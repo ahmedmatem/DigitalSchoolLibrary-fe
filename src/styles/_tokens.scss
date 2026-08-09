@@ -1,0 +1,60 @@
+:root {
+  /* Brand */
+  --sl-color-primary: #2457a6;
+  --sl-color-primary-hover: #1f4b91;
+  --sl-color-primary-active: #193e79;
+
+  --sl-color-accent: #18a7a0;
+  --sl-color-accent-hover: #148f89;
+
+  /* Surfaces */
+  --sl-color-background: #f7f9fc;
+  --sl-color-surface: #ffffff;
+  --sl-color-surface-subtle: #eef4fb;
+  --sl-color-border: #d9e4f0;
+
+  /* Text */
+  --sl-color-text-primary: #1a222d;
+  --sl-color-text-secondary: #616f82;
+  --sl-color-text-muted: #9aa8b8;
+
+  /* Semantic */
+  --sl-color-success: #257a52;
+  --sl-color-success-bg: #ddf3e7;
+
+  --sl-color-warning: #9a6500;
+  --sl-color-warning-bg: #fff0c7;
+
+  --sl-color-error: #b33a3a;
+  --sl-color-error-bg: #fbe1e1;
+
+  --sl-color-info-bg: #e8f2fc;
+
+  /* Radius */
+  --sl-radius-sm: 6px;
+  --sl-radius-md: 10px;
+  --sl-radius-lg: 14px;
+  --sl-radius-xl: 18px;
+  --sl-radius-2xl: 24px;
+
+  /* Spacing */
+  --sl-space-1: 4px;
+  --sl-space-2: 8px;
+  --sl-space-3: 12px;
+  --sl-space-4: 16px;
+  --sl-space-5: 24px;
+  --sl-space-6: 32px;
+  --sl-space-7: 48px;
+  --sl-space-8: 64px;
+
+  /* Layout */
+  --sl-content-max-width: 1200px;
+  --sl-header-height: 72px;
+
+  /* Motion */
+  --sl-motion-fast: 150ms;
+  --sl-motion-normal: 200ms;
+  --sl-motion-slow: 300ms;
+
+  --sl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
