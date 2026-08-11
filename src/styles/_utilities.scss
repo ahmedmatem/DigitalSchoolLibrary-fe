@@ -1,0 +1,8 @@
+.sl-container {
+  width: min(
+    calc(100% - 32px),
+    var(--sl-content-max-width)
+  );
+
+  margin-inline: auto;
+}

@@ -7,25 +7,4 @@ export const routes: Routes = [
       import('./features/catalog/catalog.routes')
         .then(m => m.CATALOG_ROUTES),
   },
-
-  {
-    path: 'ui-preview',
-    loadComponent: () =>
-      import('./features/ui-preview/ui-preview')
-        .then(m => m.UiPreview),
-  },
-
-  {
-    path: 'access-denied',
-    loadComponent: () =>
-      import('./system/access-denied/access-denied')
-        .then(m => m.AccessDenied),
-  },
-
-  {
-    path: '**',
-    loadComponent: () =>
-      import('./system/not-found/not-found')
-        .then(m => m.NotFound),
-  },
 ];

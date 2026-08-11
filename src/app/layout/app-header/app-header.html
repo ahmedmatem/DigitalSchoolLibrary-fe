@@ -1,0 +1,124 @@
+<header class="app-header">
+  <div class="app-header__inner">
+
+    <a
+      class="app-header__brand"
+      routerLink="/"
+      aria-label="School Library - начало"
+    >
+      <span class="app-header__brand-mark">
+        SL
+      </span>
+
+      <span class="app-header__brand-text">
+        <strong>School Library</strong>
+        <span>Училищна библиотека</span>
+      </span>
+    </a>
+
+    <nav
+      class="app-header__nav"
+      aria-label="Основна навигация"
+    >
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Каталог
+      </a>
+
+      @if (authenticated()) {
+        <a
+          routerLink="/for-me"
+          routerLinkActive="is-active"
+        >
+          За мен
+        </a>
+
+        <a
+          routerLink="/my-library"
+          routerLinkActive="is-active"
+        >
+          Моята библиотека
+        </a>
+
+        @if (
+          role() === 'Teacher' ||
+          role() === 'Admin'
+        ) {
+          <a
+            routerLink="/teacher"
+            routerLinkActive="is-active"
+          >
+            Учител
+          </a>
+        }
+
+        @if (role() === 'Admin') {
+          <a
+            routerLink="/admin"
+            routerLinkActive="is-active"
+          >
+            Администрация
+          </a>
+        }
+      }
+    </nav>
+
+    <div class="app-header__actions">
+
+      @if (!authenticated()) {
+
+        <a
+          class="app-header__login"
+          routerLink="/login"
+        >
+          Вход
+        </a>
+
+        <a
+          class="app-header__register"
+          routerLink="/register"
+        >
+          Регистрация
+        </a>
+
+      } @else {
+
+        <a
+          class="app-header__profile"
+          routerLink="/profile"
+        >
+          <span class="app-header__avatar">
+            {{ displayName()?.charAt(0) || 'U' }}
+          </span>
+
+          <span class="app-header__user">
+            <strong>
+              {{ displayName() || 'Потребител' }}
+            </strong>
+
+            <span>
+              {{ role() }}
+            </span>
+          </span>
+        </a>
+
+      }
+
+      <button
+        type="button"
+        class="app-header__menu"
+        aria-label="Отвори меню"
+        (click)="menuClick.emit()"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
+  </div>
+</header>
