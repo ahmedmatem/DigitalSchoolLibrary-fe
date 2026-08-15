@@ -1,1 +1,23 @@
-<p>chip works!</p>
+<span
+  class="sl-chip"
+  [class.sl-chip--default]="variant() === 'default'"
+  [class.sl-chip--accent]="variant() === 'accent'"
+  [class.sl-chip--success]="variant() === 'success'"
+  [class.sl-chip--warning]="variant() === 'warning'"
+  [class.sl-chip--error]="variant() === 'error'"
+>
+  <span class="sl-chip__content">
+    <ng-content />
+  </span>
+
+  @if (removable()) {
+    <button
+      type="button"
+      class="sl-chip__remove"
+      aria-label="Премахни"
+      (click)="removed.emit()"
+    >
+      ×
+    </button>
+  }
+</span>

@@ -1,0 +1,65 @@
+.sl-chip {
+  min-height: 28px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding-inline: 10px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.sl-chip--default {
+  background: var(--sl-color-surface-subtle);
+  color: var(--sl-color-text-secondary);
+}
+
+.sl-chip--accent {
+  background: var(--sl-color-chip-bg);
+  color: var(--sl-color-chip-text);
+}
+
+.sl-chip--success {
+  background: var(--sl-color-success-bg);
+  color: var(--sl-color-success);
+}
+
+.sl-chip--warning {
+  background: var(--sl-color-warning-bg);
+  color: var(--sl-color-warning);
+}
+
+.sl-chip--error {
+  background: var(--sl-color-error-bg);
+  color: var(--sl-color-error);
+}
+
+.sl-chip__remove {
+  width: 20px;
+  height: 20px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: currentColor;
+
+  cursor: pointer;
+
+  font-size: 16px;
+  line-height: 1;
+}
+
+.sl-chip__remove:hover {
+  background: rgb(0 0 0 / 6%);
+}

@@ -1,1 +1,25 @@
-<p>button works!</p>
+<button
+  class="sl-button"
+  [class.sl-button--primary]="variant() === 'primary'"
+  [class.sl-button--secondary]="variant() === 'secondary'"
+  [class.sl-button--ghost]="variant() === 'ghost'"
+  [class.sl-button--danger]="variant() === 'danger'"
+
+  [class.sl-button--sm]="size() === 'sm'"
+  [class.sl-button--md]="size() === 'md'"
+  [class.sl-button--lg]="size() === 'lg'"
+
+  [disabled]="disabled() || loading()"
+  [attr.type]="type()"
+>
+  @if (loading()) {
+    <span
+      class="sl-button__spinner"
+      aria-hidden="true">
+    </span>
+  }
+
+  <span class="sl-button__content">
+    <ng-content />
+  </span>
+</button>

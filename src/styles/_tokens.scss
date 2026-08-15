@@ -7,8 +7,6 @@
   --sl-color-accent: #18a7a0;
   --sl-color-accent-hover: #148f89;
 
-  --sl-color-on-primary: #ffffff;
-
   /* Surfaces */
   --sl-color-background: #f7f9fc;
   --sl-color-surface: #ffffff;
@@ -59,4 +57,21 @@
   --sl-motion-slow: 300ms;
 
   --sl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Button */
+  --sl-color-on-primary: #ffffff;
+
+  --sl-color-secondary-bg: #ffffff;
+  --sl-color-secondary-hover: #eef4fb;
+
+  --sl-color-disabled-bg: #eef4fb;
+  --sl-color-disabled-text: #9aa8b8;
+
+  --sl-color-danger-hover: #963131;
+
+  --sl-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  /* UI component styles */
+  --sl-color-chip-bg: #ddf4f2;
+  --sl-color-chip-text: #0f6e69;
 }

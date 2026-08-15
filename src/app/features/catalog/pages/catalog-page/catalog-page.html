@@ -1,9 +1,25 @@
 <sl-page-container>
-
   <h1>School Library</h1>
 
-  <p>
-    Angular Foundation Sprint
-  </p>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <sl-button>
+      Основен бутон
+    </sl-button>
 
+    <sl-button variant="secondary" size="sm">
+      Вторичен
+    </sl-button>
+
+    <sl-button variant="ghost">
+      Ghost
+    </sl-button>
+
+    <sl-button variant="danger" size="lg">
+      Изтрий
+    </sl-button>
+
+    <sl-button [loading]="true">
+      Запазване
+    </sl-button>
+  </div>
 </sl-page-container>

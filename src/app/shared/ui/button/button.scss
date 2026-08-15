@@ -1,0 +1,127 @@
+.sl-button {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sl-space-2);
+
+  border: 1px solid transparent;
+  border-radius: var(--sl-radius-md);
+
+  font-weight: 600;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background-color var(--sl-motion-fast) var(--sl-ease-standard),
+    border-color var(--sl-motion-fast) var(--sl-ease-standard),
+    color var(--sl-motion-fast) var(--sl-ease-standard),
+    opacity var(--sl-motion-fast) var(--sl-ease-standard);
+}
+
+/* Sizes */
+
+.sl-button--sm {
+  min-height: 36px;
+  padding-inline: 12px;
+  font-size: 13px;
+}
+
+.sl-button--md {
+  min-height: 44px;
+  padding-inline: 16px;
+  font-size: 14px;
+}
+
+.sl-button--lg {
+  min-height: 48px;
+  padding-inline: 20px;
+  font-size: 15px;
+}
+
+/* Primary */
+
+.sl-button--primary {
+  background: var(--sl-color-primary);
+  color: var(--sl-color-on-primary);
+}
+
+.sl-button--primary:hover:not(:disabled) {
+  background: var(--sl-color-primary-hover);
+}
+
+.sl-button--primary:active:not(:disabled) {
+  background: var(--sl-color-primary-active);
+}
+
+/* Secondary */
+
+.sl-button--secondary {
+  background: var(--sl-color-surface);
+  border-color: var(--sl-color-border);
+  color: var(--sl-color-primary);
+}
+
+.sl-button--secondary:hover:not(:disabled) {
+  background: var(--sl-color-surface-subtle);
+}
+
+/* Ghost */
+
+.sl-button--ghost {
+  background: transparent;
+  color: var(--sl-color-primary);
+}
+
+.sl-button--ghost:hover:not(:disabled) {
+  background: var(--sl-color-surface-subtle);
+}
+
+/* Danger */
+
+.sl-button--danger {
+  background: var(--sl-color-error);
+  color: var(--sl-color-on-primary);
+}
+
+.sl-button--danger:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Disabled */
+
+.sl-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Loading */
+
+.sl-button__spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+
+  animation: sl-button-spin 700ms linear infinite;
+}
+
+@keyframes sl-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-button {
+    transition: none;
+  }
+
+  .sl-button__spinner {
+    animation-duration: 1.5s;
+  }
+}
