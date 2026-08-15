@@ -1,31 +1,7 @@
 <sl-page-container>
-  <div style="max-width: 600px;">
-    <sl-search-field
-      placeholder="Търсене по заглавие, предмет или автор..."
-      [value]="searchQuery()"
-      (valueChange)="searchQuery.set($event)"
-    />
-  </div>
+  <h1>School Library</h1>
 
   <p>
-    Търсиш: {{ searchQuery() }}
-  </p>
-
-  <div style="max-width: 360px;">
-    <sl-resource-card
-      [resource]="demoResource"
-      (openResource)="onResourceOpen($event)"
-    />
-  </div>
-
-  <sl-pagination
-    [page]="currentPage()"
-    [pageCount]="12"
-    (pageChange)="currentPage.set($event)"
-  />
-
-  <p style="text-align: center; margin-top: 16px;">
-    Текуща страница:
-    {{ currentPage() }}
+    Public Catalog ще бъде изграден в Sprint 2.
   </p>
 </sl-page-container>

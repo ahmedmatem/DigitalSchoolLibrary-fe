@@ -1,0 +1,181 @@
+<sl-page-container>
+
+  <div class="ui-preview">
+
+    <header class="ui-preview__header">
+      <h1>School Library UI Preview</h1>
+
+      <p>
+        Shared components — Sprint 1
+      </p>
+    </header>
+
+    <section class="ui-preview__section">
+      <h2>Buttons</h2>
+
+      <div class="ui-preview__row">
+        <sl-button>
+          Primary
+        </sl-button>
+
+        <sl-button variant="secondary">
+          Secondary
+        </sl-button>
+
+        <sl-button variant="ghost">
+          Ghost
+        </sl-button>
+
+        <sl-button variant="danger">
+          Danger
+        </sl-button>
+
+        <sl-button [loading]="true">
+          Saving
+        </sl-button>
+      </div>
+
+      <div class="ui-preview__row">
+        <sl-button size="sm">
+          Small
+        </sl-button>
+
+        <sl-button size="md">
+          Medium
+        </sl-button>
+
+        <sl-button size="lg">
+          Large
+        </sl-button>
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Icon Buttons</h2>
+
+      <div class="ui-preview__row">
+
+        <sl-icon-button
+          ariaLabel="Меню"
+          size="sm"
+        >
+          <svg lucideMenu></svg>
+        </sl-icon-button>
+
+        <sl-icon-button
+          ariaLabel="Търсене"
+          variant="ghost"
+        >
+          <svg lucideSearch></svg>
+        </sl-icon-button>
+
+        <sl-icon-button
+          ariaLabel="Запази"
+          variant="primary"
+        >
+          <svg lucideBookmark></svg>
+        </sl-icon-button>
+
+        <sl-icon-button
+          ariaLabel="Изтрий"
+          variant="danger"
+          size="lg"
+        >
+          <svg lucideTrash2></svg>
+        </sl-icon-button>
+
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Chips</h2>
+
+      <div class="ui-preview__row">
+        <sl-chip>
+          Математика
+        </sl-chip>
+
+        <sl-chip variant="accent">
+          Информатика
+        </sl-chip>
+
+        <sl-chip variant="success">
+          Одобрен
+        </sl-chip>
+
+        <sl-chip variant="warning">
+          Изчаква
+        </sl-chip>
+
+        <sl-chip variant="error">
+          Отхвърлен
+        </sl-chip>
+
+        <sl-chip
+          variant="accent"
+          [removable]="true"
+        >
+          11 клас
+        </sl-chip>
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Search Field</h2>
+
+      <div class="ui-preview__search">
+        <sl-search-field
+          placeholder="Търсене по заглавие, предмет или автор..."
+          [value]="searchQuery()"
+          (valueChange)="searchQuery.set($event)"
+        />
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Skeletons</h2>
+
+      <div class="ui-preview__skeletons">
+        <sl-skeleton
+          width="320px"
+          height="24px"
+        />
+
+        <sl-skeleton
+          width="240px"
+          height="16px"
+        />
+
+        <sl-skeleton
+          width="80px"
+          height="80px"
+          radius="round"
+        />
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Resource Card</h2>
+
+      <div class="ui-preview__card">
+        <sl-resource-card
+          [resource]="demoResource()"
+          (savedChange)="onSavedChange($event)"
+          (openResource)="onResourceOpen($event)"
+        />
+      </div>
+    </section>
+
+    <section class="ui-preview__section">
+      <h2>Pagination</h2>
+
+      <sl-pagination
+        [page]="currentPage()"
+        [pageCount]="12"
+        (pageChange)="currentPage.set($event)"
+      />
+    </section>
+
+  </div>
+
+</sl-page-container>
