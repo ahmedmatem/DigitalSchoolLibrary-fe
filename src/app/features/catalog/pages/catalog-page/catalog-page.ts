@@ -118,6 +118,13 @@ export class CatalogPage {
     );
   });
 
+  readonly pagedResources = computed(() => {
+    const query = this.query();
+    const start = (query.page - 1) * query.pageSize;
+    const end = start + query.pageSize;
+    return this.filteredResources().slice(start, end);
+  });
+
   readonly filteredResources = computed(() => {
     const query = this.query();
 
