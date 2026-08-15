@@ -1,0 +1,126 @@
+.sl-icon-button {
+  display: inline-grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: 1px solid transparent;
+  border-radius: var(--sl-radius-md);
+
+  cursor: pointer;
+
+  transition:
+    background-color
+      var(--sl-motion-fast)
+      var(--sl-ease-standard),
+    border-color
+      var(--sl-motion-fast)
+      var(--sl-ease-standard),
+    color
+      var(--sl-motion-fast)
+      var(--sl-ease-standard),
+    opacity
+      var(--sl-motion-fast)
+      var(--sl-ease-standard);
+}
+
+/* Sizes */
+
+.sl-icon-button--sm {
+  width: 36px;
+  height: 36px;
+}
+
+.sl-icon-button--md {
+  width: 44px;
+  height: 44px;
+}
+
+.sl-icon-button--lg {
+  width: 48px;
+  height: 48px;
+}
+
+/* Variants */
+
+.sl-icon-button--default {
+  background: var(--sl-color-surface);
+  border-color: var(--sl-color-border);
+  color: var(--sl-color-text-primary);
+}
+
+.sl-icon-button--default:hover:not(:disabled) {
+  background:
+    var(--sl-color-surface-subtle);
+}
+
+.sl-icon-button--ghost {
+  background: transparent;
+  color: var(--sl-color-text-primary);
+}
+
+.sl-icon-button--ghost:hover:not(:disabled) {
+  background:
+    var(--sl-color-surface-subtle);
+}
+
+.sl-icon-button--primary {
+  background: var(--sl-color-primary);
+  color: var(--sl-color-on-primary);
+}
+
+.sl-icon-button--primary:hover:not(:disabled) {
+  background:
+    var(--sl-color-primary-hover);
+}
+
+.sl-icon-button--primary:active:not(:disabled) {
+  background:
+    var(--sl-color-primary-active);
+}
+
+.sl-icon-button--danger {
+  background: transparent;
+  color: var(--sl-color-error);
+}
+
+.sl-icon-button--danger:hover:not(:disabled) {
+  background:
+    var(--sl-color-error-bg);
+}
+
+/* Disabled */
+
+.sl-icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Lucide icons */
+
+.sl-icon-button ::ng-deep svg {
+  width: 20px;
+  height: 20px;
+
+  stroke-width: 2;
+
+  pointer-events: none;
+}
+
+.sl-icon-button--sm ::ng-deep svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sl-icon-button--lg ::ng-deep svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-icon-button {
+    transition: none;
+  }
+}

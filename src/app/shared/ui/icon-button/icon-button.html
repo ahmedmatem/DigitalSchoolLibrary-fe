@@ -1,1 +1,19 @@
-<p>icon-button works!</p>
+<button
+  class="sl-icon-button"
+
+  [class.sl-icon-button--sm]="size() === 'sm'"
+  [class.sl-icon-button--md]="size() === 'md'"
+  [class.sl-icon-button--lg]="size() === 'lg'"
+
+  [class.sl-icon-button--default]="variant() === 'default'"
+  [class.sl-icon-button--ghost]="variant() === 'ghost'"
+  [class.sl-icon-button--primary]="variant() === 'primary'"
+  [class.sl-icon-button--danger]="variant() === 'danger'"
+
+  [disabled]="disabled()"
+
+  [attr.type]="type()"
+  [attr.aria-label]="ariaLabel()"
+>
+  <ng-content />
+</button>

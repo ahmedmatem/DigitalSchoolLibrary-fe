@@ -1,25 +1,50 @@
 <sl-page-container>
-  <h1>School Library</h1>
-
-  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-    <sl-button>
-      Основен бутон
-    </sl-button>
-
-    <sl-button variant="secondary" size="sm">
-      Вторичен
-    </sl-button>
-
-    <sl-button variant="ghost">
-      Ghost
-    </sl-button>
-
-    <sl-button variant="danger" size="lg">
-      Изтрий
-    </sl-button>
-
-    <sl-button [loading]="true">
-      Запазване
-    </sl-button>
+  <div style="max-width: 600px;">
+    <sl-search-field
+      placeholder="Търсене по заглавие, предмет или автор..."
+      [value]="searchQuery()"
+      (valueChange)="searchQuery.set($event)"
+    />
   </div>
+
+  <p>
+    Търсиш: {{ searchQuery() }}
+  </p>
 </sl-page-container>
+
+<div
+  style="
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  "
+>
+  <sl-icon-button
+    ariaLabel="Отвори меню"
+    size="sm"
+  >
+    <svg lucideMenu></svg>
+  </sl-icon-button>
+
+  <sl-icon-button
+    ariaLabel="Търсене"
+    variant="ghost"
+  >
+    <svg lucideSearch></svg>
+  </sl-icon-button>
+
+  <sl-icon-button
+    ariaLabel="Запази"
+    variant="primary"
+  >
+    <svg lucideBookmark></svg>
+  </sl-icon-button>
+
+  <sl-icon-button
+    ariaLabel="Изтрий"
+    variant="danger"
+    size="lg"
+  >
+    <svg lucideTrash2></svg>
+  </sl-icon-button>
+</div>

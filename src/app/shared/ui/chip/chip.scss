@@ -39,6 +39,11 @@
   color: var(--sl-color-error);
 }
 
+.sl-chip__content {
+  display: inline-flex;
+  align-items: center;
+}
+
 .sl-chip__remove {
   width: 20px;
   height: 20px;
@@ -55,11 +60,14 @@
   color: currentColor;
 
   cursor: pointer;
-
-  font-size: 16px;
-  line-height: 1;
 }
 
 .sl-chip__remove:hover {
   background: rgb(0 0 0 / 6%);
+}
+
+.sl-chip__remove svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
 }

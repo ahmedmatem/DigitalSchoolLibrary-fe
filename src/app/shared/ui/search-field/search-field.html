@@ -1,1 +1,34 @@
-<p>search-field works!</p>
+<div
+  class="sl-search-field"
+  [class.sl-search-field--disabled]="disabled()"
+>
+  <svg
+    lucideSearch
+    class="sl-search-field__icon"
+    aria-hidden="true"
+  ></svg>
+
+  <input
+    class="sl-search-field__input"
+    type="search"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    aria-label="Търсене"
+    (input)="onInput($event)"
+  />
+
+  @if (value()) {
+    <button
+      type="button"
+      class="sl-search-field__clear"
+      aria-label="Изчисти търсенето"
+      (click)="clear()"
+    >
+      <svg
+        lucideX
+        aria-hidden="true"
+      ></svg>
+    </button>
+  }
+</div>

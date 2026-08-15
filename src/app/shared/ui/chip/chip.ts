@@ -1,4 +1,12 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+} from '@angular/core';
+
+import {
+  LucideX,
+} from '@lucide/angular';
 
 export type ChipVariant =
   | 'default'
@@ -9,6 +17,9 @@ export type ChipVariant =
 
 @Component({
   selector: 'sl-chip',
+  imports: [
+    LucideX,
+  ],
   templateUrl: './chip.html',
   styleUrl: './chip.scss',
 })

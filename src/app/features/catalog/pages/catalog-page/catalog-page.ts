@@ -1,11 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+
 import { PageContainer } from '../../../../layout/page-container/page-container';
-import { Button } from "../../../../shared/ui/button/button";
+import { SearchField } from '../../../../shared/ui/search-field/search-field';
+import {
+  LucideBookmark,
+  LucideMenu,
+  LucideSearch,
+  LucideTrash2,
+} from '@lucide/angular';
+
+import { IconButton } from '../../../../shared/ui/icon-button/icon-button';
 
 @Component({
   selector: 'sl-catalog-page',
-  imports: [PageContainer, Button],
+  imports: [
+    PageContainer,
+    SearchField,
+    IconButton,
+
+    LucideMenu,
+    LucideSearch,
+    LucideBookmark,
+    LucideTrash2,
+  ],
   templateUrl: './catalog-page.html',
   styleUrl: './catalog-page.scss',
 })
-export class CatalogPage {}
+export class CatalogPage {
+  readonly searchQuery = signal('');
+}
