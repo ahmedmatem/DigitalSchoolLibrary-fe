@@ -93,24 +93,47 @@
 
     </div>
 
-    <div class="catalog__grid">
+    @if (pagedResources().length > 0) {
 
-      @for (resource of pagedResources(); track resource.id) {
-        <sl-resource-card
-          [resource]="resource"
-          (openResource)="
-            openResource($event)
-          "
-          (savedChange)="
-            onSavedChange(
-              resource.id,
-              $event
-            )
-          "
-        />
-      }
+      <div class="catalog__grid">
 
-    </div>
+        @for (resource of pagedResources();  track resource.id) {
+          <sl-resource-card
+            [resource]="resource"
+            (openResource)="openResource($event)"
+            (savedChange)="
+              onSavedChange(
+                resource.id,
+                $event
+              )
+            "
+          />
+        }
+
+      </div>
+
+    } @else {
+
+      <div class="catalog__empty">
+
+        <h2>
+          Няма намерени ресурси
+        </h2>
+
+        <p>
+          Опитай с друга дума за търсене
+          или промени избраните филтри.
+        </p>
+
+        <button
+          type="button"
+          (click)="clearFilters()">
+          Изчисти филтрите
+        </button>
+
+      </div>
+
+    }
 
     @if (resultCount() > 0) {
       <div class="catalog__pagination">

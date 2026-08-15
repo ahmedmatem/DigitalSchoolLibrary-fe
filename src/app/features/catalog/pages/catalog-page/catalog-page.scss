@@ -141,3 +141,39 @@
     flex: 1;
   }
 }
+
+/* temporary styles for empty state */
+
+.catalog__empty {
+  padding:
+    var(--sl-space-7)
+    var(--sl-space-4);
+
+  text-align: center;
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius:
+    var(--sl-radius-lg);
+
+  background:
+    var(--sl-color-surface);
+}
+
+.catalog__empty h2 {
+  margin-bottom:
+    var(--sl-space-2);
+
+  font-size: 20px;
+}
+
+.catalog__empty p {
+  margin:
+    0 0
+    var(--sl-space-4);
+
+  color:
+    var(--sl-color-text-secondary);
+}

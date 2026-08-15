@@ -18,6 +18,6 @@ export interface ResourceCardVm {
   coverUrl?: string;
 
   isSaved?: boolean;
-
+  
   createdAt: string;
 }
