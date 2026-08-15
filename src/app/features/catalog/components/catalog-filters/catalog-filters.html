@@ -1,0 +1,77 @@
+<div class="catalog-filters">
+
+  <div class="catalog-filters__field">
+    <label for="catalog-subject">
+      Предмет
+    </label>
+
+    <select
+      id="catalog-subject"
+      [value]="subject() ?? ''"
+      (change)="onSubjectChange($event)"
+    >
+      <option value="">
+        Всички предмети
+      </option>
+
+      @for ( item of subjects; track item) {
+        <option [value]="item">
+          {{ item }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="catalog-filters__field">
+    <label for="catalog-grade">
+      Клас
+    </label>
+
+    <select
+      id="catalog-grade"
+      [value]="grade() ?? ''"
+      (change)="onGradeChange($event)"
+    >
+      <option value="">
+        Всички класове
+      </option>
+
+      @for (item of grades; track item ) {
+        <option [value]="item">
+          {{ item }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="catalog-filters__field">
+    <label for="catalog-resource-type">
+      Тип ресурс
+    </label>
+
+    <select
+      id="catalog-resource-type"
+      [value]="resourceType() ?? ''"
+      (change)="onResourceTypeChange($event)"
+    >
+      <option value="">
+        Всички типове
+      </option>
+
+      @for ( item of resourceTypes; track item ) {
+        <option [value]="item">
+          {{ item }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <button
+    type="button"
+    class="catalog-filters__clear"
+    (click)="clear.emit()"
+  >
+    Изчисти
+  </button>
+
+</div>

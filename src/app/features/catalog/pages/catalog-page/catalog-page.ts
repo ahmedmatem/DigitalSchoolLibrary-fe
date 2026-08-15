@@ -10,6 +10,7 @@ import { SearchField } from '../../../../shared/ui/search-field/search-field';
 import { Chip } from '../../../../shared/ui/chip/chip';
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { ResourceCard } from '../../../../shared/ui/resource-card/resource-card';
+import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
 
 import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-card.model';
 
@@ -23,6 +24,7 @@ import { CatalogQuery, CatalogSort} from '../../models/catalog-query.model';
     Chip,
     Pagination,
     ResourceCard,
+    CatalogFilters,
   ],
   templateUrl: './catalog-page.html',
   styleUrl: './catalog-page.scss',
@@ -128,6 +130,32 @@ export class CatalogPage {
     this.query.update(query => ({
       ...query,
       page,
+    }));
+  }
+
+  updateSubject(subject: string | null): void {
+    this.query.update(query => ({
+      ...query,
+      subject,
+      page: 1,
+    }));
+  }
+
+  updateGrade(grade: string | null): void {
+    this.query.update(query => ({
+      ...query,
+      grade,
+      page: 1,
+    }));
+  }
+
+  updateResourceType(
+    resourceType: string | null
+  ): void {
+    this.query.update(query => ({
+      ...query,
+      resourceType,
+      page: 1,
     }));
   }
 

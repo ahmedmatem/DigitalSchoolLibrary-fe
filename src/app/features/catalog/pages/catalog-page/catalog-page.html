@@ -22,10 +22,17 @@
     </div>
 
     <section class="catalog__filters">
-      <div class="catalog__filters-placeholder">
-        Филтрите ще бъдат добавени
-        в следващата стъпка.
-      </div>
+      <sl-catalog-filters
+        [subject]="query().subject"
+        [grade]="query().grade"
+        [resourceType]="query().resourceType"
+
+        (subjectChange)="updateSubject($event)"
+        (gradeChange)="updateGrade($event)"
+        (resourceTypeChange)="updateResourceType($event)"
+
+        (clear)="clearFilters()"
+      />
     </section>
 
     @if (activeFilters().length > 0) {
