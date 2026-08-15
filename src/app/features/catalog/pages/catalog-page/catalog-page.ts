@@ -10,6 +10,7 @@ import {
 } from '@lucide/angular';
 
 import { IconButton } from '../../../../shared/ui/icon-button/icon-button';
+import { Skeleton } from '../../../../shared/ui/skeleton/skeleton';
 
 @Component({
   selector: 'sl-catalog-page',
@@ -17,6 +18,7 @@ import { IconButton } from '../../../../shared/ui/icon-button/icon-button';
     PageContainer,
     SearchField,
     IconButton,
+    Skeleton,
 
     LucideMenu,
     LucideSearch,
