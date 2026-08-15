@@ -43,10 +43,7 @@
           Моята библиотека
         </a>
 
-        @if (
-          role() === 'Teacher' ||
-          role() === 'Admin'
-        ) {
+        @if (role() === 'Teacher' || role() === 'Admin') {
           <a
             routerLink="/teacher"
             routerLinkActive="is-active"
@@ -69,7 +66,6 @@
     <div class="app-header__actions">
 
       @if (!authenticated()) {
-
         <a
           class="app-header__login"
           routerLink="/login"
@@ -83,9 +79,7 @@
         >
           Регистрация
         </a>
-
       } @else {
-
         <a
           class="app-header__profile"
           routerLink="/profile"
@@ -104,19 +98,16 @@
             </span>
           </span>
         </a>
-
       }
 
-      <button
-        type="button"
-        class="app-header__menu"
-        aria-label="Отвори меню"
+      <sl-icon-button
+        class="app-header__menu-button"
+        ariaLabel="Отвори меню"
+        variant="ghost"
         (click)="menuClick.emit()"
       >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+        <svg lucideMenu></svg>
+      </sl-icon-button>
 
     </div>
 

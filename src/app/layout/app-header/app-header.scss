@@ -75,13 +75,10 @@
 .app-header__nav {
   display: flex;
   align-items: center;
-
   gap: var(--sl-space-2);
 }
 
 .app-header__nav a {
-  position: relative;
-
   padding: 10px 12px;
 
   border-radius: var(--sl-radius-md);
@@ -92,10 +89,8 @@
   font-weight: 500;
 
   transition:
-    color var(--sl-motion-fast)
-      var(--sl-ease-standard),
-    background var(--sl-motion-fast)
-      var(--sl-ease-standard);
+    color var(--sl-motion-fast) var(--sl-ease-standard),
+    background var(--sl-motion-fast) var(--sl-ease-standard);
 }
 
 .app-header__nav a:hover {
@@ -132,10 +127,8 @@
   font-weight: 600;
 
   transition:
-    background var(--sl-motion-fast)
-      var(--sl-ease-standard),
-    color var(--sl-motion-fast)
-      var(--sl-ease-standard);
+    background var(--sl-motion-fast) var(--sl-ease-standard),
+    color var(--sl-motion-fast) var(--sl-ease-standard);
 }
 
 .app-header__login {
@@ -148,7 +141,7 @@
 
 .app-header__register {
   background: var(--sl-color-primary);
-  color: var(sl-color-on-primary);
+  color: var(--sl-color-on-primary);
 }
 
 .app-header__register:hover {
@@ -192,7 +185,6 @@
 .app-header__user {
   display: flex;
   flex-direction: column;
-
   line-height: 1.2;
 }
 
@@ -207,43 +199,15 @@
   color: var(--sl-color-text-secondary);
 }
 
-/* Mobile menu */
+/* Mobile menu button */
 
-.app-header__menu {
+.app-header__menu-button {
   display: none;
-
-  width: 44px;
-  height: 44px;
-
-  border: 0;
-  border-radius: var(--sl-radius-md);
-
-  background: transparent;
-
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-
-  gap: 4px;
-}
-
-.app-header__menu:hover {
-  background: var(--sl-color-surface-subtle);
-}
-
-.app-header__menu span {
-  width: 18px;
-  height: 2px;
-
-  border-radius: 2px;
-
-  background: var(--sl-color-text-primary);
 }
 
 /* Responsive */
 
 @media (max-width: 900px) {
-
   .app-header__nav {
     display: none;
   }
@@ -254,13 +218,12 @@
     display: none;
   }
 
-  .app-header__menu {
-    display: flex;
+  .app-header__menu-button {
+    display: inline-grid;
   }
 }
 
 @media (max-width: 480px) {
-
   .app-header__inner {
     width: calc(100% - 24px);
   }
