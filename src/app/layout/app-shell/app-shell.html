@@ -1,7 +1,16 @@
 <div class="app-shell">
-  <sl-app-header />
+
+  <sl-app-header
+    (menuClick)="openMobileMenu()"
+  />
+
+  <sl-mobile-navigation
+    [open]="mobileMenuOpen()"
+    (close)="closeMobileMenu()"
+  />
 
   <main class="app-shell__main">
     <router-outlet />
   </main>
+
 </div>
