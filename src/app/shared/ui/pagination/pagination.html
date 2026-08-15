@@ -1,0 +1,57 @@
+<nav
+  class="sl-pagination"
+  aria-label="Страници"
+>
+  <sl-icon-button
+    ariaLabel="Предишна страница"
+    variant="default"
+    size="sm"
+    [disabled]="page() === 1"
+    (click)="previous()"
+  >
+    <svg lucideChevronLeft></svg>
+  </sl-icon-button>
+
+  <div class="sl-pagination__pages">
+    @for (
+      item of pages();
+      track $index
+    ) {
+      @if (item === 'ellipsis') {
+        <span
+          class="sl-pagination__ellipsis"
+          aria-hidden="true"
+        >
+          <svg lucideMoreHorizontal></svg>
+        </span>
+      } @else {
+        <button
+          type="button"
+          class="sl-pagination__page"
+          [class.is-active]="item === page()"
+          [attr.aria-current]="
+            item === page()
+              ? 'page'
+              : null
+          "
+          [attr.aria-label]="
+            'Страница ' + item
+          "
+          (click)="selectPage(item)"
+        >
+          {{ item }}
+        </button>
+      }
+    }
+  </div>
+
+  <sl-icon-button
+    ariaLabel="Следваща страница"
+    variant="default"
+    size="sm"
+    [disabled]="page() === pageCount()"
+    (click)="next()"
+  >
+    <svg lucideChevronRight></svg>
+  </sl-icon-button>
+</nav>

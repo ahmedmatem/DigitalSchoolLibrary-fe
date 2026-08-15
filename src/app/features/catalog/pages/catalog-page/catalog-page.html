@@ -10,49 +10,22 @@
   <p>
     Търсиш: {{ searchQuery() }}
   </p>
+
+  <div style="max-width: 360px;">
+    <sl-resource-card
+      [resource]="demoResource"
+      (openResource)="onResourceOpen($event)"
+    />
+  </div>
+
+  <sl-pagination
+    [page]="currentPage()"
+    [pageCount]="12"
+    (pageChange)="currentPage.set($event)"
+  />
+
+  <p style="text-align: center; margin-top: 16px;">
+    Текуща страница:
+    {{ currentPage() }}
+  </p>
 </sl-page-container>
-
-<sl-skeleton
-  width="300px"
-  height="24px"
-/>
-
-<br>
-
-<sl-skeleton
-  width="80px"
-  height="80px"
-  radius="round"
-/>
-
-<div
->
-  <sl-icon-button
-    ariaLabel="Отвори меню"
-    size="sm"
-  >
-    <svg lucideMenu></svg>
-  </sl-icon-button>
-
-  <sl-icon-button
-    ariaLabel="Търсене"
-    variant="ghost"
-  >
-    <svg lucideSearch></svg>
-  </sl-icon-button>
-
-  <sl-icon-button
-    ariaLabel="Запази"
-    variant="primary"
-  >
-    <svg lucideBookmark></svg>
-  </sl-icon-button>
-
-  <sl-icon-button
-    ariaLabel="Изтрий"
-    variant="danger"
-    size="lg"
-  >
-    <svg lucideTrash2></svg>
-  </sl-icon-button>
-</div>

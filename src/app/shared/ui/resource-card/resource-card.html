@@ -1,0 +1,85 @@
+<article
+  class="resource-card"
+  tabindex="0"
+  (click)="open()"
+  (keydown.enter)="open()"
+>
+  <div class="resource-card__cover">
+
+    @if (resource().coverUrl) {
+      <img
+        [src]="resource().coverUrl"
+        [alt]="resource().title"
+      />
+    } @else {
+      <svg
+        lucideFileText
+        aria-hidden="true"
+      ></svg>
+    }
+
+  </div>
+
+  <div class="resource-card__content">
+
+    <div class="resource-card__top">
+
+      <div class="resource-card__chips">
+        <sl-chip variant="accent">
+          {{ resource().subject }}
+        </sl-chip>
+
+        @if (resource().grade) {
+          <sl-chip>
+            {{ resource().grade }}
+          </sl-chip>
+        }
+      </div>
+
+      <sl-icon-button
+        ariaLabel="Запази ресурса"
+        variant="ghost"
+        size="sm"
+        (click)="toggleSaved($event)"
+      >
+        @if (resource().isSaved) {
+          <svg lucideBookmarkCheck></svg>
+        } @else {
+          <svg lucideBookmark></svg>
+        }
+      </sl-icon-button>
+
+    </div>
+
+    <h3 class="resource-card__title">
+      {{ resource().title }}
+    </h3>
+
+    @if (resource().author) {
+      <p class="resource-card__author">
+        {{ resource().author }}
+      </p>
+    }
+
+    @if (resource().description) {
+      <p class="resource-card__description">
+        {{ resource().description }}
+      </p>
+    }
+
+    <div class="resource-card__meta">
+
+      <span>
+        {{ resource().resourceType }}
+      </span>
+
+      @if (resource().category) {
+        <span>
+          {{ resource().category }}
+        </span>
+      }
+
+    </div>
+
+  </div>
+</article>
