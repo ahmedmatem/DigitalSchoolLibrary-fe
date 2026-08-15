@@ -260,6 +260,18 @@ export class CatalogPage {
     }));
   }
 
+  resetCatalog(): void {
+    this.query.set({
+      search: '',
+      subject: null,
+      grade: null,
+      resourceType: null,
+      sort: 'newest',
+      page: 1,
+      pageSize: 12,
+    });
+  }
+
   openResource(id: string): void {
     console.log('Open resource:', id);
   }

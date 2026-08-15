@@ -58,6 +58,7 @@ export class UiPreview {
     resourceType: 'PDF',
     grade: '11 клас',
     isSaved: false,
+    createdAt: '2026-08-10',
   });
 
   onSavedChange(saved: boolean): void {
