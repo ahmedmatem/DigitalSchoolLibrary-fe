@@ -38,13 +38,8 @@
     @if (activeFilters().length > 0) {
       <div class="catalog__active-filters">
 
-        @for (
-          filter of activeFilters();
-          track filter
-        ) {
-          <sl-chip
-            variant="accent"
-          >
+        @for ( filter of activeFilters(); track filter ) {
+          <sl-chip variant="accent">
             {{ filter }}
           </sl-chip>
         }
@@ -100,10 +95,7 @@
 
     <div class="catalog__grid">
 
-      @for (
-        resource of resources();
-        track resource.id
-      ) {
+      @for (resource of pagedResources(); track resource.id) {
         <sl-resource-card
           [resource]="resource"
           (openResource)="
@@ -120,13 +112,17 @@
 
     </div>
 
-    <div class="catalog__pagination">
-      <sl-pagination
-        [page]="query().page"
-        [pageCount]="totalPages()"
-        (pageChange)="updatePage($event)"
-      />
-    </div>
+    @if (resultCount() > 0) {
+      <div class="catalog__pagination">
+
+        <sl-pagination
+          [page]="query().page"
+          [pageCount]="totalPages()"
+          (pageChange)="updatePage($event)"
+        />
+
+      </div>
+    }
 
   </section>
 
