@@ -1,0 +1,143 @@
+.catalog {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--sl-space-5);
+}
+
+.catalog__header h1 {
+  margin-bottom: var(--sl-space-2);
+
+  font-size: 32px;
+}
+
+.catalog__header p {
+  margin: 0;
+
+  color: var(--sl-color-text-secondary);
+}
+
+.catalog__search {
+  width: 100%;
+}
+
+.catalog__filters-placeholder {
+  padding: var(--sl-space-4);
+
+  border: 1px dashed var(--sl-color-border);
+  border-radius: var(--sl-radius-lg);
+
+  color: var(--sl-color-text-muted);
+}
+
+.catalog__active-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: var(--sl-space-2);
+}
+
+.catalog__clear-filters {
+  border: 0;
+
+  background: transparent;
+
+  color: var(--sl-color-primary);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.catalog__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: var(--sl-space-4);
+}
+
+.catalog__results {
+  margin: 0;
+
+  color: var(--sl-color-text-secondary);
+
+  font-size: 14px;
+}
+
+.catalog__sort {
+  display: flex;
+  align-items: center;
+
+  gap: var(--sl-space-2);
+
+  color: var(--sl-color-text-secondary);
+
+  font-size: 14px;
+}
+
+.catalog__sort select {
+  min-height: 40px;
+
+  padding-inline: 12px;
+
+  border: 1px solid var(--sl-color-border);
+  border-radius: var(--sl-radius-md);
+
+  background: var(--sl-color-surface);
+
+  color: var(--sl-color-text-primary);
+}
+
+/*
+ * Вариант 1:
+ * 1200px container + adaptive grid.
+ *
+ * Wide desktop -> 4 cards
+ * smaller desktop -> 3
+ * tablet -> 2
+ * mobile -> 1
+ */
+.catalog__grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
+
+  gap: var(--sl-space-5);
+}
+
+.catalog__pagination {
+  display: flex;
+  justify-content: center;
+
+  padding-top: var(--sl-space-4);
+}
+
+@media (max-width: 767px) {
+  .catalog {
+    gap: var(--sl-space-4);
+  }
+
+  .catalog__header h1 {
+    font-size: 26px;
+  }
+
+  .catalog__toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .catalog__sort {
+    width: 100%;
+  }
+
+  .catalog__sort select {
+    flex: 1;
+  }
+}

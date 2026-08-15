@@ -1,7 +1,126 @@
 <sl-page-container>
-  <h1>School Library</h1>
 
-  <p>
-    Public Catalog ще бъде изграден в Sprint 2.
-  </p>
+  <section class="catalog">
+
+    <header class="catalog__header">
+      <div>
+        <h1>Учебни ресурси</h1>
+
+        <p>
+          Открий материали по предмет,
+          клас и тип ресурс.
+        </p>
+      </div>
+    </header>
+
+    <div class="catalog__search">
+      <sl-search-field
+        placeholder="Търсене по заглавие, предмет или автор..."
+        [value]="query().search"
+        (valueChange)="updateSearch($event)"
+      />
+    </div>
+
+    <section class="catalog__filters">
+      <div class="catalog__filters-placeholder">
+        Филтрите ще бъдат добавени
+        в следващата стъпка.
+      </div>
+    </section>
+
+    @if (activeFilters().length > 0) {
+      <div class="catalog__active-filters">
+
+        @for (
+          filter of activeFilters();
+          track filter
+        ) {
+          <sl-chip
+            variant="accent"
+          >
+            {{ filter }}
+          </sl-chip>
+        }
+
+        <button
+          type="button"
+          class="catalog__clear-filters"
+          (click)="clearFilters()"
+        >
+          Изчисти филтрите
+        </button>
+
+      </div>
+    }
+
+    <div class="catalog__toolbar">
+
+      <p class="catalog__results">
+        {{ resultCount() }}
+        ресурса
+      </p>
+
+      <label class="catalog__sort">
+        <span>Подреди:</span>
+
+        <select
+          [value]="query().sort"
+          (change)="
+            updateSort(
+              $any($event.target).value
+            )
+          "
+        >
+          <option value="newest">
+            Най-нови
+          </option>
+
+          <option value="oldest">
+            Най-стари
+          </option>
+
+          <option value="title-asc">
+            Заглавие A–Я
+          </option>
+
+          <option value="title-desc">
+            Заглавие Я–A
+          </option>
+        </select>
+      </label>
+
+    </div>
+
+    <div class="catalog__grid">
+
+      @for (
+        resource of resources();
+        track resource.id
+      ) {
+        <sl-resource-card
+          [resource]="resource"
+          (openResource)="
+            openResource($event)
+          "
+          (savedChange)="
+            onSavedChange(
+              resource.id,
+              $event
+            )
+          "
+        />
+      }
+
+    </div>
+
+    <div class="catalog__pagination">
+      <sl-pagination
+        [page]="query().page"
+        [pageCount]="totalPages()"
+        (pageChange)="updatePage($event)"
+      />
+    </div>
+
+  </section>
+
 </sl-page-container>
