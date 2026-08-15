@@ -1,1 +1,106 @@
-<p>mobile-navigation works!</p>
+@if (open()) {
+  <div
+    class="mobile-nav__backdrop"
+    (click)="close.emit()"
+  ></div>
+
+  <aside
+    class="mobile-nav"
+    aria-label="Мобилна навигация"
+  >
+    <div class="mobile-nav__header">
+      <div>
+        <strong>School Library</strong>
+        <span>Училищна библиотека</span>
+      </div>
+
+      <sl-icon-button
+        ariaLabel="Затвори меню"
+        variant="ghost"
+        (click)="close.emit()"
+      >
+        <svg lucideX></svg>
+      </sl-icon-button>
+    </div>
+
+    @if (authenticated()) {
+      <div class="mobile-nav__profile">
+        <div class="mobile-nav__avatar">
+          {{ displayName()?.charAt(0) || 'U' }}
+        </div>
+
+        <div>
+          <strong>
+            {{ displayName() || 'Потребител' }}
+          </strong>
+
+          <span>
+            {{ role() }}
+          </span>
+        </div>
+      </div>
+    }
+
+    <nav class="mobile-nav__links">
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="close.emit()"
+      >
+        <svg lucideBookOpen></svg>
+        Каталог
+      </a>
+
+      @if (authenticated()) {
+        <a
+          routerLink="/my-library"
+          routerLinkActive="is-active"
+          (click)="close.emit()"
+        >
+          <svg lucideBookmark></svg>
+          Моята библиотека
+        </a>
+
+        @if (role() === 'Teacher' || role() === 'Admin') {
+          <a
+            routerLink="/teacher"
+            routerLinkActive="is-active"
+            (click)="close.emit()"
+          >
+            <svg lucideGraduationCap></svg>
+            Учител
+          </a>
+        }
+
+        @if (role() === 'Admin') {
+          <a
+            routerLink="/admin"
+            routerLinkActive="is-active"
+            (click)="close.emit()"
+          >
+            <svg lucideShield></svg>
+            Администрация
+          </a>
+        }
+
+        <a
+          routerLink="/profile"
+          routerLinkActive="is-active"
+          (click)="close.emit()"
+        >
+          <svg lucideUser></svg>
+          Профил
+        </a>
+      } @else {
+        <a
+          routerLink="/login"
+          (click)="close.emit()"
+        >
+          <svg lucideLogIn></svg>
+          Вход
+        </a>
+      }
+    </nav>
+  </aside>
+}
