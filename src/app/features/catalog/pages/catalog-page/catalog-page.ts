@@ -96,7 +96,7 @@ export class CatalogPage {
   ]);
 
   readonly resultCount = computed(
-    () => this.resources().length
+    () => this.filteredResources().length
   );
 
   readonly totalPages = signal(4);
