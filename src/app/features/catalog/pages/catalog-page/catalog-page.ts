@@ -99,7 +99,11 @@ export class CatalogPage {
     () => this.filteredResources().length
   );
 
-  readonly totalPages = signal(4);
+  readonly totalPages = computed(() => {
+    const count = this.filteredResources().length;
+    const pageSize = this.query().pageSize;
+    return Math.max(1, Math.ceil(count / pageSize));
+  });
 
   readonly activeFilters = computed(() => {
     const query = this.query();
