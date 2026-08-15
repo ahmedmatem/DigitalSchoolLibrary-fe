@@ -52,6 +52,7 @@ export class CatalogPage {
       resourceType: 'PDF',
       grade: '11 клас',
       isSaved: false,
+      createdAt: '2026-08-10',
     },
     {
       id: '2',
@@ -64,6 +65,7 @@ export class CatalogPage {
       resourceType: 'PDF',
       grade: '9 клас',
       isSaved: true,
+      createdAt: '2026-07-15',
     },
     {
       id: '3',
@@ -76,6 +78,7 @@ export class CatalogPage {
       resourceType: 'PDF',
       grade: '12 клас',
       isSaved: false,
+      createdAt: '2026-08-12',
     },
     {
       id: '4',
@@ -88,6 +91,7 @@ export class CatalogPage {
       resourceType: 'PPTX',
       grade: '10 клас',
       isSaved: false,
+      createdAt: '2026-06-20',
     },
   ]);
 
@@ -108,6 +112,82 @@ export class CatalogPage {
       (value): value is string =>
         value !== null
     );
+  });
+
+  readonly filteredResources = computed(() => {
+    const query = this.query();
+
+    let result = [...this.resources()];
+
+    const search = query.search
+      .trim()
+      .toLocaleLowerCase('bg-BG');
+
+    if (search) {
+      result = result.filter(resource => {
+        const searchableText = [
+          resource.title,
+          resource.author,
+          resource.description,
+          resource.subject,
+          resource.category,
+          resource.resourceType,
+          resource.grade,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLocaleLowerCase('bg-BG');
+
+        return searchableText.includes(search);
+      });
+    }
+
+    if (query.subject) {
+      result = result.filter(
+        resource => resource.subject === query.subject
+      );
+    }
+
+    if (query.grade) {
+      result = result.filter(
+        resource => resource.grade === query.grade
+      );
+    }
+
+    if (query.resourceType) {
+      result = result.filter(
+        resource => resource.resourceType === query.resourceType
+      );
+    }
+
+    switch (query.sort) {
+      case 'oldest':
+        result.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+        break;
+
+      case 'title-asc':
+        result.sort(
+          (a, b) => a.title.localeCompare(b.title, 'bg')
+        );
+        break;
+
+      case 'title-desc':
+        result.sort(
+          (a, b) => b.title.localeCompare(a.title, 'bg')
+        );
+        break;
+
+      case 'newest':
+      default:
+        result.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+    }
+
+    return result;
   });
 
   updateSearch(search: string): void {
