@@ -11,11 +11,11 @@ import {
 })
 export class CatalogFilters {
   readonly subject = input<string | null>(null);
-  readonly grade = input<string | null>(null);
+  readonly grade = input<number | null>(null);
   readonly resourceType = input<string | null>(null);
 
   readonly subjectChange = output<string | null>();
-  readonly gradeChange = output<string | null>();
+  readonly gradeChange = output<number | null>();
   readonly resourceTypeChange = output<string | null>();
 
   readonly clear = output<void>();
@@ -33,16 +33,7 @@ export class CatalogFilters {
     'Биология',
   ];
 
-  readonly grades = [
-    '5 клас',
-    '6 клас',
-    '7 клас',
-    '8 клас',
-    '9 клас',
-    '10 клас',
-    '11 клас',
-    '12 клас',
-  ];
+  readonly grades = [5, 6, 7, 8, 9, 10, 11, 12];
 
   readonly resourceTypes = [
     'PDF',
@@ -61,7 +52,7 @@ export class CatalogFilters {
   onGradeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
 
-    this.gradeChange.emit(value || null);
+    this.gradeChange.emit(value ? Number(value) : null);
   }
 
   onResourceTypeChange(event: Event): void {

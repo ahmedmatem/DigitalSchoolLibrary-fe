@@ -1,3 +1,5 @@
+export type ClassSection = 'а' | 'б' | 'в' | 'г';
+
 export interface ResourceCardVm {
   id: string;
 
@@ -13,11 +15,13 @@ export interface ResourceCardVm {
 
   resourceType: string;
 
-  grade?: string;
+  grade?: number;
+
+  section?: ClassSection | null;
 
   coverUrl?: string;
 
   isSaved?: boolean;
-  
+
   createdAt: string;
 }

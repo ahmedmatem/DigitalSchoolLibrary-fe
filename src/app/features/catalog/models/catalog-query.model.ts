@@ -4,7 +4,7 @@ export interface CatalogQuery {
   search: string;
 
   subject: string | null;
-  grade: string | null;
+  grade: number | null;
   resourceType: string | null;
 
   sort: CatalogSort;

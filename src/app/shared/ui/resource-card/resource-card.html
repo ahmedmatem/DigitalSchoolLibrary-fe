@@ -31,7 +31,7 @@
 
         @if (resource().grade) {
           <sl-chip>
-            {{ resource().grade }}
+            {{ resource().grade }}{{ resource().section ? resource().section : '' }} клас
           </sl-chip>
         }
       </div>

@@ -56,7 +56,7 @@ export class UiPreview {
     subject: 'Информатика',
     category: 'Учебни материали',
     resourceType: 'PDF',
-    grade: '11 клас',
+    grade: 11,
     isSaved: false,
     createdAt: '2026-08-10',
   });

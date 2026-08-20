@@ -1,8 +1,18 @@
 import {
   Component,
   computed,
+  inject,
   signal,
 } from '@angular/core';
+
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
+
+import {
+  takeUntilDestroyed,
+} from '@angular/core/rxjs-interop';
 
 import { PageContainer } from '../../../../layout/page-container/page-container';
 
@@ -15,6 +25,17 @@ import { CatalogFilters } from '../../components/catalog-filters/catalog-filters
 import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-card.model';
 
 import { CatalogQuery, CatalogSort} from '../../models/catalog-query.model';
+import { CATALOG_MOCK_RESOURCES } from '../../data-access/catalog.mock';
+
+const DEFAULT_QUERY: CatalogQuery = {
+  search: '',
+  subject: null,
+  grade: null,
+  resourceType: null,
+  sort: 'newest',
+  page: 1,
+  pageSize: 12,
+};
 
 @Component({
   selector: 'sl-catalog-page',
@@ -31,69 +52,42 @@ import { CatalogQuery, CatalogSort} from '../../models/catalog-query.model';
 })
 export class CatalogPage {
   readonly query = signal<CatalogQuery>({
-    search: '',
-    subject: null,
-    grade: null,
-    resourceType: null,
-    sort: 'newest',
-    page: 1,
-    pageSize: 12,
+    ...DEFAULT_QUERY,
   });
 
+  private readonly route = inject(ActivatedRoute);
+
+  private readonly router = inject(Router);
+
   readonly resources = signal<ResourceCardVm[]>([
-    {
-      id: '1',
-      title: 'Въведение в алгоритмите',
-      author: 'Иван Петров',
-      description:
-        'Основни алгоритми, структури от данни и практически примери.',
-      subject: 'Информатика',
-      category: 'Учебни материали',
-      resourceType: 'PDF',
-      grade: '11 клас',
-      isSaved: false,
-      createdAt: '2026-08-10',
-    },
-    {
-      id: '2',
-      title: 'Квадратни уравнения',
-      author: 'Мария Иванова',
-      description:
-        'Теория, решени примери и задачи за упражнение.',
-      subject: 'Математика',
-      category: 'Упражнения',
-      resourceType: 'PDF',
-      grade: '9 клас',
-      isSaved: true,
-      createdAt: '2026-07-15',
-    },
-    {
-      id: '3',
-      title: 'Основи на SQL',
-      author: 'Георги Георгиев',
-      description:
-        'SELECT, JOIN, GROUP BY и примери с релационни бази данни.',
-      subject: 'Информатика',
-      category: 'Учебни материали',
-      resourceType: 'PDF',
-      grade: '12 клас',
-      isSaved: false,
-      createdAt: '2026-08-12',
-    },
-    {
-      id: '4',
-      title: 'Вектори в равнината',
-      author: 'Елена Николова',
-      description:
-        'Координати, операции с вектори и геометрични приложения.',
-      subject: 'Математика',
-      category: 'Презентации',
-      resourceType: 'PPTX',
-      grade: '10 клас',
-      isSaved: false,
-      createdAt: '2026-06-20',
-    },
+    ... CATALOG_MOCK_RESOURCES
   ]);
+
+  constructor() {
+    this.route.queryParamMap
+      .pipe(
+        takeUntilDestroyed()
+      )
+      .subscribe(params => {
+        const sort = this.parseSort(
+            params.get('sort')
+          );
+
+        const page = this.parsePage(
+            params.get('page')
+          );
+
+        this.query.set({
+          search: params.get('search') ?? '',
+          subject: params.get('subject'),
+          grade: this.parseGrade(params.get('grade')),
+          resourceType: params.get('type'),
+          sort,
+          page,
+          pageSize: 12,
+        });
+      });
+  }
 
   readonly resultCount = computed(
     () => this.filteredResources().length
@@ -120,9 +114,16 @@ export class CatalogPage {
 
   readonly pagedResources = computed(() => {
     const query = this.query();
-    const start = (query.page - 1) * query.pageSize;
-    const end = start + query.pageSize;
-    return this.filteredResources().slice(start, end);
+
+    const validPage = Math.min(query.page, this.totalPages());
+
+    const start = (validPage - 1) * query.pageSize;
+
+    return this.filteredResources()
+      .slice(
+        start,
+        start + query.pageSize
+      );
   });
 
   readonly filteredResources = computed(() => {
@@ -202,74 +203,75 @@ export class CatalogPage {
   });
 
   updateSearch(search: string): void {
-    this.query.update(query => ({
-      ...query,
-      search,
-      page: 1,
-    }));
+    this.updateQuery(
+      {
+        search,
+        page: 1,
+      },
+      true /* replaceUrl */
+    );
   }
 
   updateSort(sort: CatalogSort): void {
-    this.query.update(query => ({
-      ...query,
+    this.updateQuery({
       sort,
       page: 1,
-    }));
+    });
   }
 
   updatePage(page: number): void {
-    this.query.update(query => ({
-      ...query,
-      page,
-    }));
-  }
+      this.updateQuery({
+        page,
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
 
   updateSubject(subject: string | null): void {
-    this.query.update(query => ({
-      ...query,
+    this.updateQuery({
       subject,
       page: 1,
-    }));
+    });
   }
 
-  updateGrade(grade: string | null): void {
-    this.query.update(query => ({
-      ...query,
+  updateGrade(grade: number | null): void {
+    this.updateQuery({
       grade,
       page: 1,
-    }));
+    });
   }
 
-  updateResourceType(
-    resourceType: string | null
-  ): void {
-    this.query.update(query => ({
-      ...query,
+  updateResourceType(resourceType: string | null): void {
+    this.updateQuery({
       resourceType,
       page: 1,
-    }));
+    });
   }
 
   clearFilters(): void {
-    this.query.update(query => ({
-      ...query,
+    this.updateQuery({
       subject: null,
       grade: null,
       resourceType: null,
       page: 1,
-    }));
+    });
   }
 
   resetCatalog(): void {
     this.query.set({
-      search: '',
-      subject: null,
-      grade: null,
-      resourceType: null,
-      sort: 'newest',
-      page: 1,
-      pageSize: 12,
+      ...DEFAULT_QUERY,
     });
+
+    void this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: {},
+      }
+    );
   }
 
   openResource(id: string): void {
@@ -290,5 +292,82 @@ export class CatalogPage {
           : resource
       )
     );
+  }
+
+  private parsePage(value: string | null): number {
+    const page = Number(value);
+
+    if (!Number.isInteger(page) || page < 1) {
+      return 1;
+    }
+
+    return page;
+  }
+
+  private parseSort(value: string | null): CatalogSort {
+    switch (value) {
+      case 'oldest':
+      case 'title-asc':
+      case 'title-desc':
+      case 'newest':
+        return value;
+
+      default:
+        return 'newest';
+    }
+  }
+
+  private updateQuery(changes: Partial<CatalogQuery>, replaceUrl = false): void {
+    const nextQuery: CatalogQuery = {
+      ...this.query(),
+      ...changes,
+    };
+
+    this.query.set(nextQuery);
+
+    void this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+
+        queryParams: {
+          search:
+            nextQuery.search || null,
+
+          subject:
+            nextQuery.subject,
+
+          grade:
+            nextQuery.grade,
+
+          type:
+            nextQuery.resourceType,
+
+          sort:
+            nextQuery.sort === 'newest'
+              ? null
+              : nextQuery.sort,
+
+          page:
+            nextQuery.page === 1
+              ? null
+              : nextQuery.page,
+        },
+
+        replaceUrl,
+      }
+    );
+  }
+
+  private parseGrade(value: string | null): number | null {
+    if (!value) return null;
+
+    const grade = Number(value);
+
+    if (!Number.isInteger(grade) || grade <  5 || grade > 12) {
+      return null;
+    }
+
+    return grade;
   }
 }
