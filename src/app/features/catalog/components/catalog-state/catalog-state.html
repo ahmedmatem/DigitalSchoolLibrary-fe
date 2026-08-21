@@ -1,0 +1,33 @@
+<section
+  class="catalog-state"
+  [class.catalog-state--error]="type() === 'error'">
+
+  <div class="catalog-state__icon">
+
+    @if (type() === 'error') {
+      <svg
+        lucideTriangleAlert
+        aria-hidden="true"
+      ></svg>
+    } @else {
+      <svg
+        lucideSearchX
+        aria-hidden="true"
+      ></svg>
+    }
+
+  </div>
+
+  <h2>{{ title() }}</h2>
+
+  <p>{{ message() }}</p>
+
+  @if (actionLabel()) {
+    <sl-button
+      variant="secondary"
+      (click)="action.emit()">
+      {{ actionLabel() }}
+    </sl-button>
+  }
+
+</section>
