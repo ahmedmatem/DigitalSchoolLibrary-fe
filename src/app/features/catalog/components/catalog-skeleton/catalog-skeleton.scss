@@ -1,0 +1,47 @@
+.catalog-skeleton {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
+
+  gap: var(--sl-space-5);
+}
+
+.catalog-skeleton__card {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius:
+    var(--sl-radius-lg);
+
+  background:
+    var(--sl-color-surface);
+}
+
+.catalog-skeleton__content {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--sl-space-3);
+
+  padding:
+    var(--sl-space-4);
+}
+
+.catalog-skeleton__chips {
+  display: flex;
+  gap: var(--sl-space-2);
+}
+
+.catalog-skeleton__description {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--sl-space-2);
+}

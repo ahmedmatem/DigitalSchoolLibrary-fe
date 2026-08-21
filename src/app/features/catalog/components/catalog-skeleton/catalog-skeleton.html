@@ -1,0 +1,33 @@
+<div class="catalog-skeleton" aria-hidden="true">
+  @for (_ of cards; track $index) {
+    <article class="catalog-skeleton__card">
+
+      <sl-skeleton width="100%" height="164px" radius="lg" />
+
+      <div class="catalog-skeleton__content">
+
+        <div class="catalog-skeleton__chips">
+          <sl-skeleton width="92px" height="28px" radius="round" />
+
+          <sl-skeleton width="70px" height="28px" radius="round" />
+        </div>
+
+        <sl-skeleton width="88%" height="22px" />
+
+        <sl-skeleton width="55%" height="16px" />
+
+        <div class="catalog-skeleton__description">
+          <sl-skeleton width="100%" height="14px" />
+
+          <sl-skeleton width="94%" height="14px" />
+
+          <sl-skeleton width="76%" height="14px" />
+        </div>
+
+        <sl-skeleton width="45%" height="14px" />
+
+      </div>
+
+    </article>
+  }
+</div>
