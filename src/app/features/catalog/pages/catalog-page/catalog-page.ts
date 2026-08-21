@@ -27,6 +27,9 @@ import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-car
 import { CatalogQuery, CatalogSort} from '../../models/catalog-query.model';
 import { CATALOG_MOCK_RESOURCES } from '../../data-access/catalog.mock';
 
+import { CatalogSkeleton } from '../../components/catalog-skeleton/catalog-skeleton';
+import { CatalogState } from '../../components/catalog-state/catalog-state';
+
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
   subject: null,
@@ -46,6 +49,8 @@ const DEFAULT_QUERY: CatalogQuery = {
     Pagination,
     ResourceCard,
     CatalogFilters,
+    CatalogSkeleton,
+    CatalogState
   ],
   templateUrl: './catalog-page.html',
   styleUrl: './catalog-page.scss',
@@ -58,6 +63,14 @@ export class CatalogPage {
   private readonly route = inject(ActivatedRoute);
 
   private readonly router = inject(Router);
+
+  /* 
+  Temporary signals for loading and error states. 
+  In a real application, these would be managed by a service 
+  that fetches data from an API.
+   */
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
 
   readonly resources = signal<ResourceCardVm[]>([
     ... CATALOG_MOCK_RESOURCES
