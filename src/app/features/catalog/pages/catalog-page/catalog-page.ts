@@ -215,6 +215,15 @@ export class CatalogPage {
     return result;
   });
 
+  /*
+  Temporary methods for simulating loading and error states. 
+  In a real application, these would be handled by a service 
+  that fetches data from an API.
+  */
+  retryLoad(): void {
+    this.error.set(null);
+  }
+
   updateSearch(search: string): void {
     this.updateQuery(
       {

@@ -58,8 +58,7 @@
     <div class="catalog__toolbar">
 
       <p class="catalog__results">
-        {{ resultCount() }}
-        ресурса
+        {{ resultCount() }} ресурса
       </p>
 
       <label class="catalog__sort">
@@ -67,11 +66,7 @@
 
         <select
           [value]="query().sort"
-          (change)="
-            updateSort(
-              $any($event.target).value
-            )
-          "
+          (change)="updateSort($any($event.target).value)"
         >
           <option value="newest">
             Най-нови
@@ -93,20 +88,29 @@
 
     </div>
 
-    @if (pagedResources().length > 0) {
+    @if (loading()) {
+
+      <sl-catalog-skeleton />
+
+    } @else if (error()) {
+
+      <sl-catalog-state
+        type="error"
+        title="Неуспешно зареждане"
+        [message]="error()!"
+        actionLabel="Опитай отново"
+        (action)="retryLoad()"
+      />
+
+    } @else if (pagedResources().length > 0) {
 
       <div class="catalog__grid">
 
-        @for (resource of pagedResources();  track resource.id) {
+        @for (resource of pagedResources(); track resource.id) {
           <sl-resource-card
             [resource]="resource"
             (openResource)="openResource($event)"
-            (savedChange)="
-              onSavedChange(
-                resource.id,
-                $event
-              )
-            "
+            (savedChange)="onSavedChange(resource.id, $event)"
           />
         }
 
@@ -114,35 +118,22 @@
 
     } @else {
 
-      <div class="catalog__empty">
-
-        <h2>
-          Няма намерени ресурси
-        </h2>
-
-        <p>
-          Опитай с друга дума за търсене
-          или промени избраните филтри.
-        </p>
-
-        <button
-          type="button"
-          (click)="resetCatalog()">
-          Изчисти филтрите
-        </button>
-
-      </div>
+      <sl-catalog-state
+        type="empty"
+        title="Няма намерени ресурси"
+        message="Опитай с друга дума за търсене или промени избраните филтри."
+        actionLabel="Изчисти търсенето и филтрите"
+        (action)="resetCatalog()" />
 
     }
 
-    @if (resultCount() > 0) {
+    @if (!loading() && !error() && resultCount() > 0) {
       <div class="catalog__pagination">
 
         <sl-pagination
           [page]="query().page"
           [pageCount]="totalPages()"
-          (pageChange)="updatePage($event)"
-        />
+          (pageChange)="updatePage($event)" />
 
       </div>
     }
