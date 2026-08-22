@@ -1,13 +1,17 @@
-import { ResourceDto } from './resource.dto';
+import { PublicResourceListDto } from './public-resource-list.dto';
 
 export interface CatalogResponse {
-  items: ResourceDto[];
+  items: PublicResourceListDto[];
 
   page: number;
 
   pageSize: number;
 
-  totalItems: number;
+  totalCount: number;
 
   totalPages: number;
+
+  hasPreviousPage: boolean;
+
+  hasNextPage: boolean;
 }
