@@ -50,7 +50,7 @@ export class ResourceApiService {
      * Ще го заменим с точния endpoint от ResourceController.
      */
     return this.http.get<CatalogResponse>(
-        `${API_CONFIG.baseUrl}/resources/catalog`, { params }
+        `${API_CONFIG.baseUrl}/resources`, { params }
     );
   }
 }
