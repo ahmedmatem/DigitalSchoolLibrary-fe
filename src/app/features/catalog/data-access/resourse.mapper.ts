@@ -1,10 +1,11 @@
 import { ResourceCardVm } from '../../../shared/ui/resource-card/resource-card.model';
 
-import { ResourceDto } from '../models/resource.dto';
+import { PublicResourceListDto } from '../models/public-resource-list.dto';
 
-export function mapResourceToCard(
-  resource: ResourceDto
+export function mapPublicResourceToCard(
+  resource: PublicResourceListDto
 ): ResourceCardVm {
+
   return {
     id: resource.id,
 
@@ -12,27 +13,46 @@ export function mapResourceToCard(
 
     author: resource.author ?? undefined,
 
-    description: resource.description ?? undefined,
+    subject: resource.subjectName,
 
-    subject: resource.subject,
+    category: resource.categoryName,
 
-    category: resource.category ?? undefined,
+    resourceType: getResourceTypeLabel(resource.type),
 
-    resourceType: resource.resourceType,
-
-    grade: resource.grade ?? undefined,
-
-    section: resource.section ?? null,
-
-    coverUrl: resource.coverUrl ?? undefined,
-
-    /*
-     * Това е UI state.
-     * Публичният catalog backend не е длъжен
-     * да връща saved информация.
-     */
     isSaved: false,
 
-    createdAt: resource.createdAt,
+    createdAt: resource.createdAtUtc,
   };
+}
+
+function getResourceTypeLabel( type: number): string {
+
+  switch (type) {
+    case 1:
+      return 'PDF';
+
+    case 2:
+      return 'Презентация';
+
+    case 3:
+      return 'Работен лист';
+
+    case 4:
+      return 'Тест';
+
+    case 5:
+      return 'Видео';
+
+    case 6:
+      return 'Линк';
+
+    case 7:
+      return 'Изходен код';
+
+    case 8:
+      return 'Архив';
+
+    default:
+      return 'Друго';
+  }
 }
