@@ -20,6 +20,13 @@ import { CatalogFilters } from '../../components/catalog-filters/catalog-filters
 
 import { ResourceApiService } from '../../data-access/resource-api.service';
 
+import { LookupApiService } from '../../data-access/lookup-api.service';
+
+import {
+  SubjectLookupDto,
+  GradeLevelLookupDto,
+} from '../../models/lookup.models';
+
 import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
 
 import { PublicCatalogRequest } from '../../models/public-catalog-request.model';
@@ -70,6 +77,12 @@ export class CatalogPage {
 
   private readonly router = inject(Router);
 
+  private readonly lookupApi = inject(LookupApiService);
+
+  readonly subjects = signal<SubjectLookupDto[]>([]);
+
+  readonly gradeLevels = signal<GradeLevelLookupDto[]>([]);
+
   /* 
   Temporary signals for loading and error states. 
   In a real application, these would be managed by a service 
@@ -110,6 +123,8 @@ export class CatalogPage {
           this.loadPublicCatalog();
         }
       });
+
+      this.loadLookups();
   }
 
   readonly apiTotalCount = signal(0);
@@ -461,6 +476,34 @@ export class CatalogPage {
           );
 
           this.loading.set(false);
+        },
+      });
+  }
+
+  private loadLookups(): void {
+    this.lookupApi
+      .getSubjects()
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: subjects => {
+          this.subjects.set(subjects);
+        },
+      });
+
+    this.lookupApi
+      .getGradeLevels()
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: grades => {
+          this.gradeLevels.set(grades);
         },
       });
   }

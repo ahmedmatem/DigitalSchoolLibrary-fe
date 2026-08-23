@@ -7,16 +7,16 @@
 
     <select
       id="catalog-subject"
-      [value]="subject() ?? ''"
+      [value]="subjectId() ?? ''"
       (change)="onSubjectChange($event)"
     >
       <option value="">
         Всички предмети
       </option>
 
-      @for ( item of subjects; track item) {
-        <option [value]="item">
-          {{ item }}
+      @for (item of subjects(); track item.id) {
+        <option [value]="item.id">
+          {{ item.name }}
         </option>
       }
     </select>
@@ -29,16 +29,16 @@
 
     <select
       id="catalog-grade"
-      [value]="grade() ?? ''"
+      [value]="gradeLevelId() ?? ''"
       (change)="onGradeChange($event)"
     >
       <option value="">
         Всички класове
       </option>
 
-      @for (item of grades; track item ) {
-        <option [value]="item">
-          {{ item }} клас
+      @for (item of grades(); track item.id) {
+        <option [value]="item.id">
+          {{ item.displayName }}
         </option>
       }
     </select>
@@ -58,7 +58,7 @@
         Всички типове
       </option>
 
-      @for ( item of resourceTypes; track item ) {
+      @for (item of resourceTypes; track item) {
         <option [value]="item">
           {{ item }}
         </option>
