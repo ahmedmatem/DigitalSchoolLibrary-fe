@@ -1,18 +1,14 @@
 import {
   Component,
   computed,
+  DestroyRef,
   inject,
   signal,
 } from '@angular/core';
 
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  takeUntilDestroyed,
-} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { PageContainer } from '../../../../layout/page-container/page-container';
 
@@ -21,6 +17,12 @@ import { Chip } from '../../../../shared/ui/chip/chip';
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { ResourceCard } from '../../../../shared/ui/resource-card/resource-card';
 import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
+
+import { ResourceApiService } from '../../data-access/resource-api.service';
+
+import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
+
+import { PublicCatalogRequest } from '../../models/public-catalog-request.model';
 
 import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-card.model';
 
@@ -40,6 +42,8 @@ const DEFAULT_QUERY: CatalogQuery = {
   pageSize: 12,
 };
 
+const USE_REAL_API = false; // Set to true to use real API instead of mock data
+
 @Component({
   selector: 'sl-catalog-page',
   imports: [
@@ -56,9 +60,11 @@ const DEFAULT_QUERY: CatalogQuery = {
   styleUrl: './catalog-page.scss',
 })
 export class CatalogPage {
-  readonly query = signal<CatalogQuery>({
-    ...DEFAULT_QUERY,
-  });
+  readonly query = signal<CatalogQuery>({ ...DEFAULT_QUERY });
+
+  private readonly resourceApi = inject(ResourceApiService);
+
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly route = inject(ActivatedRoute);
 
@@ -99,8 +105,15 @@ export class CatalogPage {
           page,
           pageSize: 12,
         });
+
+        if (USE_REAL_API) {
+          this.loadPublicCatalog();
+        }
       });
   }
+
+  readonly apiTotalCount = signal(0);
+  readonly apiTotalPages = signal(1);
 
   readonly resultCount = computed(
     () => this.filteredResources().length
@@ -228,6 +241,11 @@ export class CatalogPage {
   that fetches data from an API.
   */
   retryLoad(): void {
+    if (USE_REAL_API) {
+      this.loadPublicCatalog();
+      return;
+    }
+
     this.error.set(null);
   }
 
@@ -398,5 +416,52 @@ export class CatalogPage {
     }
 
     return grade;
+  }
+
+  private loadPublicCatalog(): void {
+    const query = this.query();
+
+    const request: PublicCatalogRequest = {
+      search: query.search.trim() || undefined,
+
+      page: query.page,
+
+      pageSize: query.pageSize,
+    };
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.resourceApi
+      .getPublicCatalog(request)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: response => {
+          const resources =
+            response.items.map(
+              mapPublicResourceToCard
+            );
+
+          this.resources.set(resources);
+
+          this.apiTotalCount.set(response.totalCount);
+
+          this.apiTotalPages.set(response.totalPages);
+
+          this.loading.set(false);
+        },
+
+        error: () => {
+          this.error.set(
+            'Възникна проблем при зареждането на ресурсите.'
+          );
+
+          this.loading.set(false);
+        },
+      });
   }
 }
