@@ -112,17 +112,24 @@ export class CatalogPage {
     return Math.max(1, Math.ceil(count / pageSize));
   });
 
-  readonly activeFilters = computed(() => {
+  readonly activeFilters = computed<string[]>(() => {
     const query = this.query();
 
-    return [
-      query.subject,
-      query.grade,
-      query.resourceType,
-    ].filter(
-      (value): value is string =>
-        value !== null
-    );
+    const filters: string[] = [];
+
+    if (query.subject) {
+      filters.push(query.subject);
+    }
+
+    if (query.grade !== null) {
+      filters.push(`${query.grade} клас`);
+    }
+
+    if (query.resourceType) {
+      filters.push(query.resourceType);
+    }
+
+    return filters;
   });
 
   readonly pagedResources = computed(() => {

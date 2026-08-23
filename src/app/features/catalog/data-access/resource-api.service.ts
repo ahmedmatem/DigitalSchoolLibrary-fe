@@ -1,0 +1,57 @@
+import { Injectable, inject } from '@angular/core';
+
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+
+import { PublicCatalogRequest } from '../models/public-catalog-request.model';
+
+import { CatalogResponse } from '../models/catalog-response.model';
+
+import { API_CONFIG } from '../../../core/config/api.config';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResourceApiService {
+
+  private readonly http = inject(HttpClient);
+
+  getPublicCatalog(request: PublicCatalogRequest): Observable<CatalogResponse> {
+
+    let params = new HttpParams()
+        .set('page', request.page)
+        .set('pageSize', request.pageSize);
+
+    if (request.search) {
+      params = params.set('search', request.search);
+    }
+
+    if (request.subjectId) {
+      params =  params.set('subjectId', request.subjectId);
+    }
+
+    if (request.categoryId) {
+      params = params.set('categoryId', request.categoryId);
+    }
+
+    if (request.gradeLevelId !== undefined) {
+      params = params.set('gradeLevelId', request.gradeLevelId);
+    }
+
+    if (request.schoolClassId) {
+      params = params.set('schoolClassId', request.schoolClassId);
+    }
+
+    if (request.type !== undefined) {
+      params = params.set('type', request.type);
+    }
+
+    if (request.audienceType !== undefined) {
+      params = params.set('audienceType', request.audienceType);
+    }
+
+    return this.http
+        .get<CatalogResponse>(`${API_CONFIG.baseUrl}/resources`, { params });
+  }
+}

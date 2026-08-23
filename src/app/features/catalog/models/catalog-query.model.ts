@@ -3,13 +3,13 @@ export type CatalogSort = 'newest' | 'oldest' | 'title-asc' | 'title-desc';
 export interface CatalogQuery {
   search: string;
 
-  subjectId: string | null;
+  subject: string | null;
 
-  categoryId: string | null;
+  grade: number | null;
 
-  gradeLevelId: number | null;
+  resourceType: string | null;
 
-  type: number | null;
+  sort: CatalogSort;
 
   page: number;
 

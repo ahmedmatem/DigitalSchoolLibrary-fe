@@ -2,10 +2,7 @@ import { ResourceCardVm } from '../../../shared/ui/resource-card/resource-card.m
 
 import { PublicResourceListDto } from '../models/public-resource-list.dto';
 
-export function mapPublicResourceToCard(
-  resource: PublicResourceListDto
-): ResourceCardVm {
-
+export function mapPublicResourceToCard(resource: PublicResourceListDto): ResourceCardVm {
   return {
     id: resource.id,
 
@@ -25,8 +22,7 @@ export function mapPublicResourceToCard(
   };
 }
 
-function getResourceTypeLabel( type: number): string {
-
+function getResourceTypeLabel(type: number): string {
   switch (type) {
     case 1:
       return 'PDF';
@@ -51,6 +47,9 @@ function getResourceTypeLabel( type: number): string {
 
     case 8:
       return 'Архив';
+
+    case 9:
+      return 'Друго';
 
     default:
       return 'Друго';
