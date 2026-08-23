@@ -95,6 +95,44 @@ export class CatalogPage {
     ... CATALOG_MOCK_RESOURCES
   ]);
 
+  readonly selectedSubjectId =
+  computed<string | null>(() => {
+    const subjectName =
+      this.query().subject;
+
+    if (!subjectName) {
+      return null;
+    }
+
+    return (
+      this.subjects()
+        .find(
+          subject =>
+            subject.name === subjectName
+        )
+        ?.id ?? null
+    );
+  });
+
+  readonly selectedGradeLevelId =
+  computed<number | null>(() => {
+    const grade =
+      this.query().grade;
+
+    if (grade === null) {
+      return null;
+    }
+
+    return (
+      this.gradeLevels()
+        .find(
+          gradeLevel =>
+            gradeLevel.number === grade
+        )
+        ?.id ?? null
+    );
+  });
+
   constructor() {
     this.route.queryParamMap
       .pipe(
@@ -262,6 +300,46 @@ export class CatalogPage {
     }
 
     this.error.set(null);
+  }
+
+  updateSubjectById(
+    subjectId: string | null
+  ): void {
+    if (!subjectId) {
+      this.updateSubject(null);
+      return;
+    }
+
+    const subject =
+      this.subjects()
+        .find(
+          item =>
+            item.id === subjectId
+        );
+
+    this.updateSubject(
+      subject?.name ?? null
+    );
+  }
+
+  updateGradeById(
+    gradeLevelId: number | null
+  ): void {
+    if (gradeLevelId === null) {
+      this.updateGrade(null);
+      return;
+    }
+
+    const gradeLevel =
+      this.gradeLevels()
+        .find(
+          item =>
+            item.id === gradeLevelId
+        );
+
+    this.updateGrade(
+      gradeLevel?.number ?? null
+    );
   }
 
   updateSearch(search: string): void {

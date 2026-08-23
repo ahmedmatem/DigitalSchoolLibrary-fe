@@ -23,12 +23,16 @@
 
     <section class="catalog__filters">
       <sl-catalog-filters
-        [subject]="query().subject"
-        [grade]="query().grade"
+        [subjects]="subjects()"
+        [grades]="gradeLevels()"
+
+        [subjectId]="selectedSubjectId()"
+        [gradeLevelId]="selectedGradeLevelId()"
+
         [resourceType]="query().resourceType"
 
-        (subjectChange)="updateSubject($event)"
-        (gradeChange)="updateGrade($event)"
+        (subjectChange)="updateSubjectById($event)"
+        (gradeChange)="updateGradeById($event)"
         (resourceTypeChange)="updateResourceType($event)"
 
         (clear)="clearFilters()"
