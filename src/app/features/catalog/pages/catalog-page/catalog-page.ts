@@ -603,6 +603,8 @@ export class CatalogPage {
 
           this.resources.set(resources);
 
+          this.loadCoverUrls(resources);
+
           this.apiTotalCount.set(response.totalCount);
 
           this.apiTotalPages.set(response.totalPages);
@@ -618,6 +620,40 @@ export class CatalogPage {
           this.loading.set(false);
         },
       });
+  }
+
+  private loadCoverUrls(resources: ResourceCardVm[]): void {
+    for (const resource of resources) {
+      if (!resource.hasCover) continue;
+
+      this.resourceApi
+        .getPublicCover(resource.id)
+        .pipe(
+          takeUntilDestroyed(
+            this.destroyRef
+          )
+        )
+        .subscribe({
+          next: cover => {
+            this.resources.update(items =>
+              items.map(item =>
+                item.id === resource.id
+                  ? {
+                      ...item,
+                      coverUrl: cover.downloadUrl,
+                    }
+                  : item
+              )
+            );
+          },
+
+          error: () => {
+            // Не чупим catalog-а,
+            // ако само cover не може да се зареди.
+            /*ако cover request се провали, картата просто остава с placeholder иконата.*/
+          },
+        });
+    }
   }
 
   private buildPublicCatalogRequest(): PublicCatalogRequest {

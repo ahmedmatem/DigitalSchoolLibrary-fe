@@ -9,7 +9,7 @@
     @if (resource().coverUrl) {
       <img
         [src]="resource().coverUrl"
-        [alt]="resource().title"
+        [alt]="'Корица на ' + resource().title"
       />
     } @else {
       <svg

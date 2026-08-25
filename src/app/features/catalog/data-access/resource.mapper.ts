@@ -17,6 +17,8 @@ export function mapPublicResourceToCard(resource: PublicResourceListDto): Resour
 
     resourceType: getResourceTypeLabel(resource.type),
 
+    hasCover: resource.hasCover,
+
     isSaved: false,
 
     createdAt: resource.createdAtUtc,
