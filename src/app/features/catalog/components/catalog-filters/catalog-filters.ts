@@ -5,9 +5,10 @@ import {
 } from '@angular/core';
 
 import {
-  SubjectLookupDto,
-  GradeLevelLookupDto,
-} from '../../models/lookup.models';
+  SubjectLookup,
+  GradeLevelLookup,
+} from '../../../../core/models/lookup.models';
+import { ResourceTypeOption } from '../../../../core/models/resource-type.model';
 
 @Component({
   selector: 'sl-catalog-filters',
@@ -15,31 +16,25 @@ import {
   styleUrl: './catalog-filters.scss',
 })
 export class CatalogFilters {
-  readonly subjects = input<SubjectLookupDto[]>([]);
+  readonly subjects = input<SubjectLookup[]>([]);
 
-  readonly grades = input<GradeLevelLookupDto[]>([]);
+  readonly grades = input<GradeLevelLookup[]>([]);
 
   readonly subjectId = input<string | null>(null);
 
   readonly gradeLevelId = input<number | null>(null);
 
-  readonly resourceType = input<string | null>(null);
+  readonly resourceType = input<number | null>(null);
 
   readonly subjectChange = output<string | null>();
 
   readonly gradeChange = output<number | null>();
 
-  readonly resourceTypeChange = output<string | null>();
+  readonly resourceTypeChange = output<number | null>();
 
   readonly clear = output<void>();
 
-  readonly resourceTypes = [
-    'PDF',
-    'PPTX',
-    'DOCX',
-    'Видео',
-    'Линк',
-  ];
+  readonly resourceTypes =  input<readonly ResourceTypeOption[]>([]);
 
   onSubjectChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
@@ -58,8 +53,6 @@ export class CatalogFilters {
   onResourceTypeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
 
-    this.resourceTypeChange.emit(
-      value || null
-    );
+    this.resourceTypeChange.emit(value ? Number(value) : null);
   }
 }

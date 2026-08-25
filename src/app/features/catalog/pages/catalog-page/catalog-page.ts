@@ -6,6 +6,12 @@ import {
   signal,
 } from '@angular/core';
 
+import {
+  forkJoin,
+  switchMap,
+  tap,
+} from 'rxjs';
+
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -23,9 +29,9 @@ import { ResourceApiService } from '../../data-access/resource-api.service';
 import { LookupApiService } from '../../data-access/lookup-api.service';
 
 import {
-  SubjectLookupDto,
-  GradeLevelLookupDto,
-} from '../../models/lookup.models';
+  SubjectLookup,
+  GradeLevelLookup,
+} from '../../../../core/models/lookup.models';
 
 import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
 
@@ -39,6 +45,8 @@ import { CATALOG_MOCK_RESOURCES } from '../../data-access/catalog.mock';
 import { CatalogSkeleton } from '../../components/catalog-skeleton/catalog-skeleton';
 import { CatalogState } from '../../components/catalog-state/catalog-state';
 
+import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.model';
+
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
   subject: null,
@@ -49,7 +57,7 @@ const DEFAULT_QUERY: CatalogQuery = {
   pageSize: 12,
 };
 
-const USE_REAL_API = false; // Set to true to use real API instead of mock data
+const USE_REAL_API = true; // Set to true to use real API instead of mock data
 
 @Component({
   selector: 'sl-catalog-page',
@@ -79,9 +87,28 @@ export class CatalogPage {
 
   private readonly lookupApi = inject(LookupApiService);
 
-  readonly subjects = signal<SubjectLookupDto[]>([]);
+  readonly subjects = signal<SubjectLookup[]>([]);
 
-  readonly gradeLevels = signal<GradeLevelLookupDto[]>([]);
+  readonly gradeLevels = signal<GradeLevelLookup[]>([]);
+
+  readonly selectedResourceType = computed<number | null>(() => {
+    const resourceType = this.query().resourceType;
+
+    if (!resourceType) {
+      return null;
+    }
+
+    return (
+      this.resourceTypes
+        .find(
+          item =>
+            item.label === resourceType
+        )
+        ?.value ?? null
+    );
+  });
+
+  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;
 
   /* 
   Temporary signals for loading and error states. 
@@ -134,9 +161,23 @@ export class CatalogPage {
   });
 
   constructor() {
-    this.route.queryParamMap
+    forkJoin({
+      subjects: this.lookupApi.getSubjects(),
+      grades: this.lookupApi.getGradeLevels(),
+    })
       .pipe(
-        takeUntilDestroyed()
+        tap(({ subjects, grades }) => {
+          this.subjects.set(subjects);
+          this.gradeLevels.set(grades);
+        }),
+
+        switchMap(() =>
+          this.route.queryParamMap
+        ),
+
+        takeUntilDestroyed(
+          this.destroyRef
+        )
       )
       .subscribe(params => {
         const sort = this.parseSort(
@@ -149,11 +190,19 @@ export class CatalogPage {
 
         this.query.set({
           search: params.get('search') ?? '',
+
           subject: params.get('subject'),
-          grade: this.parseGrade(params.get('grade')),
+
+          grade: this.parseGrade(
+              params.get('grade')
+            ),
+
           resourceType: params.get('type'),
+
           sort,
+
           page,
+
           pageSize: 12,
         });
 
@@ -161,18 +210,24 @@ export class CatalogPage {
           this.loadPublicCatalog();
         }
       });
-
-      this.loadLookups();
   }
 
   readonly apiTotalCount = signal(0);
   readonly apiTotalPages = signal(1);
 
-  readonly resultCount = computed(
-    () => this.filteredResources().length
-  );
+  readonly resultCount = computed(() => {
+    if (USE_REAL_API) {
+      return this.apiTotalCount();
+    }
+
+    return this.filteredResources().length;
+  });
 
   readonly totalPages = computed(() => {
+    if (USE_REAL_API) {
+      return Math.max(1, this.apiTotalPages());
+    }
+
     const count = this.filteredResources().length;
     const pageSize = this.query().pageSize;
     return Math.max(1, Math.ceil(count / pageSize));
@@ -199,6 +254,10 @@ export class CatalogPage {
   });
 
   readonly pagedResources = computed(() => {
+    if (USE_REAL_API) {
+      return this.resources();
+    }
+
     const query = this.query();
 
     const validPage = Math.min(query.page, this.totalPages());
@@ -206,10 +265,7 @@ export class CatalogPage {
     const start = (validPage - 1) * query.pageSize;
 
     return this.filteredResources()
-      .slice(
-        start,
-        start + query.pageSize
-      );
+      .slice(start, start + query.pageSize);
   });
 
   readonly filteredResources = computed(() => {
@@ -499,6 +555,23 @@ export class CatalogPage {
     );
   }
 
+  updateResourceTypeByValue(value: number | null): void {
+    if (value === null) {
+      this.updateResourceType(null);
+      return;
+    }
+
+    const resourceType =
+      this.resourceTypes.find(
+        item =>
+          item.value === value
+      );
+
+    this.updateResourceType(
+      resourceType?.label ?? null
+    );
+  }
+
   private parseGrade(value: string | null): number | null {
     if (!value) return null;
 
@@ -512,15 +585,7 @@ export class CatalogPage {
   }
 
   private loadPublicCatalog(): void {
-    const query = this.query();
-
-    const request: PublicCatalogRequest = {
-      search: query.search.trim() || undefined,
-
-      page: query.page,
-
-      pageSize: query.pageSize,
-    };
+    const request = this.buildPublicCatalogRequest();
 
     this.loading.set(true);
     this.error.set(null);
@@ -534,10 +599,7 @@ export class CatalogPage {
       )
       .subscribe({
         next: response => {
-          const resources =
-            response.items.map(
-              mapPublicResourceToCard
-            );
+          const resources = response.items.map(mapPublicResourceToCard);
 
           this.resources.set(resources);
 
@@ -558,31 +620,34 @@ export class CatalogPage {
       });
   }
 
-  private loadLookups(): void {
-    this.lookupApi
-      .getSubjects()
-      .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
-      )
-      .subscribe({
-        next: subjects => {
-          this.subjects.set(subjects);
-        },
-      });
+  private buildPublicCatalogRequest(): PublicCatalogRequest {
 
-    this.lookupApi
-      .getGradeLevels()
-      .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
-      )
-      .subscribe({
-        next: grades => {
-          this.gradeLevels.set(grades);
-        },
-      });
+    const query = this.query();
+
+    const subject = query.subject
+        ? this.subjects().find(item => item.name === query.subject)
+        : undefined;
+
+    const gradeLevel = query.grade !== null
+        ? this.gradeLevels().find(item => item.number === query.grade)
+        : undefined;
+
+    const resourceType = query.resourceType
+        ? this.resourceTypes.find(item => item.label === query.resourceType)
+        : undefined;
+
+    return {
+      search: query.search.trim() || undefined,
+
+      subjectId: subject?.id,
+
+      gradeLevelId: gradeLevel?.id,
+
+      type: resourceType?.value,
+
+      page: query.page,
+
+      pageSize: query.pageSize,
+    };
   }
 }

@@ -58,9 +58,9 @@
         Всички типове
       </option>
 
-      @for (item of resourceTypes; track item) {
-        <option [value]="item">
-          {{ item }}
+      @for (item of resourceTypes(); track item.value) {
+        <option [value]="item.value">
+          {{ item.label }}
         </option>
       }
     </select>

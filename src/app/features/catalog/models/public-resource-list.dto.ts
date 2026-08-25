@@ -1,3 +1,5 @@
+import { ResourceType } from "../../../core/models/resource-type.model";
+
 export interface PublicResourceListDto {
   id: string;
 
@@ -5,7 +7,7 @@ export interface PublicResourceListDto {
 
   author: string | null;
 
-  type: number;
+  type: ResourceType;
 
   subjectName: string;
 

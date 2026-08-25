@@ -1,3 +1,4 @@
+import { RESOURCE_TYPE_OPTIONS } from '../../../core/models/resource-type.model';
 import { ResourceCardVm } from '../../../shared/ui/resource-card/resource-card.model';
 
 import { PublicResourceListDto } from '../models/public-resource-list.dto';
@@ -23,35 +24,9 @@ export function mapPublicResourceToCard(resource: PublicResourceListDto): Resour
 }
 
 function getResourceTypeLabel(type: number): string {
-  switch (type) {
-    case 1:
-      return 'PDF';
-
-    case 2:
-      return 'Презентация';
-
-    case 3:
-      return 'Работен лист';
-
-    case 4:
-      return 'Тест';
-
-    case 5:
-      return 'Видео';
-
-    case 6:
-      return 'Линк';
-
-    case 7:
-      return 'Изходен код';
-
-    case 8:
-      return 'Архив';
-
-    case 9:
-      return 'Друго';
-
-    default:
-      return 'Друго';
-  }
+  return ( RESOURCE_TYPE_OPTIONS.find(
+      option =>
+        option.value === type
+    )?.label ?? 'Друго'
+  );
 }

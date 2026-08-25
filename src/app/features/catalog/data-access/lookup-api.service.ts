@@ -12,11 +12,11 @@ import {
 } from 'rxjs';
 
 import {
-  SubjectLookupDto,
-  CategoryLookupDto,
-  GradeLevelLookupDto,
-  SchoolClassLookupDto,
-} from '../models/lookup.models';
+  SubjectLookup,
+  CategoryLookup,
+  GradeLevelLookup,
+  SchoolClassLookup,
+} from '../../../core/models/lookup.models';
 
 import {
   API_CONFIG,
@@ -29,36 +29,36 @@ export class LookupApiService {
 
   private readonly http = inject(HttpClient);
 
-  getSubjects(): Observable<SubjectLookupDto[]> {
+  getSubjects(): Observable<SubjectLookup[]> {
 
-    return this.http.get<SubjectLookupDto[]>(
+    return this.http.get<SubjectLookup[]>(
       `${API_CONFIG.baseUrl}/lookups/subjects`
     );
   }
 
-  getCategories(): Observable<CategoryLookupDto[]> {
+  getCategories(): Observable<CategoryLookup[]> {
 
-    return this.http.get<CategoryLookupDto[]>(
+    return this.http.get<CategoryLookup[]>(
       `${API_CONFIG.baseUrl}/lookups/categories`
     );
   }
 
-  getGradeLevels(): Observable<GradeLevelLookupDto[]> {
+  getGradeLevels(): Observable<GradeLevelLookup[]> {
 
-    return this.http.get<GradeLevelLookupDto[]>(
+    return this.http.get<GradeLevelLookup[]>(
       `${API_CONFIG.baseUrl}/lookups/grade-levels`
     );
   }
 
-  getSchoolClasses(gradeLevelId?: number): Observable<SchoolClassLookupDto[]> {
+  getSchoolClasses(gradeLevelId?: number): Observable<SchoolClassLookup[]> {
 
     const url =`${API_CONFIG.baseUrl}/lookups/school-classes`;
 
     if (gradeLevelId == null) {
-      return this.http.get<SchoolClassLookupDto[]>(url);
+      return this.http.get<SchoolClassLookup[]>(url);
     }
 
-    return this.http.get<SchoolClassLookupDto[]>(
+    return this.http.get<SchoolClassLookup[]>(
       url,
       {
         params: {

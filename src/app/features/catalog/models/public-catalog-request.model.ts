@@ -1,3 +1,5 @@
+import { ResourceType } from "../../../core/models/resource-type.model";
+
 export interface PublicCatalogRequest {
   search?: string;
 
@@ -9,7 +11,7 @@ export interface PublicCatalogRequest {
 
   schoolClassId?: string;
 
-  type?: number;
+  type?: ResourceType;
 
   audienceType?: number;
 

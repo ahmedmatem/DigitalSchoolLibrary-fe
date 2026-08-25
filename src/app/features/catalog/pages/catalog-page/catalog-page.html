@@ -25,15 +25,15 @@
       <sl-catalog-filters
         [subjects]="subjects()"
         [grades]="gradeLevels()"
+        [resourceTypes]="resourceTypes"
 
         [subjectId]="selectedSubjectId()"
         [gradeLevelId]="selectedGradeLevelId()"
-
-        [resourceType]="query().resourceType"
+        [resourceType]="selectedResourceType()"
 
         (subjectChange)="updateSubjectById($event)"
         (gradeChange)="updateGradeById($event)"
-        (resourceTypeChange)="updateResourceType($event)"
+        (resourceTypeChange)="updateResourceTypeByValue($event)"
 
         (clear)="clearFilters()"
       />

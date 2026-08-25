@@ -1,20 +1,20 @@
-export interface SubjectLookupDto {
+export interface SubjectLookup {
   id: string;
   name: string;
 }
 
-export interface CategoryLookupDto {
+export interface CategoryLookup {
   id: string;
   name: string;
 }
 
-export interface GradeLevelLookupDto {
+export interface GradeLevelLookup {
   id: number;
   number: number;
   displayName: string;
 }
 
-export interface SchoolClassLookupDto {
+export interface SchoolClassLookup {
   id: string;
   gradeLevelId: number;
   gradeNumber: number;
