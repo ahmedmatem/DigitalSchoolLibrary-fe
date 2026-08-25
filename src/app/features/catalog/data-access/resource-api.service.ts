@@ -53,6 +53,10 @@ export class ResourceApiService {
       params = params.set('audienceType', request.audienceType);
     }
 
+    if (request.sort !== undefined) {
+      params = params.set('sort', request.sort);
+    }
+
     return this.http
         .get<CatalogResponse>(`${API_CONFIG.baseUrl}/resources`, { params });
   }

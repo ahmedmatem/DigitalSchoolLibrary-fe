@@ -1,4 +1,5 @@
 import { ResourceType } from "../../../core/models/resource-type.model";
+import { ResourceSortOption } from "../../../core/models/resource-sort.model";
 
 export interface PublicCatalogRequest {
   search?: string;
@@ -14,6 +15,8 @@ export interface PublicCatalogRequest {
   type?: ResourceType;
 
   audienceType?: number;
+
+  sort?: ResourceSortOption;
 
   page: number;
 

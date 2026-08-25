@@ -46,6 +46,7 @@ import { CatalogSkeleton } from '../../components/catalog-skeleton/catalog-skele
 import { CatalogState } from '../../components/catalog-state/catalog-state';
 
 import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.model';
+import { ResourceSortOption } from '../../../../core/models/resource-sort.model';
 
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
@@ -656,6 +657,23 @@ export class CatalogPage {
     }
   }
 
+  private mapSortToApi(sort: CatalogSort): ResourceSortOption {
+    switch (sort) {
+      case 'oldest':
+        return ResourceSortOption.Oldest;
+
+      case 'title-asc':
+        return ResourceSortOption.TitleAscending;
+
+      case 'title-desc':
+        return ResourceSortOption.TitleDescending;
+
+      case 'newest':
+      default:
+        return ResourceSortOption.Newest;
+    }
+  }
+
   private buildPublicCatalogRequest(): PublicCatalogRequest {
 
     const query = this.query();
@@ -680,6 +698,8 @@ export class CatalogPage {
       gradeLevelId: gradeLevel?.id,
 
       type: resourceType?.value,
+
+      sort: this.mapSortToApi(query.sort),
 
       page: query.page,
 
