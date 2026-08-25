@@ -40,7 +40,6 @@ import { PublicCatalogRequest } from '../../models/public-catalog-request.model'
 import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-card.model';
 
 import { CatalogQuery, CatalogSort} from '../../models/catalog-query.model';
-import { CATALOG_MOCK_RESOURCES } from '../../data-access/catalog.mock';
 
 import { CatalogSkeleton } from '../../components/catalog-skeleton/catalog-skeleton';
 import { CatalogState } from '../../components/catalog-state/catalog-state';
@@ -58,7 +57,7 @@ const DEFAULT_QUERY: CatalogQuery = {
   pageSize: 12,
 };
 
-const USE_REAL_API = true; // Set to true to use real API instead of mock data
+const USE_REAL_API = true;
 
 @Component({
   selector: 'sl-catalog-page',
@@ -119,9 +118,7 @@ export class CatalogPage {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  readonly resources = signal<ResourceCardVm[]>([
-    ... CATALOG_MOCK_RESOURCES
-  ]);
+  readonly resources = signal<ResourceCardVm[]>([]);
 
   readonly selectedSubjectId =
   computed<string | null>(() => {
@@ -217,22 +214,12 @@ export class CatalogPage {
   readonly apiTotalPages = signal(1);
 
   readonly resultCount = computed(() => {
-    if (USE_REAL_API) {
-      return this.apiTotalCount();
-    }
-
-    return this.filteredResources().length;
+    return this.apiTotalCount();
   });
 
-  readonly totalPages = computed(() => {
-    if (USE_REAL_API) {
-      return Math.max(1, this.apiTotalPages());
-    }
-
-    const count = this.filteredResources().length;
-    const pageSize = this.query().pageSize;
-    return Math.max(1, Math.ceil(count / pageSize));
-  });
+  readonly totalPages = computed(() =>
+    Math.max(1, this.apiTotalPages())
+  );
 
   readonly activeFilters = computed<string[]>(() => {
     const query = this.query();
@@ -254,109 +241,8 @@ export class CatalogPage {
     return filters;
   });
 
-  readonly pagedResources = computed(() => {
-    if (USE_REAL_API) {
-      return this.resources();
-    }
-
-    const query = this.query();
-
-    const validPage = Math.min(query.page, this.totalPages());
-
-    const start = (validPage - 1) * query.pageSize;
-
-    return this.filteredResources()
-      .slice(start, start + query.pageSize);
-  });
-
-  readonly filteredResources = computed(() => {
-    const query = this.query();
-
-    let result = [...this.resources()];
-
-    const search = query.search
-      .trim()
-      .toLocaleLowerCase('bg-BG');
-
-    if (search) {
-      result = result.filter(resource => {
-        const searchableText = [
-          resource.title,
-          resource.author,
-          resource.description,
-          resource.subject,
-          resource.category,
-          resource.resourceType,
-          resource.grade,
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .toLocaleLowerCase('bg-BG');
-
-        return searchableText.includes(search);
-      });
-    }
-
-    if (query.subject) {
-      result = result.filter(
-        resource => resource.subject === query.subject
-      );
-    }
-
-    if (query.grade) {
-      result = result.filter(
-        resource => resource.grade === query.grade
-      );
-    }
-
-    if (query.resourceType) {
-      result = result.filter(
-        resource => resource.resourceType === query.resourceType
-      );
-    }
-
-    switch (query.sort) {
-      case 'oldest':
-        result.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-        break;
-
-      case 'title-asc':
-        result.sort(
-          (a, b) => a.title.localeCompare(b.title, 'bg')
-        );
-        break;
-
-      case 'title-desc':
-        result.sort(
-          (a, b) => b.title.localeCompare(a.title, 'bg')
-        );
-        break;
-
-      case 'newest':
-      default:
-        result.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        break;
-    }
-
-    return result;
-  });
-
-  /*
-  Temporary methods for simulating loading and error states. 
-  In a real application, these would be handled by a service 
-  that fetches data from an API.
-  */
   retryLoad(): void {
-    if (USE_REAL_API) {
-      this.loadPublicCatalog();
-      return;
-    }
-
-    this.error.set(null);
+    this.loadPublicCatalog();
   }
 
   updateSubjectById(
@@ -475,10 +361,7 @@ export class CatalogPage {
     console.log('Open resource:', id);
   }
 
-  onSavedChange(
-    resourceId: string,
-    saved: boolean
-  ): void {
+  onSavedChange(resourceId: string, saved: boolean): void {
     this.resources.update(resources =>
       resources.map(resource =>
         resource.id === resourceId

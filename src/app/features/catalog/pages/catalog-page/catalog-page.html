@@ -106,11 +106,11 @@
         (action)="retryLoad()"
       />
 
-    } @else if (pagedResources().length > 0) {
+    } @else if (resources().length > 0) {
 
       <div class="catalog__grid">
 
-        @for (resource of pagedResources(); track resource.id) {
+        @for (resource of resources(); track resource.id) {
           <sl-resource-card
             [resource]="resource"
             (openResource)="openResource($event)"
