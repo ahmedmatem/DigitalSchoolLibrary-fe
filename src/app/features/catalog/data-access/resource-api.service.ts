@@ -11,6 +11,7 @@ import { CatalogResponse } from '../models/catalog-response.model';
 import { API_CONFIG } from '../../../core/config/api.config';
 
 import { PresignedDownloadDto } from '../models/presigned-download.dto';
+import { PublicResourceDetailsDto } from '../../resource-details/models/public-resource-details.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +65,12 @@ export class ResourceApiService {
   getPublicCover(resourceId: string): Observable<PresignedDownloadDto> {
     return this.http.get<PresignedDownloadDto>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/cover`
+    );
+  }
+
+  getPublicResource(resourceId: string): Observable<PublicResourceDetailsDto> {
+    return this.http.get<PublicResourceDetailsDto>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}`
     );
   }
 }
