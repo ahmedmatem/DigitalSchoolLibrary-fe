@@ -358,7 +358,7 @@ export class CatalogPage {
   }
 
   openResource(id: string): void {
-    console.log('Open resource:', id);
+     void this.router.navigate(['/resources', id,]);
   }
 
   onSavedChange(resourceId: string, saved: boolean): void {
