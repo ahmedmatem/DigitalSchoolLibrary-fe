@@ -181,3 +181,13 @@
   border: 1px solid var(--sl-color-border);
   background: var(--sl-color-surface);
 }
+
+.resource-details__primary-action:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.resource-details__action-error {
+  margin-top: var(--sl-space-3);
+  color: var(--sl-color-danger);
+}

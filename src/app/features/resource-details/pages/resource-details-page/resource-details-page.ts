@@ -21,6 +21,7 @@ import { Chip } from '../../../../shared/ui/chip/chip';
 import { ResourceApiService } from '../../../catalog/data-access/resource-api.service';
 import { PublicResourceDetailsDto } from '../../models/public-resource-details.dto';
 import { RESOURCE_TYPE_OPTIONS, } from '../../../../core/models/resource-type.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'sl-resource-details-page',
@@ -46,6 +47,9 @@ export class ResourceDetailsPage {
   readonly resource = signal<PublicResourceDetailsDto | null>(null);
   
   readonly coverUrl = signal<string | null>(null);
+
+  readonly openingResource = signal(false);
+  readonly openError = signal<string | null>(null);
 
   readonly loading = signal(true);
 
@@ -135,6 +139,58 @@ export class ResourceDetailsPage {
 
         error: () => {
           this.coverUrl.set(null);
+        },
+      });
+  }
+
+  openResource(): void {
+    const resource = this.resource();
+
+    if (!resource) return;
+
+    this.openingResource.set(true);
+    this.openError.set(null);
+
+    this.resourceApi
+      .getDownloadUrl(resource.id)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: result => {
+          this.openingResource.set(false);
+
+          window.open(
+            result.downloadUrl,
+            '_blank',
+            'noopener,noreferrer'
+          );
+        },
+
+        error: (error: HttpErrorResponse) => {
+          this.openingResource.set(false);
+
+          if (error.status === 401) {
+            this.openError.set(
+              'За да отворите ресурса, трябва да влезете в профила си.'
+            );
+
+            return;
+          }
+
+          if (error.status === 404) {
+            this.openError.set(
+              'Файлът на този ресурс не е наличен.'
+            );
+
+            return;
+          }
+
+          this.openError.set(
+            'Възникна проблем при отварянето на ресурса.'
+          );
         },
       });
   }

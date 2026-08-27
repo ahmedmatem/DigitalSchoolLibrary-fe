@@ -68,6 +68,12 @@ export class ResourceApiService {
     );
   }
 
+  getDownloadUrl(resourceId: string): Observable<PresignedDownloadDto> {
+    return this.http.get<PresignedDownloadDto>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/download`
+    );
+  }
+
   getPublicResource(resourceId: string): Observable<PublicResourceDetailsDto> {
     return this.http.get<PublicResourceDetailsDto>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}`

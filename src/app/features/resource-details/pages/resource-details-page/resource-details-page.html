@@ -130,6 +130,14 @@
               Отвори ресурса
             </button>
 
+            @if (openError()) {
+              <p
+                class="resource-details__action-error"
+                role="alert">
+                {{ openError() }}
+              </p>
+            }
+
           </section>
 
         </main>
