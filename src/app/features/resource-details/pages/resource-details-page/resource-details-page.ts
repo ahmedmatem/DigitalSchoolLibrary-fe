@@ -44,6 +44,8 @@ export class ResourceDetailsPage {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly resource = signal<PublicResourceDetailsDto | null>(null);
+  
+  readonly coverUrl = signal<string | null>(null);
 
   readonly loading = signal(true);
 
@@ -98,6 +100,11 @@ export class ResourceDetailsPage {
       .subscribe({
         next: resource => {
           this.resource.set(resource);
+
+          if (resource.hasCover) {
+            this.loadCover(resource.id);
+          }
+
           this.loading.set(false);
         },
 
@@ -107,6 +114,27 @@ export class ResourceDetailsPage {
           );
 
           this.loading.set(false);
+        },
+      });
+  }
+
+  private loadCover(resourceId: string): void {
+    this.resourceApi
+      .getPublicCover(resourceId)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: cover => {
+          this.coverUrl.set(
+            cover.downloadUrl
+          );
+        },
+
+        error: () => {
+          this.coverUrl.set(null);
         },
       });
   }

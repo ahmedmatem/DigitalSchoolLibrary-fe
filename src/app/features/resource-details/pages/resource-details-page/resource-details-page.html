@@ -36,12 +36,21 @@
 
         <aside class="resource-details__cover">
 
-          <div class="resource-details__cover-placeholder">
-            <svg
-              lucideFileText
-              aria-hidden="true"
-            ></svg>
-          </div>
+          @if (coverUrl()) {
+            <img
+              class="resource-details__cover-image"
+              [src]="coverUrl()!"
+              [alt]="'Корица на ' + item.title"
+              loading="lazy"
+            />
+          } @else {
+            <div class="resource-details__cover-placeholder">
+              <svg
+                lucideFileText
+                aria-hidden="true"
+              ></svg>
+            </div>
+          }
 
         </aside>
 
