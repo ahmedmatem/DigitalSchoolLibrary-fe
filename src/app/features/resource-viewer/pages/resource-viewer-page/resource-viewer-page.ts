@@ -34,11 +34,12 @@ import {
 import { PdfViewer } from '../../components/pdf-viewer/pdf-viewer';
 import { VideoViewer } from '../../components/video-viewer/video-viewer';
 import { GenericViewer } from '../../components/generic-viewer/generic-viewer';
+import { ExternalLinkViewer } from '../../components/external-link-viewer/external-link-viewer';
 
 @Component({
   selector: 'sl-resource-viewer-page',
   standalone: true,
-  imports: [PdfViewer, VideoViewer, GenericViewer],
+  imports: [PdfViewer, VideoViewer, GenericViewer, ExternalLinkViewer],
   templateUrl: './resource-viewer-page.html',
   styleUrl: './resource-viewer-page.scss',
 })

@@ -1,0 +1,45 @@
+.external-link-viewer {
+  display: grid;
+  place-items: center;
+
+  min-height: 420px;
+
+  padding: var(--sl-space-6);
+
+  border: 1px solid var(--sl-color-border);
+  border-radius: var(--sl-radius-lg);
+
+  background: var(--sl-color-surface);
+}
+
+.external-link-viewer__content {
+  max-width: 520px;
+  text-align: center;
+
+  h2 {
+    margin: 0 0 var(--sl-space-3);
+  }
+
+  p {
+    margin: 0 0 var(--sl-space-6);
+
+    color: var(--sl-color-text-muted);
+    line-height: 1.6;
+  }
+}
+
+.external-link-viewer__action {
+  min-height: 46px;
+  padding-inline: var(--sl-space-5);
+
+  border: 0;
+  border-radius: var(--sl-radius-md);
+
+  background: var(--sl-color-primary);
+  color: white;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}

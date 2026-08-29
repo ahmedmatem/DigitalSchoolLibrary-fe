@@ -62,6 +62,13 @@
         />
       }
 
+      @case (ResourceType.ExternalLink) {
+        <sl-external-link-viewer
+          [url]="resourceUrl()!"
+          [title]="item.title"
+        />
+      }
+
       @default {
         <sl-generic-viewer
           [url]="resourceUrl()!"
