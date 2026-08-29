@@ -164,50 +164,10 @@ export class ResourceDetailsPage {
 
     if (!resource) return;
 
-    this.openingResource.set(true);
-    this.openError.set(null);
-
-    this.resourceApi
-      .getDownloadUrl(resource.id)
-      .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
-      )
-      .subscribe({
-        next: result => {
-          this.openingResource.set(false);
-
-          window.open(
-            result.downloadUrl,
-            '_blank',
-            'noopener,noreferrer'
-          );
-        },
-
-        error: (error: HttpErrorResponse) => {
-          this.openingResource.set(false);
-
-          if (error.status === 401) {
-            this.openError.set(
-              'За да отворите ресурса, трябва да влезете в профила си.'
-            );
-
-            return;
-          }
-
-          if (error.status === 404) {
-            this.openError.set(
-              'Файлът на този ресурс не е наличен.'
-            );
-
-            return;
-          }
-
-          this.openError.set(
-            'Възникна проблем при отварянето на ресурса.'
-          );
-        },
-      });
+    void this.router.navigate([
+      '/resources',
+      resource.id,
+      'view',
+    ]);
   }
 }
