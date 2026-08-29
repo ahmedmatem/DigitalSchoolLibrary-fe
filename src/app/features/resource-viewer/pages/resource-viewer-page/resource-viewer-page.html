@@ -1,0 +1,60 @@
+@if (loading()) {
+
+  <p>
+    Зареждане на ресурса...
+  </p>
+
+} @else if (unauthorized()) {
+
+  <h1>
+    Необходим е вход
+  </h1>
+
+  <p>
+    Трябва да влезете в профила си,
+    за да отворите този ресурс.
+  </p>
+
+} @else if (notFound()) {
+
+  <h1>
+    Ресурсът не е намерен
+  </h1>
+
+} @else if (error()) {
+
+  <h1>
+    Възникна грешка
+  </h1>
+
+  <p>
+    {{ error() }}
+  </p>
+
+} @else if (
+  resource();
+  as item
+) {
+
+  <button
+    type="button"
+    (click)="goBack()"
+  >
+    Назад
+  </button>
+
+  <h1>
+    {{ item.title }}
+  </h1>
+
+  <p>
+    Type:
+    {{ item.type }}
+  </p>
+
+  <p>
+    URL:
+    {{ resourceUrl() }}
+  </p>
+
+}

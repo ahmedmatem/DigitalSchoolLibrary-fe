@@ -13,6 +13,12 @@ export const routes: Routes = [
       .then(m => m.ResourceDetailsPage),
   },
   {
+    path: 'resources/:id/view',
+    loadComponent: () =>
+      import('./features/resource-viewer/pages/resource-viewer-page/resource-viewer-page')
+      .then(m => m.ResourceViewerPage),
+  },
+  {
     path: 'ui-preview',
     loadComponent: () =>
       import('./features/ui-preview/ui-preview')
