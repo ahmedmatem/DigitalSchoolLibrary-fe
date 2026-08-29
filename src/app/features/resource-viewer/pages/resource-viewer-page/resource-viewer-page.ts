@@ -104,6 +104,23 @@ export class ResourceViewerPage {
     void this.router.navigate(['/catalog', ]);
   }
 
+  retry(): void {
+    const resourceId = this.route.snapshot.paramMap.get('id');
+
+    if (!resourceId) {
+      return;
+    }
+
+    this.resource.set(null);
+    this.resourceUrl.set(null);
+
+    this.error.set(null);
+    this.notFound.set(false);
+    this.unauthorized.set(false);
+
+    this.loadResource(resourceId);
+  }
+
   getResourceTypeLabel(type: ResourceType): string {
     return (
       RESOURCE_TYPE_OPTIONS.find(
@@ -131,6 +148,14 @@ export class ResourceViewerPage {
         queryParams: {returnUrl, },
       }
     );
+  }
+
+  goHome(): void {
+    void this.router.navigate(['/',]);
+  }
+
+  goToCatalog(): void {
+    void this.router.navigate(['/catalog',]);
   }
 
   private loadResource(resourceId: string): void {

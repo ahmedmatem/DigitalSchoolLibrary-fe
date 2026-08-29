@@ -49,19 +49,90 @@
 
 } @else if (notFound()) {
 
-  <h1>
-    Ресурсът не е намерен
-  </h1>
+  <section
+    class="viewer-state"
+    aria-labelledby="viewer-not-found-title"
+  >
+    <div
+      class="viewer-state__visual"
+      aria-hidden="true"
+    >
+      404
+    </div>
+
+    <h1
+      id="viewer-not-found-title"
+      class="viewer-state__title"
+    >
+      Страницата не е намерена
+    </h1>
+
+    <p class="viewer-state__description">
+      Адресът може да е променен, страницата да е премахната
+      или връзката да е неправилна.
+    </p>
+
+    <div class="viewer-state__actions">
+      <sl-button
+        (click)="goHome()"
+      >
+        Към началната страница
+      </sl-button>
+
+      <button
+        type="button"
+        class="viewer-state__secondary"
+        (click)="goToCatalog()"
+      >
+        Отвори каталога
+      </button>
+    </div>
+  </section>
 
 } @else if (error()) {
 
-  <h1>
-    Възникна грешка
-  </h1>
+  } @else if (error()) {
 
-  <p>
-    {{ error() }}
-  </p>
+  <section
+    class="viewer-state"
+    aria-labelledby="viewer-error-title"
+  >
+    <div
+      class="viewer-state__visual"
+      aria-hidden="true"
+    >
+      !
+    </div>
+
+    <h1
+      id="viewer-error-title"
+      class="viewer-state__title"
+    >
+      Възникна грешка
+    </h1>
+
+    <p class="viewer-state__description">
+      {{ error() }}
+    </p>
+
+    <div class="viewer-state__actions">
+
+      <sl-button
+        (click)="retry()"
+      >
+        Опитай отново
+      </sl-button>
+
+      <button
+        type="button"
+        class="viewer-state__secondary"
+        (click)="goToCatalog()"
+      >
+        Отвори каталога
+      </button>
+
+    </div>
+  </section>
 
 } @else if (resource(); as item) {
 
