@@ -6,14 +6,46 @@
 
 } @else if (unauthorized()) {
 
-  <h1>
-    Необходим е вход
-  </h1>
+  <section
+    class="viewer-state"
+    aria-labelledby="viewer-unauthorized-title"
+  >
+    <div
+      class="viewer-state__visual"
+      aria-hidden="true"
+    >
+      401
+    </div>
 
-  <p>
-    Трябва да влезете в профила си,
-    за да отворите този ресурс.
-  </p>
+    <h1
+      id="viewer-unauthorized-title"
+      class="viewer-state__title"
+    >
+      Необходим е вход
+    </h1>
+
+    <p class="viewer-state__description">
+      Влезте в профила си, за да отворите този ресурс.
+      След успешен вход ще се върнете към прегледа.
+    </p>
+
+    <div class="viewer-state__actions">
+      <sl-button
+        class="viewer-state__button"
+        (click)="goToLogin()"
+      >
+        Вход в профила
+      </sl-button>
+
+      <button
+        type="button"
+        class="viewer-state__secondary"
+        (click)="goBack()"
+      >
+        Назад към ресурса
+      </button>
+    </div>
+  </section>
 
 } @else if (notFound()) {
 

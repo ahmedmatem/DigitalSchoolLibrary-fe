@@ -1,0 +1,327 @@
+:host {
+  display: block;
+}
+
+.resource-viewer {
+  min-height: calc(
+    100vh -
+    var(--sl-header-height)
+  );
+
+  padding:
+    0
+    var(--sl-space-4)
+    var(--sl-space-8);
+}
+
+/* =========================
+   System state
+   ========================= */
+
+.viewer-state {
+  width: min(
+    calc(100% - 32px),
+    680px
+  );
+
+  min-height: 433px;
+
+  margin:
+    108px auto 0;
+
+  padding:
+    43px 59px 48px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  background:
+    var(--sl-color-surface);
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius: 18px;
+
+  text-align: center;
+}
+
+.viewer-state__visual {
+  width: 96px;
+  height: 96px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: #eef4fb;
+
+  color:
+    var(--sl-color-primary);
+
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.viewer-state__title {
+  width: 100%;
+
+  margin:
+    27px 0 0;
+
+  color:
+    var(--sl-color-primary);
+
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.viewer-state__description {
+  width: 100%;
+  max-width: 560px;
+
+  margin:
+    13px 0 0;
+
+  color:
+    var(--sl-color-text-muted);
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.viewer-state__actions {
+  width: 100%;
+
+  display: grid;
+  gap: 12px;
+
+  margin-top: 24px;
+}
+
+.viewer-state__secondary {
+  width: 100%;
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0
+    var(--sl-space-4);
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--sl-color-surface);
+
+  color:
+    var(--sl-color-primary);
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color
+      var(--sl-motion-fast),
+    border-color
+      var(--sl-motion-fast);
+
+  &:hover {
+    background: #f7f9fc;
+  }
+
+  &:focus-visible {
+    outline:
+      2px solid
+      var(--sl-color-primary);
+
+    outline-offset: 2px;
+  }
+}
+
+/* =========================
+   Resource content
+   ========================= */
+
+.resource-viewer__header {
+  width: min(
+    100%,
+    var(--sl-content-max)
+  );
+
+  margin:
+    var(--sl-space-6)
+    auto
+    var(--sl-space-5);
+
+  display: flex;
+  align-items: center;
+  gap: var(--sl-space-4);
+}
+
+.resource-viewer__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
+  padding:
+    0
+    var(--sl-space-4);
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius:
+    var(--sl-radius-md);
+
+  background:
+    var(--sl-color-surface);
+
+  color:
+    var(--sl-color-primary);
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.resource-viewer__title {
+  margin: 0;
+
+  color:
+    var(--sl-color-text);
+
+  font-size:
+    clamp(
+      1.5rem,
+      3vw,
+      2rem
+    );
+
+  line-height: 1.2;
+}
+
+.resource-viewer__content {
+  width: min(
+    100%,
+    var(--sl-content-max)
+  );
+
+  margin-inline: auto;
+}
+
+/* =========================
+   Basic loading/error fallback
+   ========================= */
+
+.resource-viewer__message {
+  width: min(
+    calc(100% - 32px),
+    680px
+  );
+
+  margin:
+    108px auto 0;
+
+  padding:
+    var(--sl-space-8)
+    var(--sl-space-6);
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--sl-color-surface);
+
+  text-align: center;
+
+  color:
+    var(--sl-color-text-muted);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 600px) {
+  .resource-viewer {
+    padding-inline:
+      var(--sl-space-3);
+  }
+
+  .viewer-state {
+    width: 100%;
+
+    min-height: auto;
+
+    margin-top: 54px;
+
+    padding:
+      36px 20px 40px;
+
+    border-radius: 18px;
+  }
+
+  .viewer-state__visual {
+    width: 84px;
+    height: 84px;
+
+    font-size: 21px;
+  }
+
+  .viewer-state__title {
+    margin-top: 28px;
+
+    font-size: 28px;
+  }
+
+  .viewer-state__description {
+    margin-top: 14px;
+
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .viewer-state__actions {
+    margin-top: 28px;
+  }
+
+  .resource-viewer__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .resource-viewer__back {
+    width: 100%;
+  }
+}

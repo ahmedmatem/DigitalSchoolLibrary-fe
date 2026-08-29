@@ -35,11 +35,23 @@ import { PdfViewer } from '../../components/pdf-viewer/pdf-viewer';
 import { VideoViewer } from '../../components/video-viewer/video-viewer';
 import { GenericViewer } from '../../components/generic-viewer/generic-viewer';
 import { ExternalLinkViewer } from '../../components/external-link-viewer/external-link-viewer';
+import { Button } from '../../../../shared/ui/button/button';
+import { LucideLockKeyhole, LucideLogIn, LucideArrowLeft } from '@lucide/angular';
 
 @Component({
   selector: 'sl-resource-viewer-page',
   standalone: true,
-  imports: [PdfViewer, VideoViewer, GenericViewer, ExternalLinkViewer],
+  imports: [
+    PdfViewer, 
+    VideoViewer, 
+    GenericViewer, 
+    ExternalLinkViewer,
+
+    Button,
+
+    LucideLockKeyhole,
+    LucideLogIn,
+    LucideArrowLeft,],
   templateUrl: './resource-viewer-page.html',
   styleUrl: './resource-viewer-page.scss',
 })
@@ -97,6 +109,27 @@ export class ResourceViewerPage {
       RESOURCE_TYPE_OPTIONS.find(
         item => item.value === type
       )?.label ?? 'Ресурс'
+    );
+  }
+
+  goToLogin(): void {
+    const resource = this.resource();
+
+    if (!resource) {
+      void this.router.navigate([
+        '/login',
+      ]);
+
+      return;
+    }
+
+    const returnUrl = `/resources/${resource.id}/view`;
+
+    void this.router.navigate(
+      ['/login'],
+      {
+        queryParams: {returnUrl, },
+      }
     );
   }
 
