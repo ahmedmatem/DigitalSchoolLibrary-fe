@@ -1,0 +1,24 @@
+.video-viewer {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  padding-block: var(--sl-space-4);
+}
+
+.video-viewer__player {
+  display: block;
+
+  width: 100%;
+  max-width: 1100px;
+
+  max-height: calc(
+    100vh -
+    var(--sl-header-height) -
+    var(--sl-space-10)
+  );
+
+  border-radius: var(--sl-radius-lg);
+  background: #000;
+}

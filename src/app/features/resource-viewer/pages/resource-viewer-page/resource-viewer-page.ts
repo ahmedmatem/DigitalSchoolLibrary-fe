@@ -27,12 +27,18 @@ import {
 } from '../../../resource-details/models/public-resource-details.dto';
 
 import {
+  RESOURCE_TYPE_OPTIONS,
   ResourceType,
 } from '../../../../core/models/resource-type.model';
+
+import { PdfViewer } from '../../components/pdf-viewer/pdf-viewer';
+import { VideoViewer } from '../../components/video-viewer/video-viewer';
+import { GenericViewer } from '../../components/generic-viewer/generic-viewer';
 
 @Component({
   selector: 'sl-resource-viewer-page',
   standalone: true,
+  imports: [PdfViewer, VideoViewer, GenericViewer],
   templateUrl: './resource-viewer-page.html',
   styleUrl: './resource-viewer-page.scss',
 })
@@ -83,6 +89,14 @@ export class ResourceViewerPage {
     }
 
     void this.router.navigate(['/catalog', ]);
+  }
+
+  getResourceTypeLabel(type: ResourceType): string {
+    return (
+      RESOURCE_TYPE_OPTIONS.find(
+        item => item.value === type
+      )?.label ?? 'Ресурс'
+    );
   }
 
   private loadResource(resourceId: string): void {

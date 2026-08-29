@@ -31,10 +31,7 @@
     {{ error() }}
   </p>
 
-} @else if (
-  resource();
-  as item
-) {
+} @else if (resource(); as item) {
 
   <button
     type="button"
@@ -47,14 +44,33 @@
     {{ item.title }}
   </h1>
 
-  <p>
-    Type:
-    {{ item.type }}
-  </p>
+  @if (resourceUrl()) {
 
-  <p>
-    URL:
-    {{ resourceUrl() }}
-  </p>
+    @switch (item.type) {
+
+      @case (ResourceType.PdfDocument) {
+        <sl-pdf-viewer
+          [url]="resourceUrl()!"
+          [title]="item.title"
+        />
+      }
+
+      @case (ResourceType.Video) {
+        <sl-video-viewer
+          [url]="resourceUrl()!"
+          [title]="item.title"
+        />
+      }
+
+      @default {
+        <sl-generic-viewer
+          [url]="resourceUrl()!"
+          [title]="item.title"
+          [typeLabel]="getResourceTypeLabel(item.type)"
+        />
+      }
+    }
+
+  }
 
 }

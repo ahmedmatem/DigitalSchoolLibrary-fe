@@ -1,0 +1,28 @@
+<div class="generic-viewer">
+
+  <div class="generic-viewer__content">
+
+    <h2>
+      {{ title() }}
+    </h2>
+
+    <p class="generic-viewer__type">
+      {{ typeLabel() }}
+    </p>
+
+    <p class="generic-viewer__message">
+      Този тип ресурс няма вграден преглед
+      в приложението.
+    </p>
+
+    <button
+      type="button"
+      class="generic-viewer__action"
+      (click)="openResource()"
+    >
+      Отвори ресурса
+    </button>
+
+  </div>
+
+</div>
