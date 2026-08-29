@@ -1,7 +1,50 @@
-<div class="pdf-viewer">
-  <iframe
-    class="pdf-viewer__frame"
-    [src]="url()"
-    [title]="title()"
-  ></iframe>
-</div>
+<section
+  class="pdf-viewer"
+  aria-label="PDF преглед"
+>
+
+  <div class="pdf-viewer__toolbar">
+
+    <div class="pdf-viewer__toolbar-info">
+      <span class="pdf-viewer__toolbar-title">
+        PDF преглед
+      </span>
+
+      <span
+        class="pdf-viewer__toolbar-divider"
+        aria-hidden="true"
+      >
+        ·
+      </span>
+
+      <span class="pdf-viewer__toolbar-meta">
+        PDF документ
+      </span>
+    </div>
+
+    <button
+      type="button"
+      class="pdf-viewer__open"
+      (click)="openInNewWindow()"
+    >
+      Отвори в нов прозорец
+    </button>
+
+  </div>
+
+  <div
+    class="pdf-viewer__separator"
+    aria-hidden="true"
+  ></div>
+
+  <div class="pdf-viewer__preview">
+
+    <iframe
+      class="pdf-viewer__frame"
+      [src]="url()"
+      [title]="title()"
+    ></iframe>
+
+  </div>
+
+</section>

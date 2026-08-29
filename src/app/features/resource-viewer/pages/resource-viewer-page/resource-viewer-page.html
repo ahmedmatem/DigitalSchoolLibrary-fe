@@ -39,7 +39,6 @@
 
     <div class="viewer-state__actions">
       <sl-button
-        class="viewer-state__button"
         (click)="goToLogin()"
       >
         Вход в профила
@@ -99,8 +98,6 @@
 
 } @else if (error()) {
 
-  } @else if (error()) {
-
   <section
     class="viewer-state"
     aria-labelledby="viewer-error-title"
@@ -124,7 +121,6 @@
     </p>
 
     <div class="viewer-state__actions">
-
       <sl-button
         (click)="retry()"
       >
@@ -138,57 +134,114 @@
       >
         Отвори каталога
       </button>
-
     </div>
   </section>
 
 } @else if (resource(); as item) {
 
-  <button
-    type="button"
-    (click)="goBack()"
-  >
-    Назад
-  </button>
+  <div class="resource-viewer">
 
-  <h1>
-    {{ item.title }}
-  </h1>
+    <button
+      type="button"
+      class="resource-viewer__back"
+      (click)="goBack()"
+    >
+      <span
+        class="resource-viewer__back-arrow"
+        aria-hidden="true"
+      >
+        ←
+      </span>
 
-  @if (resourceUrl()) {
+      <span>
+        Назад към ресурса
+      </span>
+    </button>
 
-    @switch (item.type) {
+    <h1 class="resource-viewer__title">
+      {{ item.title }}
+    </h1>
 
-      @case (ResourceType.PdfDocument) {
-        <sl-pdf-viewer
-          [url]="resourceUrl()!"
-          [title]="item.title"
-        />
+    <div
+      class="resource-viewer__metadata"
+      aria-label="Информация за ресурса"
+    >
+      <span
+        class="
+          resource-viewer__chip
+          resource-viewer__chip--primary
+        "
+      >
+        {{ item.subjectName }}
+      </span>
+
+      <span
+        class="
+          resource-viewer__chip
+          resource-viewer__chip--primary
+        "
+      >
+        {{ getResourceTypeLabel(item.type) }}
+      </span>
+
+      @if (item.categoryName) {
+        <span
+          class="
+            resource-viewer__chip
+            resource-viewer__chip--secondary
+          "
+        >
+          {{ item.categoryName }}
+        </span>
+      }
+    </div>
+
+    <div
+      class="resource-viewer__divider"
+      aria-hidden="true"
+    ></div>
+
+    <main class="resource-viewer__content">
+
+      @if (resourceUrl()) {
+
+        @switch (item.type) {
+
+          @case (ResourceType.PdfDocument) {
+            <sl-pdf-viewer
+              [url]="resourceUrl()!"
+              [title]="item.title"
+            />
+          }
+
+          @case (ResourceType.Video) {
+            <sl-video-viewer
+              [url]="resourceUrl()!"
+              [title]="item.title"
+            />
+          }
+
+          @case (ResourceType.ExternalLink) {
+            <sl-external-link-viewer
+              [url]="resourceUrl()!"
+              [title]="item.title"
+            />
+          }
+
+          @default {
+            <sl-generic-viewer
+              [url]="resourceUrl()!"
+              [title]="item.title"
+              [typeLabel]="getResourceTypeLabel(item.type)"
+            />
+          }
+
+        }
+
       }
 
-      @case (ResourceType.Video) {
-        <sl-video-viewer
-          [url]="resourceUrl()!"
-          [title]="item.title"
-        />
-      }
+    </main>
 
-      @case (ResourceType.ExternalLink) {
-        <sl-external-link-viewer
-          [url]="resourceUrl()!"
-          [title]="item.title"
-        />
-      }
-
-      @default {
-        <sl-generic-viewer
-          [url]="resourceUrl()!"
-          [title]="item.title"
-          [typeLabel]="getResourceTypeLabel(item.type)"
-        />
-      }
-    }
-
-  }
+  </div>
 
 }
