@@ -20,6 +20,25 @@
         Зареждане на ресурса...
       </div>
 
+    } @else if (notFound()) {
+
+      <div class="resource-details__state">
+        <h1>Ресурсът не е намерен</h1>
+
+        <p>
+          Възможно е ресурсът да е премахнат,
+          архивиран или вече да не е достъпен.
+        </p>
+
+        <button
+          type="button"
+          class="resource-details__state-action"
+          (click)="goBack()"
+        >
+          Назад към каталога
+        </button>
+      </div>
+
     } @else if (error()) {
 
       <div class="resource-details__error">

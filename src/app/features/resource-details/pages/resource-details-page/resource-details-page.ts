@@ -52,6 +52,7 @@ export class ResourceDetailsPage {
   readonly openError = signal<string | null>(null);
 
   readonly loading = signal(true);
+  readonly notFound = signal(false);
 
   readonly error = signal<string | null>(null);
 
@@ -93,6 +94,7 @@ export class ResourceDetailsPage {
   private loadResource(resourceId: string): void {
     this.loading.set(true);
     this.error.set(null);
+    this.notFound.set(false);
 
     this.resourceApi
       .getPublicResource(resourceId)
@@ -112,14 +114,28 @@ export class ResourceDetailsPage {
           this.loading.set(false);
         },
 
-        error: () => {
-          this.error.set(
-            'Ресурсът не беше намерен или не е достъпен.'
-          );
-
+        error: (error: HttpErrorResponse) => {
           this.loading.set(false);
+
+          if (error.status === 404) {
+            this.notFound.set(true);
+            this.error.set(null);
+            return;
+          }
+
+          this.error.set(
+            'Възникна проблем при зареждането на ресурса.'
+          );
         },
       });
+  }
+
+  retryLoad(): void {
+    const resourceId = this.route.snapshot.paramMap.get('id');
+
+    if (!resourceId) return;
+
+    this.loadResource(resourceId);
   }
 
   private loadCover(resourceId: string): void {
