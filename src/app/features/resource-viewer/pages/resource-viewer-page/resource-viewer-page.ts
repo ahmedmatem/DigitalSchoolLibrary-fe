@@ -46,12 +46,7 @@ import { LucideLockKeyhole, LucideLogIn, LucideArrowLeft } from '@lucide/angular
     VideoViewer, 
     GenericViewer, 
     ExternalLinkViewer,
-
-    Button,
-
-    LucideLockKeyhole,
-    LucideLogIn,
-    LucideArrowLeft,],
+    Button,],
   templateUrl: './resource-viewer-page.html',
   styleUrl: './resource-viewer-page.scss',
 })

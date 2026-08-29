@@ -1,8 +1,16 @@
 @if (loading()) {
 
-  <p>
-    Зареждане на ресурса...
-  </p>
+  <section
+    class="viewer-loading"
+    aria-live="polite"
+    aria-busy="true"
+  >
+    <div class="viewer-loading__spinner"></div>
+
+    <p class="viewer-loading__text">
+      Зареждане на ресурса...
+    </p>
+  </section>
 
 } @else if (unauthorized()) {
 
