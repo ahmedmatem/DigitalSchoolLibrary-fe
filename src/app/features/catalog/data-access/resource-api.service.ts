@@ -12,6 +12,7 @@ import { API_CONFIG } from '../../../core/config/api.config';
 
 import { PresignedDownloadDto } from '../models/presigned-download.dto';
 import { PublicResourceDetailsDto } from '../../resource-details/models/public-resource-details.dto';
+import { ResourceOpenDto } from '../../resource-viewer/models/resource-open.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -68,9 +69,9 @@ export class ResourceApiService {
     );
   }
 
-  getDownloadUrl(resourceId: string): Observable<PresignedDownloadDto> {
-    return this.http.get<PresignedDownloadDto>(
-      `${API_CONFIG.baseUrl}/resources/${resourceId}/download`
+  getOpenUrl(resourceId: string): Observable<ResourceOpenDto> {
+    return this.http.get<ResourceOpenDto>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/open`
     );
   }
 

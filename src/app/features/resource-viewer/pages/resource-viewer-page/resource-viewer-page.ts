@@ -135,9 +135,9 @@ export class ResourceViewerPage {
       });
   }
 
-  private loadResourceUrl( resourceId: string): void {
+  private loadResourceUrl(resourceId: string): void {
     this.resourceApi
-      .getDownloadUrl(resourceId)
+      .getOpenUrl(resourceId)
       .pipe(
         takeUntilDestroyed(
           this.destroyRef
@@ -145,7 +145,9 @@ export class ResourceViewerPage {
       )
       .subscribe({
         next: result => {
-          this.resourceUrl.set(result.downloadUrl);
+          this.resourceUrl.set(
+            result.url
+          );
 
           this.loading.set(false);
         },
@@ -157,6 +159,13 @@ export class ResourceViewerPage {
 
           if (error.status === 401) {
             this.unauthorized.set(true);
+            return;
+          }
+
+          if (error.status === 403) {
+            this.error.set(
+              'Нямате достъп до този ресурс.'
+            );
             return;
           }
 

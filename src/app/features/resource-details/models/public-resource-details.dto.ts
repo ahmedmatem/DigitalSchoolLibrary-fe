@@ -17,4 +17,6 @@ export interface PublicResourceDetailsDto {
   requiresAuthentication: boolean;
 
   createdAtUtc: string;
+
+  externalUrl: string | null;
 }
