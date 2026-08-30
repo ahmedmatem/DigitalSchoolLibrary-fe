@@ -35,6 +35,6 @@ export function roleGuard(...allowedRoles: AuthRole[]): CanActivateFn {
       return true;
     }
 
-    return router.createUrlTree(['/forbidden']);
+    return router.createUrlTree(['/access-denied']);
   };
 }

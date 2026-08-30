@@ -1,0 +1,196 @@
+:host {
+  display: block;
+
+  min-height:
+    calc(100vh - var(--sl-header-height));
+
+  background:
+    var(--sl-color-page);
+}
+
+
+.access-denied {
+  min-height:
+    calc(100vh - var(--sl-header-height));
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 108px;
+  padding-bottom: 48px;
+
+  box-sizing: border-box;
+}
+
+
+.access-denied__card {
+  width: 680px;
+  height: 433px;
+
+  padding: 43px 59px 48px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid var(--sl-color-border);
+  border-radius: 18px;
+
+  background:
+    var(--sl-color-surface);
+}
+
+
+.access-denied__visual {
+  width: 96px;
+  height: 96px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #fff5d9;
+  color: #8a5a00;
+
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+.access-denied__title {
+  width: 560px;
+
+  margin: 28px 0 0;
+
+  color:
+    var(--sl-color-primary);
+
+  font-size: 32px;
+  font-weight: 700;
+  line-height: normal;
+
+  text-align: center;
+}
+
+
+.access-denied__description {
+  width: 560px;
+
+  margin: 7px 0 0;
+
+  color:
+    var(--sl-color-text-secondary);
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: normal;
+
+  text-align: center;
+}
+
+
+.access-denied__actions {
+  width: 560px;
+
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+.access-denied__action {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+
+.access-denied__action--primary {
+  border: 1px solid var(--sl-color-primary);
+
+  background:
+    var(--sl-color-primary);
+
+  color:
+    var(--sl-color-on-primary);
+}
+
+
+.access-denied__action--secondary {
+  border: 1px solid var(--sl-color-border);
+
+  background:
+    var(--sl-color-surface);
+
+  color:
+    var(--sl-color-primary);
+}
+
+
+@media (max-width: 700px) {
+
+  .access-denied {
+    padding:
+      54px 16px 48px;
+  }
+
+  .access-denied__card {
+    width: 100%;
+    max-width: 358px;
+    height: 500px;
+
+    padding:
+      35px 19px 40px;
+  }
+
+  .access-denied__visual {
+    width: 84px;
+    height: 84px;
+
+    font-size: 32px;
+  }
+
+  .access-denied__title {
+    width: 100%;
+
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .access-denied__description {
+    width: 100%;
+
+    margin-top: 14px;
+
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  .access-denied__actions {
+    width: 100%;
+
+    margin-top: 26px;
+  }
+}
