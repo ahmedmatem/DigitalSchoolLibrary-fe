@@ -1,0 +1,517 @@
+<main class="register-page">
+
+  <section
+    class="register-page__intro"
+    aria-labelledby="register-intro-title"
+  >
+
+    <span class="register-page__eyebrow">
+      НОВ ПРОФИЛ
+    </span>
+
+    <h1
+      id="register-intro-title"
+      class="register-page__intro-title"
+    >
+      Вашата библиотека, според вашия клас
+    </h1>
+
+    <p class="register-page__intro-text">
+      След регистрация ще виждате персонализиран
+      каталог и ще можете да запазвате полезни
+      материали.
+    </p>
+
+  </section>
+
+
+  <section
+    class="register-card"
+    aria-labelledby="register-title"
+  >
+
+    <h2
+      id="register-title"
+      class="register-card__title"
+    >
+      Регистрация
+    </h2>
+
+    <p class="register-card__description">
+      Създайте ученически профил за достъп до
+      ресурсите за вашия клас и „Моята библиотека“.
+    </p>
+
+
+    <form
+      class="register-form"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      novalidate
+    >
+
+      <!-- NAME ROW -->
+
+      <div class="register-form__row">
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-first-name"
+          >
+            Име
+          </label>
+
+          <input
+            id="register-first-name"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              firstName.touched && firstName.invalid
+            "
+            type="text"
+            formControlName="firstName"
+            autocomplete="given-name"
+            placeholder="Име"
+          />
+
+          @if (firstName.touched && firstName.invalid) {
+
+            <p class="register-field__error">
+
+              @if (firstName.hasError('required')) {
+
+                Името е задължително.
+
+              } @else if (firstName.hasError('minlength')) {
+
+                Името трябва да съдържа поне 2 символа.
+
+              } @else if (firstName.hasError('maxlength')) {
+
+                Името не може да бъде по-дълго от 100 символа.
+
+              }
+
+            </p>
+          }
+
+        </div>
+
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-father-name"
+          >
+            Презиме
+          </label>
+
+          <input
+            id="register-father-name"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              fatherName.touched && fatherName.invalid
+            "
+            type="text"
+            formControlName="fatherName"
+            autocomplete="additional-name"
+            placeholder="Презиме"
+          />
+
+          @if (fatherName.touched && fatherName.invalid) {
+
+            <p class="register-field__error">
+
+              @if (fatherName.hasError('required')) {
+
+                Презимето е задължително.
+
+              } @else if (fatherName.hasError('minlength')) {
+
+                Презимето трябва да съдържа поне 2 символа.
+
+              } @else if (fatherName.hasError('maxlength')) {
+
+                Презимето не може да бъде по-дълго от 100 символа.
+
+              }
+
+            </p>
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- LAST NAME + EMAIL -->
+
+      <div class="register-form__row">
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-last-name"
+          >
+            Фамилия
+          </label>
+
+          <input
+            id="register-last-name"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              lastName.touched && lastName.invalid
+            "
+            type="text"
+            formControlName="lastName"
+            autocomplete="family-name"
+            placeholder="Фамилия"
+          />
+
+          @if (lastName.touched && lastName.invalid) {
+
+            <p class="register-field__error">
+
+              @if (lastName.hasError('required')) {
+
+                Фамилията е задължителна.
+
+              } @else if (lastName.hasError('minlength')) {
+
+                Фамилията трябва да съдържа поне 2 символа.
+
+              }
+
+            </p>
+          }
+
+        </div>
+
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-email"
+          >
+            Имейл
+          </label>
+
+          <input
+            id="register-email"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              email.touched && email.invalid
+            "
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="name@example.com"
+          />
+
+          @if (email.touched && email.invalid) {
+
+            <p class="register-field__error">
+
+              @if (email.hasError('required')) {
+
+                Имейлът е задължителен.
+
+              } @else if (email.hasError('email')) {
+
+                Въведеният имейл адрес е невалиден.
+
+              }
+
+            </p>
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- PASSWORDS -->
+
+      <div class="register-form__row">
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-password"
+          >
+            Парола
+          </label>
+
+          <input
+            id="register-password"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              password.touched && password.invalid
+            "
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Минимум 6 символа"
+          />
+
+          @if (password.touched && password.invalid) {
+
+            <p class="register-field__error">
+
+              @if (password.hasError('required')) {
+
+                Паролата е задължителна.
+
+              } @else if (password.hasError('minlength')) {
+
+                Паролата трябва да съдържа поне 6 символа.
+
+              } @else if (password.hasError('pattern')) {
+
+                Използвайте поне една малка буква и една цифра.
+
+              }
+
+            </p>
+          }
+
+        </div>
+
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-confirm-password"
+          >
+            Потвърди паролата
+          </label>
+
+          <input
+            id="register-confirm-password"
+            class="register-field__control"
+            [class.register-field__control--error]="
+              confirmPassword.touched &&
+              (
+                confirmPassword.invalid ||
+                form.hasError('passwordMismatch')
+              )
+            "
+            type="password"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            placeholder="Повторете паролата"
+          />
+
+          @if (confirmPassword.touched) {
+
+            @if (confirmPassword.hasError('required')) {
+
+              <p class="register-field__error">
+                Потвърждението на паролата е задължително.
+              </p>
+
+            } @else if (form.hasError('passwordMismatch')) {
+
+              <p class="register-field__error">
+                Паролите не съвпадат.
+              </p>
+
+            }
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- GRADE / CLASS -->
+
+      <div class="register-form__row">
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-grade"
+          >
+            Клас
+          </label>
+
+          <select
+            id="register-grade"
+            class="
+              register-field__control
+              register-field__control--select
+            "
+            formControlName="gradeLevelId"
+          >
+
+            <option [ngValue]="null">
+              @if (loadingGradeLevels()) {
+                Зареждане...
+              } @else {
+                Изберете клас
+              }
+            </option>
+
+            @for (
+              gradeLevel of gradeLevels();
+              track gradeLevel.id
+            ) {
+
+              <option [ngValue]="gradeLevel.id">
+                {{ gradeLevel.displayName }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="register-field">
+
+          <label
+            class="register-field__label"
+            for="register-school-class"
+          >
+            Паралелка
+          </label>
+
+          <select
+            id="register-school-class"
+            class="
+              register-field__control
+              register-field__control--select
+            "
+            formControlName="schoolClassId"
+          >
+
+            <option [ngValue]="null">
+
+              @if (loadingSchoolClasses()) {
+
+                Зареждане...
+
+              } @else if (gradeLevelId.value == null) {
+
+                Първо изберете клас
+
+              } @else {
+
+                Изберете паралелка
+
+              }
+
+            </option>
+
+
+            @for (
+              schoolClass of schoolClasses();
+              track schoolClass.id
+            ) {
+
+              <option [ngValue]="schoolClass.id">
+                {{ schoolClass.displayName }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      @if (lookupError()) {
+
+        <p
+          class="register-form__lookup-error"
+          role="alert"
+        >
+          {{ lookupError() }}
+        </p>
+
+      }
+
+
+      <!-- STUDENT NOTE -->
+
+      <div class="register-form__student-note">
+
+        <strong>
+          Регистрацията създава профил с роля Student.
+        </strong>
+
+        <span>
+          Класът и паралелката определят
+          персонализираните ресурси.
+        </span>
+
+      </div>
+
+
+      @if (serverError()) {
+
+        <div
+          class="register-form__server-error"
+          role="alert"
+        >
+          {{ serverError() }}
+        </div>
+
+      }
+
+
+      <button
+        class="register-form__submit"
+        type="submit"
+        [disabled]="submitting()"
+      >
+
+        @if (submitting()) {
+
+          <span
+            class="register-form__spinner"
+            aria-hidden="true"
+          ></span>
+
+          <span>
+            Създаване...
+          </span>
+
+        } @else {
+
+          Създай профил
+
+        }
+
+      </button>
+
+
+      <p class="register-form__login">
+
+        <span>
+          Вече имате профил?
+        </span>
+
+        <a routerLink="/login">
+          Вход
+        </a>
+
+      </p>
+
+    </form>
+
+  </section>
+
+</main>

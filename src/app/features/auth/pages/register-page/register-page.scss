@@ -1,0 +1,633 @@
+:host {
+  display: block;
+
+  min-height:
+    calc(100vh - var(--sl-header-height));
+
+  background:
+    var(--sl-color-page);
+}
+
+
+.register-page {
+  width:
+    min(calc(100% - 32px), 1200px);
+
+  min-height:
+    calc(100vh - var(--sl-header-height));
+
+  margin-inline: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    400px 660px;
+
+  column-gap: 100px;
+
+  align-items: start;
+
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   INTRO
+========================= */
+
+.register-page__intro {
+  width: 400px;
+
+  margin-top: 38px;
+
+  padding:
+    48px 40px;
+
+  box-sizing: border-box;
+
+  border-radius: 24px;
+
+  background: #eef4fb;
+}
+
+
+.register-page__eyebrow {
+  display: block;
+
+  color:
+    var(--sl-color-accent);
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+
+.register-page__intro-title {
+  width: 320px;
+
+  margin:
+    20px 0 0;
+
+  color:
+    var(--sl-color-primary);
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  line-height: 1.18;
+}
+
+
+.register-page__intro-text {
+  width: 320px;
+
+  margin:
+    20px 0 0;
+
+  color:
+    var(--sl-color-text-muted);
+
+  font-size: 15px;
+
+  font-weight: 400;
+
+  line-height: 1.4;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.register-card {
+  width: 660px;
+
+  padding:
+    36px 40px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  border:
+    1px solid var(--sl-color-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--sl-color-surface);
+
+  box-shadow:
+    0 4px 14px rgb(26 33 46 / 8%);
+}
+
+
+.register-card__title {
+  margin: 0;
+
+  color:
+    var(--sl-color-primary);
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+
+.register-card__description {
+  width: 580px;
+
+  margin:
+    16px 0 0;
+
+  color:
+    var(--sl-color-text-muted);
+
+  font-size: 15px;
+
+  line-height: 1.3;
+
+  text-align: center;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.register-form {
+  width: 580px;
+
+  margin-top: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+.register-form__row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  align-items: start;
+}
+
+
+/* =========================
+   FIELD
+========================= */
+
+.register-field {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.register-field__label {
+  margin-bottom: 6px;
+
+  color:
+    var(--sl-color-text);
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 20px;
+}
+
+
+.register-field__control {
+  width: 100%;
+  height: 48px;
+
+  padding:
+    0 14px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid var(--sl-color-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--sl-color-surface);
+
+  color:
+    var(--sl-color-text);
+
+  font:
+    inherit;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+
+.register-field__control::placeholder {
+  color: #9aa8b8;
+}
+
+
+.register-field__control:focus {
+  border:
+    2px solid var(--sl-color-accent);
+
+  padding-inline: 13px;
+}
+
+
+.register-field__control--error {
+  border:
+    2px solid #b33a3a;
+
+  padding-inline: 13px;
+}
+
+
+.register-field__control--select {
+  appearance: none;
+
+  padding-right: 38px;
+
+  cursor: pointer;
+
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      #617082 50%
+    ),
+    linear-gradient(
+      135deg,
+      #617082 50%,
+      transparent 50%
+    );
+
+  background-position:
+    calc(100% - 18px) 21px,
+    calc(100% - 13px) 21px;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat:
+    no-repeat;
+}
+
+
+.register-field__control--select:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+.register-field__error {
+  margin:
+    6px 0 0;
+
+  color: #b33a3a;
+
+  font-size: 12px;
+
+  line-height: 16px;
+}
+
+
+/* =========================
+   STUDENT NOTE
+========================= */
+
+.register-form__student-note {
+  width: 100%;
+
+  padding:
+    12px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  border-radius: 10px;
+
+  background: #eef4fb;
+}
+
+
+.register-form__student-note strong {
+  color:
+    var(--sl-color-primary);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  line-height: 1.3;
+}
+
+
+.register-form__student-note span {
+  color:
+    var(--sl-color-text-muted);
+
+  font-size: 12px;
+
+  line-height: 1.35;
+}
+
+
+/* =========================
+   ERRORS
+========================= */
+
+.register-form__lookup-error {
+  margin: -6px 0 0;
+
+  color: #b33a3a;
+
+  font-size: 12px;
+
+  line-height: 16px;
+}
+
+
+.register-form__server-error {
+  width: 100%;
+
+  padding:
+    10px 12px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid rgb(179 58 58 / 25%);
+
+  border-radius: 10px;
+
+  background:
+    rgb(179 58 58 / 6%);
+
+  color: #b33a3a;
+
+  font-size: 13px;
+
+  line-height: 1.35;
+}
+
+
+/* =========================
+   SUBMIT
+========================= */
+
+.register-form__submit {
+  width: 100%;
+  height: 44px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0 16px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background:
+    var(--sl-color-primary);
+
+  color: white;
+
+  font: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    opacity 120ms ease;
+}
+
+
+.register-form__submit:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+
+.register-form__submit:focus-visible {
+  outline:
+    2px solid var(--sl-color-accent);
+
+  outline-offset: 3px;
+}
+
+
+.register-form__submit:disabled {
+  cursor: wait;
+
+  opacity: 0.7;
+}
+
+
+.register-form__spinner {
+  width: 15px;
+  height: 15px;
+
+  box-sizing: border-box;
+
+  border:
+    2px solid rgb(255 255 255 / 40%);
+
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation:
+    register-spin 700ms linear infinite;
+}
+
+
+/* =========================
+   LOGIN LINK
+========================= */
+
+.register-form__login {
+  width: 100%;
+
+  margin: 0;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  color:
+    var(--sl-color-text-muted);
+
+  font-size: 14px;
+
+  line-height: 24px;
+}
+
+
+.register-form__login a {
+  color:
+    var(--sl-color-primary);
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+
+.register-form__login a:hover {
+  text-decoration: underline;
+}
+
+
+.register-form__login a:focus-visible {
+  outline:
+    2px solid var(--sl-color-accent);
+
+  outline-offset: 3px;
+
+  border-radius: 3px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+  .register-page {
+    width:
+      calc(100% - 32px);
+
+    display: block;
+
+    padding-top: 24px;
+
+    padding-bottom: 37px;
+  }
+
+
+  .register-page__intro {
+    display: none;
+  }
+
+
+  .register-card {
+    width: 100%;
+
+    padding:
+      28px 20px;
+
+    border-radius: 18px;
+  }
+
+
+  .register-card__title {
+    font-size: 28px;
+  }
+
+
+  .register-card__description {
+    width: 100%;
+
+    font-size: 14px;
+  }
+
+
+  .register-form {
+    width: 100%;
+
+    margin-top: 16px;
+  }
+
+
+  .register-form__row {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+
+  .register-field {
+    width: 100%;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .register-field__control,
+  .register-form__submit {
+    transition: none;
+  }
+
+
+  .register-form__spinner {
+    animation: none;
+  }
+
+}
+
+
+@keyframes register-spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
