@@ -26,12 +26,12 @@ import { CatalogFilters } from '../../components/catalog-filters/catalog-filters
 
 import { ResourceApiService } from '../../data-access/resource-api.service';
 
-import { LookupApiService } from '../../data-access/lookup-api.service';
+import { LookupApiService } from '../../../../core/lookups/services/lookup-api.service';
 
 import {
   SubjectLookup,
   GradeLevelLookup,
-} from '../../../../core/models/lookup.models';
+} from '../../../../core/lookups/models/lookup.models';
 
 import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
 

@@ -16,11 +16,11 @@ import {
   CategoryLookup,
   GradeLevelLookup,
   SchoolClassLookup,
-} from '../../../core/models/lookup.models';
+} from '../models/lookup.models';
 
 import {
   API_CONFIG,
-} from '../../../core/config/api.config';
+} from '../../config/api.config';
 
 @Injectable({
   providedIn: 'root',

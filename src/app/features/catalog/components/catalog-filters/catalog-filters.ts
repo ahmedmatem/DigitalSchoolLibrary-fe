@@ -7,7 +7,7 @@ import {
 import {
   SubjectLookup,
   GradeLevelLookup,
-} from '../../../../core/models/lookup.models';
+} from '../../../../core/lookups/models/lookup.models';
 import { ResourceTypeOption } from '../../../../core/models/resource-type.model';
 
 @Component({
