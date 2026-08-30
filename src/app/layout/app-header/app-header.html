@@ -1,4 +1,5 @@
 <header class="app-header">
+
   <div class="app-header__inner">
 
     <a
@@ -11,30 +12,42 @@
       </span>
 
       <span class="app-header__brand-text">
-        <strong>School Library</strong>
-        <span>Училищна библиотека</span>
+        <strong>
+          School Library
+        </strong>
+
+        <span>
+          Училищна библиотека
+        </span>
       </span>
     </a>
+
 
     <nav
       class="app-header__nav"
       aria-label="Основна навигация"
     >
+
       <a
         routerLink="/"
         routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="{
+          exact: true
+        }"
       >
         Каталог
       </a>
 
+
       @if (authenticated()) {
+
         <a
           routerLink="/for-me"
           routerLinkActive="is-active"
         >
           За мен
         </a>
+
 
         <a
           routerLink="/my-library"
@@ -43,29 +56,42 @@
           Моята библиотека
         </a>
 
-        @if (role() === 'Teacher' || role() === 'Admin') {
+
+        @if (
+          role() === 'Teacher' ||
+          role() === 'Admin'
+        ) {
+
           <a
             routerLink="/teacher"
             routerLinkActive="is-active"
           >
             Учител
           </a>
+
         }
 
+
         @if (role() === 'Admin') {
+
           <a
             routerLink="/admin"
             routerLinkActive="is-active"
           >
             Администрация
           </a>
+
         }
+
       }
+
     </nav>
+
 
     <div class="app-header__actions">
 
       @if (!authenticated()) {
+
         <a
           class="app-header__login"
           routerLink="/login"
@@ -73,32 +99,227 @@
           Вход
         </a>
 
+
         <a
           class="app-header__register"
           routerLink="/register"
         >
           Регистрация
         </a>
+
       } @else {
-        <a
-          class="app-header__profile"
-          routerLink="/profile"
-        >
-          <span class="app-header__avatar">
-            {{ displayName()?.charAt(0) || 'U' }}
-          </span>
 
-          <span class="app-header__user">
-            <strong>
-              {{ displayName() || 'Потребител' }}
-            </strong>
+        <div class="app-header__profile-area">
 
-            <span>
-              {{ role() }}
+          <button
+            type="button"
+            class="app-header__profile"
+            [attr.aria-expanded]="profileMenuOpen()"
+            aria-haspopup="menu"
+            (click)="toggleProfileMenu($event)"
+          >
+
+            <span class="app-header__avatar">
+              {{ initials() }}
             </span>
-          </span>
-        </a>
+
+
+            <span class="app-header__user">
+
+              <strong>
+                {{ displayName() || 'Потребител' }}
+              </strong>
+
+              <span>
+                {{ roleLabel() }}
+              </span>
+
+            </span>
+
+          </button>
+
+
+          @if (profileMenuOpen()) {
+
+            <div
+              class="profile-menu"
+              role="menu"
+              (click)="$event.stopPropagation()"
+            >
+
+              <!-- USER -->
+
+              <div class="profile-menu__identity">
+
+                <span class="profile-menu__avatar">
+                  {{ initials() }}
+                </span>
+
+
+                <span class="profile-menu__identity-text">
+
+                  <strong>
+                    {{ displayName() }}
+                  </strong>
+
+                  <span>
+                    {{ roleLabel() }}
+                  </span>
+
+                </span>
+
+              </div>
+
+
+              <div
+                class="profile-menu__divider"
+                aria-hidden="true"
+              ></div>
+
+
+              <!-- PROFILE -->
+
+              <a
+                class="profile-menu__item"
+                routerLink="/profile"
+                role="menuitem"
+                (click)="closeProfileMenu()"
+              >
+                <svg lucideUserRound></svg>
+
+                <span>
+                  Профил
+                </span>
+              </a>
+
+
+              <!-- STUDENT -->
+
+              @if (role() === 'Student') {
+
+                <a
+                  class="profile-menu__item"
+                  routerLink="/my-library"
+                  role="menuitem"
+                  (click)="closeProfileMenu()"
+                >
+                  <svg lucideBookmark></svg>
+
+                  <span>
+                    Моята библиотека
+                  </span>
+                </a>
+
+              }
+
+
+              <!-- TEACHER -->
+
+              @if (role() === 'Teacher') {
+
+                <a
+                  class="profile-menu__item"
+                  routerLink="/teacher"
+                  role="menuitem"
+                  (click)="closeProfileMenu()"
+                >
+                  <svg lucideFolderCog></svg>
+
+                  <span>
+                    Моите ресурси
+                  </span>
+                </a>
+
+
+                <a
+                  class="profile-menu__item"
+                  routerLink="/teacher/add"
+                  role="menuitem"
+                  (click)="closeProfileMenu()"
+                >
+                  <svg lucidePlus></svg>
+
+                  <span>
+                    Добави ресурс
+                  </span>
+                </a>
+
+              }
+
+
+              <!-- ADMIN -->
+
+              @if (role() === 'Admin') {
+
+                <a
+                  class="profile-menu__item"
+                  routerLink="/admin"
+                  role="menuitem"
+                  (click)="closeProfileMenu()"
+                >
+                  <svg lucideShieldCheck></svg>
+
+                  <span>
+                    Модерация
+                  </span>
+                </a>
+
+
+                <a
+                  class="profile-menu__item"
+                  routerLink="/admin/resources"
+                  role="menuitem"
+                  (click)="closeProfileMenu()"
+                >
+                  <svg lucideFolderCog></svg>
+
+                  <span>
+                    Управление на ресурси
+                  </span>
+                </a>
+
+              }
+
+
+              <div
+                class="profile-menu__divider"
+                aria-hidden="true"
+              ></div>
+
+
+              <!-- LOGOUT -->
+
+              <button
+                type="button"
+                class="
+                  profile-menu__item
+                  profile-menu__item--logout
+                "
+                role="menuitem"
+                [disabled]="loggingOut()"
+                (click)="logout()"
+              >
+
+                <svg lucideLogOut></svg>
+
+                <span>
+                  @if (loggingOut()) {
+                    Излизане...
+                  } @else {
+                    Изход
+                  }
+                </span>
+
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
       }
+
 
       <sl-icon-button
         class="app-header__menu-button"
@@ -112,4 +333,5 @@
     </div>
 
   </div>
+
 </header>
