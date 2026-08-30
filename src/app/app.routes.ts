@@ -26,6 +26,12 @@ export const routes: Routes = [
         .then(m => m.LoginPage),
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./features/auth/pages/register-page/register-page')
+        .then(m => m.RegisterPage),
+  },
+  {
     path: 'ui-preview',
     loadComponent: () =>
       import('./features/ui-preview/ui-preview')
