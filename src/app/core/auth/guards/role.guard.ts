@@ -5,9 +5,10 @@ import {
   UrlTree,
 } from '@angular/router';
 
+import { AuthRole } from '../constants/auth-roles';
 import { AuthStateService } from '../services/auth-state.service';
 
-export function roleGuard(...allowedRoles: string[]): CanActivateFn {
+export function roleGuard(...allowedRoles: AuthRole[]): CanActivateFn {
   return (
     route,
     state
