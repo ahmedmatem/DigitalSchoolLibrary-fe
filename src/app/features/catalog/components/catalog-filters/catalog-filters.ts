@@ -7,6 +7,7 @@ import {
 import {
   SubjectLookup,
   GradeLevelLookup,
+  CategoryLookup,
 } from '../../../../core/lookups/models/lookup.models';
 import { ResourceTypeOption } from '../../../../core/models/resource-type.model';
 
@@ -18,15 +19,21 @@ import { ResourceTypeOption } from '../../../../core/models/resource-type.model'
 export class CatalogFilters {
   readonly subjects = input<SubjectLookup[]>([]);
 
+  readonly categories = input<CategoryLookup[]>([]);
+
   readonly grades = input<GradeLevelLookup[]>([]);
 
   readonly subjectId = input<string | null>(null);
+
+  readonly categoryId = input<string | null>(null);
 
   readonly gradeLevelId = input<number | null>(null);
 
   readonly resourceType = input<number | null>(null);
 
   readonly subjectChange = output<string | null>();
+
+  readonly categoryChange = output<string | null>();
 
   readonly gradeChange = output<number | null>();
 
@@ -40,6 +47,14 @@ export class CatalogFilters {
     const value = (event.target as HTMLSelectElement).value;
 
     this.subjectChange.emit(value || null);
+  }
+
+  onCategoryChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+
+    this.categoryChange.emit(
+      value || null
+    );
   }
 
   onGradeChange(event: Event): void {

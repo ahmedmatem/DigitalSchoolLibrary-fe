@@ -30,6 +30,7 @@ import { LookupApiService } from '../../../../core/lookups/services/lookup-api.s
 
 import {
   SubjectLookup,
+  CategoryLookup,
   GradeLevelLookup,
 } from '../../../../core/lookups/models/lookup.models';
 
@@ -50,6 +51,7 @@ import { ResourceSortOption } from '../../../../core/models/resource-sort.model'
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
   subject: null,
+  category: null,
   grade: null,
   resourceType: null,
   sort: 'newest',
@@ -88,6 +90,8 @@ export class CatalogPage {
   private readonly lookupApi = inject(LookupApiService);
 
   readonly subjects = signal<SubjectLookup[]>([]);
+
+  readonly categories = signal<CategoryLookup[]>([]);
 
   readonly gradeLevels = signal<GradeLevelLookup[]>([]);
 
@@ -139,6 +143,25 @@ export class CatalogPage {
     );
   });
 
+  readonly selectedCategoryId =
+  computed<string | null>(() => {
+    const categoryName =
+      this.query().category;
+
+    if (!categoryName) {
+      return null;
+    }
+
+    return (
+      this.categories()
+        .find(
+          category =>
+            category.name === categoryName
+        )
+        ?.id ?? null
+    );
+  });
+
   readonly selectedGradeLevelId =
   computed<number | null>(() => {
     const grade =
@@ -161,11 +184,13 @@ export class CatalogPage {
   constructor() {
     forkJoin({
       subjects: this.lookupApi.getSubjects(),
+      categories: this.lookupApi.getCategories(),
       grades: this.lookupApi.getGradeLevels(),
     })
       .pipe(
-        tap(({ subjects, grades }) => {
+        tap(({ subjects, categories, grades }) => {
           this.subjects.set(subjects);
+          this.categories.set(categories);
           this.gradeLevels.set(grades);
         }),
 
@@ -191,9 +216,9 @@ export class CatalogPage {
 
           subject: params.get('subject'),
 
-          grade: this.parseGrade(
-              params.get('grade')
-            ),
+          category: params.get('category'),
+
+          grade: this.parseGrade(params.get('grade')),
 
           resourceType: params.get('type'),
 
@@ -230,6 +255,10 @@ export class CatalogPage {
       filters.push(query.subject);
     }
 
+    if (query.category) {
+      filters.push(query.category);
+    }
+
     if (query.grade !== null) {
       filters.push(`${query.grade} клас`);
     }
@@ -263,6 +292,22 @@ export class CatalogPage {
     this.updateSubject(
       subject?.name ?? null
     );
+  }
+
+  updateCategoryById(categoryId: string | null): void {
+    if (!categoryId) {
+      this.updateCategory(null);
+      return;
+    }
+
+    const category =
+      this.categories()
+        .find(
+          item =>
+            item.id === categoryId
+        );
+
+    this.updateCategory(category?.name ?? null);
   }
 
   updateGradeById(
@@ -318,6 +363,13 @@ export class CatalogPage {
       subject,
       page: 1,
     });
+  }  
+
+  updateCategory(category: string | null): void {
+    this.updateQuery({
+      category,
+      page: 1,
+    });
   }
 
   updateGrade(grade: number | null): void {
@@ -337,6 +389,7 @@ export class CatalogPage {
   clearFilters(): void {
     this.updateQuery({
       subject: null,
+      category: null,
       grade: null,
       resourceType: null,
       page: 1,
@@ -411,25 +464,21 @@ export class CatalogPage {
         relativeTo: this.route,
 
         queryParams: {
-          search:
-            nextQuery.search || null,
+          search: nextQuery.search || null,
 
-          subject:
-            nextQuery.subject,
+          subject: nextQuery.subject,
 
-          grade:
-            nextQuery.grade,
+          category: nextQuery.category,
 
-          type:
-            nextQuery.resourceType,
+          grade: nextQuery.grade,
 
-          sort:
-            nextQuery.sort === 'newest'
+          type: nextQuery.resourceType,
+
+          sort: nextQuery.sort === 'newest'
               ? null
               : nextQuery.sort,
 
-          page:
-            nextQuery.page === 1
+          page: nextQuery.page === 1
               ? null
               : nextQuery.page,
         },
@@ -565,6 +614,10 @@ export class CatalogPage {
         ? this.subjects().find(item => item.name === query.subject)
         : undefined;
 
+    const category = query.category
+        ? this.categories().find(item => item.name === query.category)
+        : undefined;
+
     const gradeLevel = query.grade !== null
         ? this.gradeLevels().find(item => item.number === query.grade)
         : undefined;
@@ -577,6 +630,8 @@ export class CatalogPage {
       search: query.search.trim() || undefined,
 
       subjectId: subject?.id,
+
+      categoryId: category?.id,
 
       gradeLevelId: gradeLevel?.id,
 

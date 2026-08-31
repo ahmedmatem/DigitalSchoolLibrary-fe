@@ -24,14 +24,17 @@
     <section class="catalog__filters">
       <sl-catalog-filters
         [subjects]="subjects()"
+        [categories]="categories()"
         [grades]="gradeLevels()"
         [resourceTypes]="resourceTypes"
 
         [subjectId]="selectedSubjectId()"
+        [categoryId]="selectedCategoryId()"
         [gradeLevelId]="selectedGradeLevelId()"
         [resourceType]="selectedResourceType()"
 
         (subjectChange)="updateSubjectById($event)"
+        (categoryChange)="updateCategoryById($event)"
         (gradeChange)="updateGradeById($event)"
         (resourceTypeChange)="updateResourceTypeByValue($event)"
 

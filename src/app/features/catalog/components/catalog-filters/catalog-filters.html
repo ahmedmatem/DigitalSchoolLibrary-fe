@@ -23,6 +23,30 @@
   </div>
 
   <div class="catalog-filters__field">
+    <label for="catalog-category">
+      Категория
+    </label>
+
+    <select
+      id="catalog-category"
+      [value]="categoryId() ?? ''"
+      (change)="onCategoryChange($event)"
+    >
+      <option value="">
+        Всички категории
+      </option>
+
+      @for (item of categories(); track item.id) {
+        <option [value]="item.id">
+          {{ item.name }}
+        </option>
+      }
+
+    </select>
+
+  </div>
+
+  <div class="catalog-filters__field">
     <label for="catalog-grade">
       Клас
     </label>
