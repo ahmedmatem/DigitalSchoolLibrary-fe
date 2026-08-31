@@ -39,6 +39,16 @@ export const routes: Routes = [
         .then(m => m.RegisterPage),
   },
   /* =========================
+     STUDENT
+  ========================= */
+  {
+    path: 'for-me',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/student/pages/for-me/for-me')
+        .then(m => m.ForMe),
+  },
+  /* =========================
      SYSTEM
   ========================= */
   {

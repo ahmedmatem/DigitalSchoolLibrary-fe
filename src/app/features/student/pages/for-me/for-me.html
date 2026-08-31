@@ -1,0 +1,184 @@
+<sl-page-container>
+
+  <section class="for-me">
+
+    <!-- HERO -->
+    <section class="for-me__hero">
+
+      <div class="for-me__hero-content">
+
+        <p class="for-me__eyebrow">
+          ПЕРСОНАЛИЗИРАН КАТАЛОГ
+        </p>
+
+        <h1 class="for-me__title">
+          Ресурси за вас
+        </h1>
+
+        <p class="for-me__description">
+          Подбрани материали според вашия клас и паралелка.
+          Тук виждате само ресурси, до които имате достъп.
+        </p>
+
+      </div>
+
+
+      <div class="for-me__student-context">
+
+        @if (gradeLabel()) {
+          <span class="for-me__context-chip">
+            {{ gradeLabel() }}
+          </span>
+        }
+
+        @if (classLabel()) {
+          <span class="for-me__context-chip">
+            {{ classLabel() }}
+          </span>
+        }
+
+      </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+    <div class="for-me__search">
+
+      <sl-search-field
+        placeholder="Търсене в библиотеката…"
+        [value]="query().search"
+        (valueChange)="updateSearch($event)"
+      />
+
+    </div>
+
+
+    <!-- FILTER CARD -->
+    <section class="for-me__filter-card">
+
+      <div class="for-me__filter-header">
+
+        <h2>
+          Филтри
+        </h2>
+
+        @if (activeFilters().length === 0) {
+
+          <span class="for-me__filter-status">
+            Няма активни филтри
+          </span>
+
+        } @else {
+
+          <span class="for-me__filter-status">
+            {{ activeFilters().length }}
+            активни филтри
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="for-me__filter-content">
+
+        <sl-catalog-filters
+          [subjects]="subjects()"
+          [categories]="categories()"
+          [grades]="gradeLevels()"
+          [resourceTypes]="resourceTypes"
+
+          [subjectId]="query().subjectId"
+          [categoryId]="query().categoryId"
+          [gradeLevelId]="query().gradeLevelId"
+          [resourceType]="query().resourceType"
+
+          (subjectChange)="updateSubjectById($event)"
+          (categoryChange)="updateCategoryById($event)"
+          (gradeChange)="updateGradeById($event)"
+          (resourceTypeChange)="updateResourceTypeByValue($event)"
+
+          (clear)="clearFilters()"
+        />
+
+      </div>
+
+
+      @if (activeFilters().length > 0) {
+
+        <div class="for-me__active-filters">
+
+          @for (
+            filter of activeFilters();
+            track filter
+          ) {
+
+            <span class="for-me__active-chip">
+              {{ filter }}
+            </span>
+
+          }
+
+
+          <button
+            type="button"
+            class="for-me__clear-filters"
+            (click)="clearFilters()"
+          >
+            Изчисти филтрите
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- RESOURCE SECTION HEADER -->
+    <header class="for-me__resources-header">
+
+      <h2>
+        Подходящи за вас
+      </h2>
+
+      <span>
+        {{ totalCount() }} ресурса
+      </span>
+
+    </header>
+
+
+    <!-- TEMPORARY STATE -->
+    @if (loading()) {
+
+      <p class="for-me__message">
+        Зареждане...
+      </p>
+
+    }
+
+
+    @if (error()) {
+
+      <div class="for-me__message">
+
+        <p>
+          {{ error() }}
+        </p>
+
+        <button
+          type="button"
+          (click)="retryLoad()"
+        >
+          Опитай отново
+        </button>
+
+      </div>
+
+    }
+
+  </section>
+
+</sl-page-container>

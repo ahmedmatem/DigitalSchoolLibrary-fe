@@ -2,7 +2,7 @@
    PAGE
 ========================================================= */
 
-.catalog {
+.for-me {
   display: flex;
   flex-direction: column;
 
@@ -20,7 +20,7 @@
    HERO
 ========================================================= */
 
-.catalog__hero {
+.for-me__hero {
   position: relative;
 
   width: 100%;
@@ -41,7 +41,12 @@
 }
 
 
-.catalog__eyebrow {
+.for-me__hero-content {
+  max-width: 760px;
+}
+
+
+.for-me__eyebrow {
   margin: 0;
 
   color:
@@ -56,7 +61,7 @@
 }
 
 
-.catalog__hero-title {
+.for-me__title {
   margin:
     16px 0 0;
 
@@ -72,7 +77,7 @@
 }
 
 
-.catalog__hero-description {
+.for-me__description {
   max-width: 760px;
 
   margin:
@@ -90,10 +95,58 @@
 
 
 /* =========================================================
+   STUDENT CONTEXT
+========================================================= */
+
+.for-me__student-context {
+  position: absolute;
+
+  top: 92px;
+  right: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+.for-me__context-chip {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 26px;
+
+  padding:
+    5px 10px;
+
+  border-radius: 999px;
+
+  background:
+    var(
+      --sl-color-surface-subtle,
+      #eef4fb
+    );
+
+  color:
+    var(
+      --sl-color-primary,
+      #2457a6
+    );
+
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
    SEARCH
 ========================================================= */
 
-.catalog__search {
+.for-me__search {
   width: 520px;
   max-width: 100%;
 }
@@ -103,7 +156,7 @@
    FILTER CARD
 ========================================================= */
 
-.catalog__filter-card {
+.for-me__filter-card {
   width: 100%;
 
   padding: 24px;
@@ -125,7 +178,7 @@
 }
 
 
-.catalog__filter-header {
+.for-me__filter-header {
   display: flex;
 
   align-items: center;
@@ -137,7 +190,7 @@
 }
 
 
-.catalog__filter-header h2 {
+.for-me__filter-header h2 {
   margin: 0;
 
   color:
@@ -152,7 +205,7 @@
 }
 
 
-.catalog__filter-status {
+.for-me__filter-status {
   display: inline-flex;
 
   align-items: center;
@@ -185,22 +238,18 @@
 }
 
 
-.catalog__filter-content {
+.for-me__filter-content {
   width: 100%;
 }
 
 
-/*
- * CatalogFilters вече е вътре във външната
- * Figma filter card.
- *
- * Затова премахваме неговата собствена
- * външна рамка/padding, но НЕ променяме
- * HTML, TS или поведението му.
- */
+/* =========================================================
+   SHARED CATALOG FILTER
+   само визуален override
+========================================================= */
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters {
 
   display: grid;
@@ -226,7 +275,7 @@
 
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters__field {
 
   gap: 6px;
@@ -234,7 +283,7 @@
 
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters__field label {
 
   color:
@@ -250,7 +299,7 @@
 
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters__field select {
 
   width: 100%;
@@ -289,7 +338,7 @@
 
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters__clear {
 
   width: 128px;
@@ -331,7 +380,7 @@
 
 
 :host ::ng-deep
-.catalog__filter-content
+.for-me__filter-content
 .catalog-filters__clear:hover {
 
   background:
@@ -343,31 +392,62 @@
 
 
 /* =========================================================
-   ACTIVE FILTER CHIPS
+   ACTIVE FILTERS
 ========================================================= */
 
-.catalog__active-filters {
+.for-me__active-filters {
   display: flex;
+
   align-items: center;
   flex-wrap: wrap;
 
-  gap: var(--sl-space-2);
+  gap: 8px;
 
   margin-top: 16px;
 
   padding-top: 16px;
 
-  border-top: 1px solid var(--sl-color-border);
+  border-top:
+    1px solid
+    var(
+      --sl-color-border,
+      #d9e4f0
+    );
 }
 
 
-.catalog__clear-filters {
+.for-me__active-chip {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 28px;
+
+  padding:
+    5px 10px;
+
+  border-radius: 999px;
+
+  background: #ddf4f2;
+
+  color: #0f6e69;
+
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+
+.for-me__clear-filters {
   border: 0;
 
   background: transparent;
 
   color:
-    var(--sl-color-primary);
+    var(
+      --sl-color-primary,
+      #2457a6
+    );
 
   font-size: 13px;
   font-weight: 600;
@@ -377,91 +457,62 @@
 
 
 /* =========================================================
-   TOOLBAR
+   RESOURCE SECTION HEADER
 ========================================================= */
 
-.catalog__toolbar {
+.for-me__resources-header {
   display: flex;
 
   align-items: center;
   justify-content: space-between;
 
-  gap: var(--sl-space-4);
+  width: 100%;
+
+  margin-top: 4px;
 }
 
 
-.catalog__results {
+.for-me__resources-header h2 {
   margin: 0;
 
   color:
-    var(--sl-color-text-secondary);
-
-  font-size: 14px;
-}
-
-
-.catalog__sort {
-  display: flex;
-
-  align-items: center;
-
-  gap: var(--sl-space-2);
-
-  color:
-    var(--sl-color-text-secondary);
-
-  font-size: 14px;
-}
-
-
-.catalog__sort select {
-  min-height: 40px;
-
-  padding-inline: 12px;
-
-  border:
-    1px solid
-    var(--sl-color-border);
-
-  border-radius:
-    var(--sl-radius-md);
-
-  background:
-    var(--sl-color-surface);
-
-  color:
-    var(--sl-color-text-primary);
-}
-
-
-/* =========================================================
-   GRID
-========================================================= */
-
-.catalog__grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(270px, 1fr)
+    var(
+      --sl-color-text-primary,
+      #1a222d
     );
 
-  gap: var(--sl-space-5);
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 700;
+}
+
+
+.for-me__resources-header span {
+  color:
+    var(
+      --sl-color-text-secondary,
+      #617082
+    );
+
+  font-size: 14px;
+  line-height: 20px;
 }
 
 
 /* =========================================================
-   PAGINATION
+   TEMP MESSAGE
 ========================================================= */
 
-.catalog__pagination {
-  display: flex;
+.for-me__message {
+  margin: 0;
 
-  justify-content: center;
+  color:
+    var(
+      --sl-color-text-secondary,
+      #617082
+    );
 
-  padding-top:
-    var(--sl-space-4);
+  font-size: 14px;
 }
 
 
@@ -471,8 +522,15 @@
 
 @media (max-width: 900px) {
 
+  .for-me__student-context {
+    position: static;
+
+    margin-top: 16px;
+  }
+
+
   :host ::ng-deep
-  .catalog__filter-content
+  .for-me__filter-content
   .catalog-filters {
 
     grid-template-columns:
@@ -484,7 +542,7 @@
 
 
   :host ::ng-deep
-  .catalog__filter-content
+  .for-me__filter-content
   .catalog-filters__clear {
 
     width: 100%;
@@ -499,7 +557,7 @@
 
 @media (max-width: 767px) {
 
-  .catalog {
+  .for-me {
     gap: 24px;
 
     padding:
@@ -510,7 +568,7 @@
 
   /* HERO */
 
-  .catalog__hero {
+  .for-me__hero {
     min-height: 198px;
 
     padding:
@@ -520,12 +578,12 @@
   }
 
 
-  .catalog__eyebrow {
+  .for-me__eyebrow {
     font-size: 11px;
   }
 
 
-  .catalog__hero-title {
+  .for-me__title {
     margin-top: 16px;
 
     font-size: 28px;
@@ -533,7 +591,7 @@
   }
 
 
-  .catalog__hero-description {
+  .for-me__description {
     margin-top: 10px;
 
     font-size: 15px;
@@ -541,39 +599,44 @@
   }
 
 
+  .for-me__student-context {
+    position: static;
+
+    margin-top: 12px;
+  }
+
+
   /* SEARCH */
 
-  .catalog__search {
+  .for-me__search {
     width: 100%;
   }
 
 
-  /* FILTER CARD */
+  /* FILTER */
 
-  .catalog__filter-card {
+  .for-me__filter-card {
     padding: 16px;
-
-    border-radius: 14px;
   }
 
 
-  .catalog__filter-header {
+  .for-me__filter-header {
     margin-bottom: 16px;
   }
 
 
-  .catalog__filter-header h2 {
+  .for-me__filter-header h2 {
     font-size: 16px;
   }
 
 
-  .catalog__filter-status {
+  .for-me__filter-status {
     font-size: 11px;
   }
 
 
   :host ::ng-deep
-  .catalog__filter-content
+  .for-me__filter-content
   .catalog-filters {
 
     grid-template-columns: 1fr;
@@ -583,77 +646,32 @@
 
 
   :host ::ng-deep
-  .catalog__filter-content
+  .for-me__filter-content
   .catalog-filters__clear {
 
     width: 100%;
   }
 
 
-  /* ACTIVE FILTERS */
+  /* SECTION HEADER */
 
-  .catalog__active-filters {
-    gap: 8px;
+  .for-me__resources-header {
+    display: block;
   }
 
 
-  /* TOOLBAR */
-
-  .catalog__toolbar {
-    align-items: flex-start;
-
-    flex-direction: column;
+  .for-me__resources-header h2 {
+    font-size: 24px;
+    line-height: 32px;
   }
 
 
-  .catalog__sort {
-    width: 100%;
+  .for-me__resources-header span {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 13px;
   }
 
-
-  .catalog__sort select {
-    flex: 1;
-  }
-
-}
-
-
-/* =========================================================
-   TEMPORARY EMPTY STATE
-========================================================= */
-
-.catalog__empty {
-  padding:
-    var(--sl-space-7)
-    var(--sl-space-4);
-
-  text-align: center;
-
-  border:
-    1px solid
-    var(--sl-color-border);
-
-  border-radius:
-    var(--sl-radius-lg);
-
-  background:
-    var(--sl-color-surface);
-}
-
-
-.catalog__empty h2 {
-  margin-bottom:
-    var(--sl-space-2);
-
-  font-size: 20px;
-}
-
-
-.catalog__empty p {
-  margin:
-    0 0
-    var(--sl-space-4);
-
-  color:
-    var(--sl-color-text-secondary);
 }

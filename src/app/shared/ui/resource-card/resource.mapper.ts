@@ -1,5 +1,5 @@
 import { RESOURCE_TYPE_OPTIONS } from '../../../core/models/resource-type.model';
-import { ResourceCardVm } from '../../../shared/ui/resource-card/resource-card.model';
+import { ResourceCardVm } from './resource-card.model';
 
 import { ResourceListItem  } from '../../../core/resources/models/resource-list-item.model';
 

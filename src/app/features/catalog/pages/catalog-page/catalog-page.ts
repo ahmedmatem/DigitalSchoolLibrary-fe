@@ -33,7 +33,7 @@ import {
   GradeLevelLookup,
 } from '../../../../core/lookups/models/lookup.models';
 
-import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
+import { mapPublicResourceToCard } from '../../../../shared/ui/resource-card/resource.mapper';
 
 import { ResourceCatalogRequest } from '../../../../core/resources/models/resource-catalog-request.model';
 
