@@ -17,6 +17,10 @@ import {
 } from '@angular/core/rxjs-interop';
 
 import {
+  Router,
+} from '@angular/router';
+
+import {
   AuthStateService,
 } from '../../../../core/auth/services/auth-state.service';
 
@@ -57,6 +61,20 @@ import {
 import {
   CatalogFilters,
 } from '../../../../shared/ui/catalog-filters/catalog-filters';
+
+import {
+  ResourceCard,
+} from '../../../../shared/ui/resource-card/resource-card';
+
+import {
+  ResourceCardVm,
+} from '../../../../shared/ui/resource-card/resource-card.model';
+
+
+import {
+  Pagination,
+} from '../../../../shared/ui/pagination/pagination';
+import { mapResourceToCard } from '../../../../shared/ui/resource-card/resource.mapper';
 
 
 interface ForMeQuery {
@@ -100,6 +118,8 @@ const DEFAULT_QUERY: ForMeQuery = {
     PageContainer,
     SearchField,
     CatalogFilters,
+    ResourceCard,
+    Pagination,
   ],
 
   templateUrl: './for-me.html',
@@ -118,6 +138,9 @@ export class ForMe {
 
   private readonly destroyRef =
     inject(DestroyRef);
+
+  private readonly router =
+    inject(Router);
 
 
   /*
@@ -200,6 +223,9 @@ export class ForMe {
 
   readonly error =
     signal<string | null>(null);
+
+  readonly resources =
+    signal<ResourceCardVm[]>([]);
 
   readonly totalCount =
     signal(0);
@@ -362,6 +388,22 @@ export class ForMe {
 
         next: response => {
 
+          const resources =
+            response.items.map(
+              mapResourceToCard
+            );
+
+
+          this.resources.set(
+            resources
+          );
+
+
+          this.loadCoverUrls(
+            resources
+          );
+
+
           this.totalCount.set(
             response.totalCount
           );
@@ -375,6 +417,8 @@ export class ForMe {
 
 
         error: () => {
+
+          this.resources.set([]);
 
           this.error.set(
             'Възникна проблем при зареждането на ресурсите.'
@@ -548,6 +592,45 @@ export class ForMe {
 
   /*
    * =========================================================
+   * RESOURCE ACTIONS
+   * =========================================================
+   */
+
+  openResource(
+    id: string
+  ): void {
+
+    void this.router.navigate(
+      [
+        '/resources',
+        id,
+      ]
+    );
+  }
+
+
+  onSavedChange(
+    resourceId: string,
+    saved: boolean
+  ): void {
+
+    this.resources.update(
+      resources =>
+        resources.map(
+          resource =>
+            resource.id === resourceId
+              ? {
+                  ...resource,
+                  isSaved: saved,
+                }
+              : resource
+        )
+    );
+  }
+
+
+  /*
+   * =========================================================
    * RETRY
    * =========================================================
    */
@@ -584,6 +667,22 @@ export class ForMe {
 
         next: response => {
 
+          const resources =
+            response.items.map(
+              mapResourceToCard
+            );
+
+
+          this.resources.set(
+            resources
+          );
+
+
+          this.loadCoverUrls(
+            resources
+          );
+
+
           this.totalCount.set(
             response.totalCount
           );
@@ -598,6 +697,8 @@ export class ForMe {
 
         error: () => {
 
+          this.resources.set([]);
+
           this.error.set(
             'Възникна проблем при зареждането на ресурсите.'
           );
@@ -608,6 +709,78 @@ export class ForMe {
   }
 
 
+  /*
+   * =========================================================
+   * COVER IMAGES
+   * =========================================================
+   */
+
+  private loadCoverUrls(
+    resources: ResourceCardVm[]
+  ): void {
+
+    for (
+      const resource
+      of resources
+    ) {
+
+      if (!resource.hasCover) {
+        continue;
+      }
+
+
+      this.resourceApi
+        .getPublicCover(
+          resource.id
+        )
+        .pipe(
+          takeUntilDestroyed(
+            this.destroyRef
+          )
+        )
+        .subscribe({
+
+          next: cover => {
+
+            this.resources.update(
+              items =>
+                items.map(
+                  item =>
+                    item.id === resource.id
+                      ? {
+                          ...item,
+
+                          coverUrl:
+                            cover.downloadUrl,
+                        }
+                      : item
+                )
+            );
+
+          },
+
+
+          error: () => {
+
+            /*
+             * Ако cover request се провали,
+             * картата просто остава
+             * с placeholder.
+             */
+
+          },
+
+        });
+    }
+  }
+
+
+  /*
+   * =========================================================
+   * REQUEST
+   * =========================================================
+   */
+
   private buildRequest():
     ResourceCatalogRequest {
 
@@ -616,6 +789,7 @@ export class ForMe {
 
 
     return {
+
       search:
         query.search.trim()
           || undefined,

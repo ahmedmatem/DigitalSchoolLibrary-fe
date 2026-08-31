@@ -2,7 +2,9 @@
 
   <section class="for-me">
 
-    <!-- HERO -->
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
     <section class="for-me__hero">
 
       <div class="for-me__hero-content">
@@ -42,7 +44,9 @@
     </section>
 
 
-    <!-- SEARCH -->
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
     <div class="for-me__search">
 
       <sl-search-field
@@ -54,7 +58,9 @@
     </div>
 
 
-    <!-- FILTER CARD -->
+    <!-- =====================================================
+         FILTER CARD
+    ====================================================== -->
     <section class="for-me__filter-card">
 
       <div class="for-me__filter-header">
@@ -62,6 +68,7 @@
         <h2>
           Филтри
         </h2>
+
 
         @if (activeFilters().length === 0) {
 
@@ -73,7 +80,12 @@
 
           <span class="for-me__filter-status">
             {{ activeFilters().length }}
-            активни филтри
+
+            @if (activeFilters().length === 1) {
+              активен филтър
+            } @else {
+              активни филтъра
+            }
           </span>
 
         }
@@ -105,6 +117,9 @@
       </div>
 
 
+      <!-- ===================================================
+           ACTIVE FILTERS
+      ==================================================== -->
       @if (activeFilters().length > 0) {
 
         <div class="for-me__active-filters">
@@ -136,7 +151,9 @@
     </section>
 
 
-    <!-- RESOURCE SECTION HEADER -->
+    <!-- =====================================================
+         RESOURCE SECTION HEADER
+    ====================================================== -->
     <header class="for-me__resources-header">
 
       <h2>
@@ -144,25 +161,40 @@
       </h2>
 
       <span>
-        {{ totalCount() }} ресурса
+        {{ totalCount() }}
+
+        @if (totalCount() === 1) {
+          ресурс
+        } @else {
+          ресурса
+        }
       </span>
 
     </header>
 
 
-    <!-- TEMPORARY STATE -->
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
     @if (loading()) {
 
-      <p class="for-me__message">
+      <div class="for-me__message">
         Зареждане...
-      </p>
+      </div>
 
     }
 
 
-    @if (error()) {
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+    @else if (error()) {
 
-      <div class="for-me__message">
+      <div class="for-me__state">
+
+        <h2>
+          Неуспешно зареждане
+        </h2>
 
         <p>
           {{ error() }}
@@ -170,10 +202,81 @@
 
         <button
           type="button"
+          class="for-me__state-action"
           (click)="retryLoad()"
         >
           Опитай отново
         </button>
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         RESOURCE GRID
+    ====================================================== -->
+    @else if (resources().length > 0) {
+
+      <div class="for-me__grid">
+
+        @for (
+          resource of resources();
+          track resource.id
+        ) {
+
+          <sl-resource-card
+            [resource]="resource"
+            (openResource)="openResource($event)"
+            (savedChange)="onSavedChange(resource.id, $event)"
+          />
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         EMPTY STATE
+    ====================================================== -->
+    @else {
+
+      <div class="for-me__state">
+
+        <h2>
+          Няма намерени ресурси
+        </h2>
+
+        <p>
+          Няма ресурси, които отговарят на избраното
+          търсене и филтри.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         PAGINATION
+         Показва се само при повече от една страница
+    ====================================================== -->
+    @if (
+      !loading()
+      && !error()
+      && resources().length > 0
+      && totalPages() > 1
+    ) {
+
+      <div class="for-me__pagination">
+
+        <sl-pagination
+          [page]="query().page"
+          [pageCount]="totalPages()"
+          (pageChange)="updatePage($event)"
+        />
 
       </div>
 

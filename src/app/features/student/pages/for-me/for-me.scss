@@ -102,10 +102,10 @@
   position: absolute;
 
   top: 92px;
-  right: 36px;
+  left: 68.7%;
+  right: auto;
 
   display: flex;
-
   align-items: center;
 
   gap: 8px;
@@ -504,15 +504,17 @@
 ========================================================= */
 
 .for-me__message {
-  margin: 0;
+  padding:
+    var(--sl-space-6)
+    var(--sl-space-4);
+
+  text-align: center;
 
   color:
-    var(
-      --sl-color-text-secondary,
-      #617082
-    );
+    var(--sl-color-text-secondary);
 
   font-size: 14px;
+  line-height: 22px;
 }
 
 
@@ -672,6 +674,101 @@
     margin-top: 6px;
 
     font-size: 13px;
+  }
+
+}
+
+/* =========================================================
+   RESOURCE GRID
+========================================================= */
+
+.for-me__grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
+
+  gap:
+    var(--sl-space-5);
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.for-me__pagination {
+  display: flex;
+
+  justify-content: center;
+
+  padding-top:
+    var(--sl-space-4);
+}
+
+
+/* =========================================================
+   EMPTY / ERROR STATE
+========================================================= */
+
+.for-me__state {
+  padding:
+    var(--sl-space-7)
+    var(--sl-space-4);
+
+  text-align: center;
+
+  border:
+    1px solid
+    var(--sl-color-border);
+
+  border-radius:
+    var(--sl-radius-lg);
+
+  background:
+    var(--sl-color-surface);
+}
+
+
+.for-me__state h2 {
+  margin:
+    0 0
+    var(--sl-space-2);
+
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+
+  color:
+    var(--sl-color-text-primary);
+}
+
+
+.for-me__state p {
+  margin:
+    0;
+
+  color:
+    var(--sl-color-text-secondary);
+
+  font-size: 14px;
+  line-height: 22px;
+}
+
+@media (max-width: 767px) {
+
+  .for-me__grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .for-me__state {
+    padding:
+      var(--sl-space-6)
+      var(--sl-space-4);
   }
 
 }

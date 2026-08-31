@@ -33,7 +33,7 @@ import {
   GradeLevelLookup,
 } from '../../../../core/lookups/models/lookup.models';
 
-import { mapPublicResourceToCard } from '../../../../shared/ui/resource-card/resource.mapper';
+import { mapResourceToCard } from '../../../../shared/ui/resource-card/resource.mapper';
 
 import { ResourceCatalogRequest } from '../../../../core/resources/models/resource-catalog-request.model';
 
@@ -532,7 +532,7 @@ export class CatalogPage {
       )
       .subscribe({
         next: response => {
-          const resources = response.items.map(mapPublicResourceToCard);
+          const resources = response.items.map(mapResourceToCard);
 
           this.resources.set(resources);
 

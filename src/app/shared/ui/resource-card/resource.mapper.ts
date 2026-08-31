@@ -3,7 +3,7 @@ import { ResourceCardVm } from './resource-card.model';
 
 import { ResourceListItem  } from '../../../core/resources/models/resource-list-item.model';
 
-export function mapPublicResourceToCard(resource: ResourceListItem ): ResourceCardVm {
+export function mapResourceToCard(resource: ResourceListItem ): ResourceCardVm {
   return {
     id: resource.id,
 
