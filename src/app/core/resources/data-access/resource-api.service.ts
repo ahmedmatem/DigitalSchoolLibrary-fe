@@ -22,45 +22,16 @@ export class ResourceApiService {
   private readonly http = inject(HttpClient);
 
   getPublicCatalog(request: ResourceCatalogRequest): Observable<ResourceCatalogResponse> {
+    return this.http.get<ResourceCatalogResponse>(
+      `${API_CONFIG.baseUrl}/resources`,
+      { params: this.buildCatalogParams(request) });
+  }
 
-    let params = new HttpParams()
-        .set('page', request.page)
-        .set('pageSize', request.pageSize);
-
-    if (request.search) {
-      params = params.set('search', request.search);
-    }
-
-    if (request.subjectId) {
-      params =  params.set('subjectId', request.subjectId);
-    }
-
-    if (request.categoryId) {
-      params = params.set('categoryId', request.categoryId);
-    }
-
-    if (request.gradeLevelId !== undefined) {
-      params = params.set('gradeLevelId', request.gradeLevelId);
-    }
-
-    if (request.schoolClassId) {
-      params = params.set('schoolClassId', request.schoolClassId);
-    }
-
-    if (request.type !== undefined) {
-      params = params.set('type', request.type);
-    }
-
-    if (request.audienceType !== undefined) {
-      params = params.set('audienceType', request.audienceType);
-    }
-
-    if (request.sort !== undefined) {
-      params = params.set('sort', request.sort);
-    }
-
-    return this.http
-        .get<ResourceCatalogResponse>(`${API_CONFIG.baseUrl}/resources`, { params });
+  getForMe(request: ResourceCatalogRequest): Observable<ResourceCatalogResponse> {
+    return this.http.get<ResourceCatalogResponse>(
+      `${API_CONFIG.baseUrl}/resources/for-me`,
+      { params: this.buildCatalogParams(request) }
+    );
   }
 
   getPublicCover(resourceId: string): Observable<PresignedDownload> {
@@ -79,5 +50,46 @@ export class ResourceApiService {
     return this.http.get<ResourceDetails>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}`
     );
+  }
+
+  private buildCatalogParams(request: ResourceCatalogRequest): HttpParams {
+
+    let params = new HttpParams()
+        .set('page', request.page)
+        .set('pageSize', request.pageSize);
+
+    if (request.search) {
+      params = params.set('search', request.search);
+    }
+
+    if (request.subjectId) {
+      params = params.set('subjectId', request.subjectId);
+    }
+
+    if (request.categoryId) {
+      params = params.set('categoryId', request.categoryId);
+    }
+
+    if (request.gradeLevelId !== undefined) {
+      params = params.set('gradeLevelId', request.gradeLevelId );
+    }
+
+    if (request.schoolClassId) {
+      params = params.set('schoolClassId', request.schoolClassId);
+    }
+
+    if (request.type !== undefined) {
+      params = params.set('type', request.type);
+    }
+
+    if (request.audienceType !== undefined) {
+      params = params.set('audienceType', request.audienceType);
+    }
+
+    if (request.sort !== undefined) {
+      params = params.set('sort', request.sort);
+    }
+
+    return params;
   }
 }
