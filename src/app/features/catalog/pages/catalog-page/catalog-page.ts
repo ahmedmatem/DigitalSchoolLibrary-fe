@@ -22,7 +22,6 @@ import { SearchField } from '../../../../shared/ui/search-field/search-field';
 import { Chip } from '../../../../shared/ui/chip/chip';
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { ResourceCard } from '../../../../shared/ui/resource-card/resource-card';
-import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
 
 import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
 
@@ -47,6 +46,7 @@ import { CatalogState } from '../../components/catalog-state/catalog-state';
 
 import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.model';
 import { ResourceSortOption } from '../../../../core/models/resource-sort.model';
+import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
 
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',

@@ -1,34 +1,348 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
 .catalog {
   display: flex;
   flex-direction: column;
 
-  gap: var(--sl-space-5);
+  gap: 24px;
+
+  padding:
+  16px 0
+  64px;
 }
 
-.catalog__header h1 {
-  margin-bottom: var(--sl-space-2);
 
-  font-size: 32px;
+/* =========================================================
+   HERO
+========================================================= */
+
+.catalog__hero {
+  width: 100%;
+
+  min-height: 180px;
+
+  padding:
+    36px 40px;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background:
+    var(
+      --sl-color-surface-subtle,
+      #eef4fb
+    );
 }
 
-.catalog__header p {
+
+.catalog__eyebrow {
   margin: 0;
 
-  color: var(--sl-color-text-secondary);
+  color:
+    var(
+      --sl-color-accent,
+      #18a7a0
+    );
+
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
 }
 
+
+.catalog__hero-title {
+  margin:
+    16px 0 0;
+
+  color:
+    var(
+      --sl-color-text-primary,
+      #1a222d
+    );
+
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+
+.catalog__hero-description {
+  max-width: 900px;
+
+  margin:
+    16px 0 0;
+
+  color:
+    var(
+      --sl-color-text-secondary,
+      #616f82
+    );
+
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
 .catalog__search {
+  width: 520px;
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   FILTER CARD
+========================================================= */
+
+.catalog__filter-card {
+  width: 100%;
+
+  padding: 24px;
+
+  border:
+    1px solid
+    var(
+      --sl-color-border,
+      #d9e4f0
+    );
+
+  border-radius: 14px;
+
+  background:
+    var(
+      --sl-color-surface,
+      #ffffff
+    );
+}
+
+
+.catalog__filter-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 32px;
+
+  margin-bottom: 20px;
+}
+
+
+.catalog__filter-header h2 {
+  margin: 0;
+
+  color:
+    var(
+      --sl-color-text-primary,
+      #1a222d
+    );
+
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+
+.catalog__filter-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 26px;
+
+  padding:
+    5px 10px;
+
+  border-radius: 999px;
+
+  background:
+    var(
+      --sl-color-surface-subtle,
+      #eef4fb
+    );
+
+  color:
+    var(
+      --sl-color-primary,
+      #2457a6
+    );
+
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+.catalog__filter-content {
   width: 100%;
 }
 
-.catalog__filters-placeholder {
-  padding: var(--sl-space-4);
 
-  border: 1px dashed var(--sl-color-border);
-  border-radius: var(--sl-radius-lg);
+/*
+ * CatalogFilters вече е вътре във външната
+ * Figma filter card.
+ *
+ * Затова премахваме неговата собствена
+ * външна рамка/padding, но НЕ променяме
+ * HTML, TS или поведението му.
+ */
 
-  color: var(--sl-color-text-muted);
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    )
+    128px;
+
+  align-items: end;
+
+  gap: 16px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
 }
+
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters__field {
+
+  gap: 6px;
+}
+
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters__field label {
+
+  color:
+    var(
+      --sl-color-text-primary,
+      #1a222d
+    );
+
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters__field select {
+
+  width: 100%;
+
+  min-height: 48px;
+
+  padding-inline: 14px;
+
+  border:
+    1px solid
+    var(
+      --sl-color-border,
+      #d9e4f0
+    );
+
+  border-radius:
+    var(
+      --sl-radius-md,
+      10px
+    );
+
+  background:
+    var(
+      --sl-color-surface,
+      #ffffff
+    );
+
+  color:
+    var(
+      --sl-color-text-primary,
+      #1a222d
+    );
+
+  font-size: 16px;
+}
+
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters__clear {
+
+  width: 128px;
+
+  min-height: 44px;
+
+  padding-inline: 18px;
+
+  border:
+    1px solid
+    var(
+      --sl-color-primary,
+      #2457a6
+    );
+
+  border-radius:
+    var(
+      --sl-radius-md,
+      10px
+    );
+
+  background:
+    var(
+      --sl-color-surface,
+      #ffffff
+    );
+
+  color:
+    var(
+      --sl-color-primary,
+      #2457a6
+    );
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters__clear:hover {
+
+  background:
+    var(
+      --sl-color-surface-subtle,
+      #eef4fb
+    );
+}
+
+
+/* =========================================================
+   ACTIVE FILTER CHIPS
+========================================================= */
 
 .catalog__active-filters {
   display: flex;
@@ -36,14 +350,22 @@
   flex-wrap: wrap;
 
   gap: var(--sl-space-2);
+
+  margin-top: 16px;
+
+  padding-top: 16px;
+
+  border-top: 1px solid var(--sl-color-border);
 }
+
 
 .catalog__clear-filters {
   border: 0;
 
   background: transparent;
 
-  color: var(--sl-color-primary);
+  color:
+    var(--sl-color-primary);
 
   font-size: 13px;
   font-weight: 600;
@@ -51,55 +373,69 @@
   cursor: pointer;
 }
 
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
 .catalog__toolbar {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
   gap: var(--sl-space-4);
 }
 
+
 .catalog__results {
   margin: 0;
 
-  color: var(--sl-color-text-secondary);
+  color:
+    var(--sl-color-text-secondary);
 
   font-size: 14px;
 }
 
+
 .catalog__sort {
   display: flex;
+
   align-items: center;
 
   gap: var(--sl-space-2);
 
-  color: var(--sl-color-text-secondary);
+  color:
+    var(--sl-color-text-secondary);
 
   font-size: 14px;
 }
+
 
 .catalog__sort select {
   min-height: 40px;
 
   padding-inline: 12px;
 
-  border: 1px solid var(--sl-color-border);
-  border-radius: var(--sl-radius-md);
+  border:
+    1px solid
+    var(--sl-color-border);
 
-  background: var(--sl-color-surface);
+  border-radius:
+    var(--sl-radius-md);
 
-  color: var(--sl-color-text-primary);
+  background:
+    var(--sl-color-surface);
+
+  color:
+    var(--sl-color-text-primary);
 }
 
-/*
- * Вариант 1:
- * 1200px container + adaptive grid.
- *
- * Wide desktop -> 4 cards
- * smaller desktop -> 3
- * tablet -> 2
- * mobile -> 1
- */
+
+/* =========================================================
+   GRID
+========================================================= */
+
 .catalog__grid {
   display: grid;
 
@@ -112,37 +448,178 @@
   gap: var(--sl-space-5);
 }
 
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .catalog__pagination {
   display: flex;
+
   justify-content: center;
 
-  padding-top: var(--sl-space-4);
+  padding-top:
+    var(--sl-space-4);
 }
 
-@media (max-width: 767px) {
-  .catalog {
-    gap: var(--sl-space-4);
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  :host ::ng-deep
+  .catalog__filter-content
+  .catalog-filters {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
 
-  .catalog__header h1 {
-    font-size: 26px;
+
+  :host ::ng-deep
+  .catalog__filter-content
+  .catalog-filters__clear {
+
+    width: 100%;
   }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+
+  .catalog {
+    gap: 24px;
+
+    padding:
+      24px 0
+      48px;
+  }
+
+
+  /* HERO */
+
+  .catalog__hero {
+    min-height: 0;
+
+    padding:
+      22px 20px
+      26px;
+
+    border-radius: 18px;
+  }
+
+
+  .catalog__eyebrow {
+    font-size: 11px;
+  }
+
+
+  .catalog__hero-title {
+    margin-top: 16px;
+
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+
+  .catalog__hero-description {
+    margin-top: 16px;
+
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+
+  /* SEARCH */
+
+  .catalog__search {
+    width: 100%;
+  }
+
+
+  /* FILTER CARD */
+
+  .catalog__filter-card {
+    padding: 16px;
+
+    border-radius: 14px;
+  }
+
+
+  .catalog__filter-header {
+    margin-bottom: 16px;
+  }
+
+
+  .catalog__filter-header h2 {
+    font-size: 16px;
+  }
+
+
+  .catalog__filter-status {
+    font-size: 11px;
+  }
+
+
+  :host ::ng-deep
+  .catalog__filter-content
+  .catalog-filters {
+
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+
+  :host ::ng-deep
+  .catalog__filter-content
+  .catalog-filters__clear {
+
+    width: 100%;
+  }
+
+
+  /* ACTIVE FILTERS */
+
+  .catalog__active-filters {
+    gap: 8px;
+  }
+
+
+  /* TOOLBAR */
 
   .catalog__toolbar {
     align-items: flex-start;
+
     flex-direction: column;
   }
+
 
   .catalog__sort {
     width: 100%;
   }
 
+
   .catalog__sort select {
     flex: 1;
   }
+
 }
 
-/* temporary styles for empty state */
+
+/* =========================================================
+   TEMPORARY EMPTY STATE
+========================================================= */
 
 .catalog__empty {
   padding:
@@ -162,12 +639,14 @@
     var(--sl-color-surface);
 }
 
+
 .catalog__empty h2 {
   margin-bottom:
     var(--sl-space-2);
 
   font-size: 20px;
 }
+
 
 .catalog__empty p {
   margin:

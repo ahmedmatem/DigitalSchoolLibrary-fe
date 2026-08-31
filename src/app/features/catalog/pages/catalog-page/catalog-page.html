@@ -2,79 +2,160 @@
 
   <section class="catalog">
 
-    <header class="catalog__header">
-      <div>
-        <h1>Учебни ресурси</h1>
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <section class="catalog__hero">
 
-        <p>
-          Открий материали по предмет,
-          клас и тип ресурс.
-        </p>
-      </div>
-    </header>
+      <p class="catalog__eyebrow">
+        ДИГИТАЛНА УЧИЛИЩНА БИБЛИОТЕКА
+      </p>
 
+      <h1 class="catalog__hero-title">
+        Учебни ресурси на едно място
+      </h1>
+
+      <p class="catalog__hero-description">
+        Открийте учебни материали, книги и полезни ресурси
+        по предмет, клас и категория.
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
     <div class="catalog__search">
+
       <sl-search-field
-        placeholder="Търсене по заглавие, предмет или автор..."
+        placeholder="Търсене в библиотеката…"
         [value]="query().search"
         (valueChange)="updateSearch($event)"
       />
+
     </div>
 
-    <section class="catalog__filters">
-      <sl-catalog-filters
-        [subjects]="subjects()"
-        [categories]="categories()"
-        [grades]="gradeLevels()"
-        [resourceTypes]="resourceTypes"
 
-        [subjectId]="selectedSubjectId()"
-        [categoryId]="selectedCategoryId()"
-        [gradeLevelId]="selectedGradeLevelId()"
-        [resourceType]="selectedResourceType()"
+    <!-- =====================================================
+         FILTER CARD
+    ====================================================== -->
+    <section class="catalog__filter-card">
 
-        (subjectChange)="updateSubjectById($event)"
-        (categoryChange)="updateCategoryById($event)"
-        (gradeChange)="updateGradeById($event)"
-        (resourceTypeChange)="updateResourceTypeByValue($event)"
+      <div class="catalog__filter-header">
 
-        (clear)="clearFilters()"
-      />
-    </section>
+        <h2>
+          Филтри
+        </h2>
 
-    @if (activeFilters().length > 0) {
-      <div class="catalog__active-filters">
+        <span class="catalog__filter-status">
 
-        @for ( filter of activeFilters(); track filter ) {
-          <sl-chip variant="accent">
-            {{ filter }}
-          </sl-chip>
-        }
+          @if (activeFilters().length === 0) {
 
-        <button
-          type="button"
-          class="catalog__clear-filters"
-          (click)="clearFilters()"
-        >
-          Изчисти филтрите
-        </button>
+            Няма активни филтри
+
+          } @else {
+
+            {{ activeFilters().length }}
+
+            {{ activeFilters().length === 1
+              ? 'активен филтър'
+              : 'активни филтъра'
+            }}
+
+          }
+
+        </span>
 
       </div>
-    }
 
+
+      <div class="catalog__filter-content">
+
+        <sl-catalog-filters
+          [subjects]="subjects()"
+          [categories]="categories()"
+          [grades]="gradeLevels()"
+          [resourceTypes]="resourceTypes"
+
+          [subjectId]="selectedSubjectId()"
+          [categoryId]="selectedCategoryId()"
+          [gradeLevelId]="selectedGradeLevelId()"
+          [resourceType]="selectedResourceType()"
+
+          (subjectChange)="updateSubjectById($event)"
+          (categoryChange)="updateCategoryById($event)"
+          (gradeChange)="updateGradeById($event)"
+          (resourceTypeChange)="updateResourceTypeByValue($event)"
+
+          (clear)="clearFilters()"
+        />
+
+      </div>
+
+      <!-- =====================================================
+          ACTIVE FILTER CHIPS
+      ====================================================== -->
+      @if (activeFilters().length > 0) {
+
+        <div class="catalog__active-filters">
+
+          @for (
+            filter of activeFilters();
+            track filter
+          ) {
+
+            <sl-chip variant="accent">
+              {{ filter }}
+            </sl-chip>
+
+          }
+
+
+          <button
+            type="button"
+            class="catalog__clear-filters"
+            (click)="clearFilters()"
+          >
+            Изчисти филтрите
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ЗАПАЗВАМЕ SORT-А
+    ====================================================== -->
     <div class="catalog__toolbar">
 
       <p class="catalog__results">
-        {{ resultCount() }} ресурса
+
+        {{ resultCount() }}
+
+        {{ resultCount() === 1
+          ? 'ресурс'
+          : 'ресурса'
+        }}
+
       </p>
 
+
       <label class="catalog__sort">
-        <span>Подреди:</span>
+
+        <span>
+          Подреди:
+        </span>
 
         <select
           [value]="query().sort"
           (change)="updateSort($any($event.target).value)"
         >
+
           <option value="newest">
             Най-нови
           </option>
@@ -90,11 +171,17 @@
           <option value="title-desc">
             Заглавие Я–A
           </option>
+
         </select>
+
       </label>
 
     </div>
 
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
     @if (loading()) {
 
       <sl-catalog-skeleton />
@@ -113,12 +200,17 @@
 
       <div class="catalog__grid">
 
-        @for (resource of resources(); track resource.id) {
+        @for (
+          resource of resources();
+          track resource.id
+        ) {
+
           <sl-resource-card
             [resource]="resource"
             (openResource)="openResource($event)"
             (savedChange)="onSavedChange(resource.id, $event)"
           />
+
         }
 
       </div>
@@ -130,19 +222,31 @@
         title="Няма намерени ресурси"
         message="Опитай с друга дума за търсене или промени избраните филтри."
         actionLabel="Изчисти търсенето и филтрите"
-        (action)="resetCatalog()" />
+        (action)="resetCatalog()"
+      />
 
     }
 
-    @if (!loading() && !error() && resultCount() > 0) {
+
+    <!-- =====================================================
+         PAGINATION
+    ====================================================== -->
+    @if (
+      !loading()
+      && !error()
+      && resultCount() > 0
+    ) {
+
       <div class="catalog__pagination">
 
         <sl-pagination
           [page]="query().page"
           [pageCount]="totalPages()"
-          (pageChange)="updatePage($event)" />
+          (pageChange)="updatePage($event)"
+        />
 
       </div>
+
     }
 
   </section>
