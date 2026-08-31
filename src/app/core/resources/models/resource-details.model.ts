@@ -1,6 +1,6 @@
-import { ResourceType, } from '../../../core/models/resource-type.model';
+import { ResourceType, } from '../../models/resource-type.model';
 
-export interface PublicResourceDetailsDto {
+export interface ResourceDetails {
   id: string;
   title: string;
   description: string;

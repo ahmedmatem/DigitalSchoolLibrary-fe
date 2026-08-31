@@ -1,7 +1,7 @@
-import { ResourceType } from "../../../core/models/resource-type.model";
-import { ResourceSortOption } from "../../../core/models/resource-sort.model";
+import { ResourceType } from "../../models/resource-type.model";
+import { ResourceSortOption } from "../../models/resource-sort.model";
 
-export interface PublicCatalogRequest {
+export interface ResourceCatalogRequest {
   search?: string;
 
   subjectId?: string;

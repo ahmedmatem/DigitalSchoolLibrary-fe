@@ -1,4 +1,4 @@
-export interface PresignedDownloadDto {
+export interface PresignedDownload {
   downloadUrl: string;
   expiresAtUtc: string;
 }

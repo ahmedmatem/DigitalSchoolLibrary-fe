@@ -1,6 +1,6 @@
-import { ResourceType } from "../../../core/models/resource-type.model";
+import { ResourceType } from "../../models/resource-type.model";
 
-export interface PublicResourceListDto {
+export interface ResourceListItem  {
   id: string;
 
   title: string;

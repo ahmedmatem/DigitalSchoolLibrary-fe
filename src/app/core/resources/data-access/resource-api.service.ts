@@ -4,15 +4,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { PublicCatalogRequest } from '../models/public-catalog-request.model';
+import { ResourceCatalogRequest } from '../models/resource-catalog-request.model';
 
-import { CatalogResponse } from '../models/catalog-response.model';
+import { ResourceCatalogResponse } from '../models/resource-catalog-response.model';
 
-import { API_CONFIG } from '../../../core/config/api.config';
+import { API_CONFIG } from '../../config/api.config';
 
-import { PresignedDownloadDto } from '../models/presigned-download.dto';
-import { PublicResourceDetailsDto } from '../../resource-details/models/public-resource-details.dto';
-import { ResourceOpenDto } from '../../resource-viewer/models/resource-open.dto';
+import { PresignedDownload } from '../models/presigned-download.model';
+import { ResourceDetails } from '../models/resource-details.model';
+import { ResourceOpen } from '../models/resource-open.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class ResourceApiService {
 
   private readonly http = inject(HttpClient);
 
-  getPublicCatalog(request: PublicCatalogRequest): Observable<CatalogResponse> {
+  getPublicCatalog(request: ResourceCatalogRequest): Observable<ResourceCatalogResponse> {
 
     let params = new HttpParams()
         .set('page', request.page)
@@ -60,23 +60,23 @@ export class ResourceApiService {
     }
 
     return this.http
-        .get<CatalogResponse>(`${API_CONFIG.baseUrl}/resources`, { params });
+        .get<ResourceCatalogResponse>(`${API_CONFIG.baseUrl}/resources`, { params });
   }
 
-  getPublicCover(resourceId: string): Observable<PresignedDownloadDto> {
-    return this.http.get<PresignedDownloadDto>(
+  getPublicCover(resourceId: string): Observable<PresignedDownload> {
+    return this.http.get<PresignedDownload>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/cover`
     );
   }
 
-  getOpenUrl(resourceId: string): Observable<ResourceOpenDto> {
-    return this.http.get<ResourceOpenDto>(
+  getOpenUrl(resourceId: string): Observable<ResourceOpen> {
+    return this.http.get<ResourceOpen>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/open`
     );
   }
 
-  getPublicResource(resourceId: string): Observable<PublicResourceDetailsDto> {
-    return this.http.get<PublicResourceDetailsDto>(
+  getPublicResource(resourceId: string): Observable<ResourceDetails> {
+    return this.http.get<ResourceDetails>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}`
     );
   }

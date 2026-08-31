@@ -1,9 +1,9 @@
 import { RESOURCE_TYPE_OPTIONS } from '../../../core/models/resource-type.model';
 import { ResourceCardVm } from '../../../shared/ui/resource-card/resource-card.model';
 
-import { PublicResourceListDto } from '../models/public-resource-list.dto';
+import { ResourceListItem  } from '../../../core/resources/models/resource-list-item.model';
 
-export function mapPublicResourceToCard(resource: PublicResourceListDto): ResourceCardVm {
+export function mapPublicResourceToCard(resource: ResourceListItem ): ResourceCardVm {
   return {
     id: resource.id,
 

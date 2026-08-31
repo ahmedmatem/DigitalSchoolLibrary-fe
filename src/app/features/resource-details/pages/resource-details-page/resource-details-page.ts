@@ -18,8 +18,8 @@ import {
 import { PageContainer } from '../../../../layout/page-container/page-container';
 import { Chip } from '../../../../shared/ui/chip/chip';
 
-import { ResourceApiService } from '../../../catalog/data-access/resource-api.service';
-import { PublicResourceDetailsDto } from '../../models/public-resource-details.dto';
+import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
+import { ResourceDetails } from '../../../../core/resources/models/resource-details.model';
 import { RESOURCE_TYPE_OPTIONS, } from '../../../../core/models/resource-type.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -44,7 +44,7 @@ export class ResourceDetailsPage {
   private readonly resourceApi = inject(ResourceApiService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resource = signal<PublicResourceDetailsDto | null>(null);
+  readonly resource = signal<ResourceDetails | null>(null);
   
   readonly coverUrl = signal<string | null>(null);
 

@@ -1,7 +1,7 @@
-import { PublicResourceListDto } from './public-resource-list.dto';
+import { ResourceListItem  } from './resource-list-item.model';
 
-export interface CatalogResponse {
-  items: PublicResourceListDto[];
+export interface ResourceCatalogResponse {
+  items: ResourceListItem [];
 
   page: number;
 

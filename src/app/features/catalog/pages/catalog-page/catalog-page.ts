@@ -24,7 +24,7 @@ import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { ResourceCard } from '../../../../shared/ui/resource-card/resource-card';
 import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
 
-import { ResourceApiService } from '../../data-access/resource-api.service';
+import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
 
 import { LookupApiService } from '../../../../core/lookups/services/lookup-api.service';
 
@@ -36,7 +36,7 @@ import {
 
 import { mapPublicResourceToCard } from '../../data-access/resource.mapper';
 
-import { PublicCatalogRequest } from '../../models/public-catalog-request.model';
+import { ResourceCatalogRequest } from '../../../../core/resources/models/resource-catalog-request.model';
 
 import { ResourceCardVm } from '../../../../shared/ui/resource-card/resource-card.model';
 
@@ -606,7 +606,7 @@ export class CatalogPage {
     }
   }
 
-  private buildPublicCatalogRequest(): PublicCatalogRequest {
+  private buildPublicCatalogRequest(): ResourceCatalogRequest {
 
     const query = this.query();
 

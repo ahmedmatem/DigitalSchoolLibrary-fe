@@ -20,11 +20,11 @@ import {
 
 import {
   ResourceApiService,
-} from '../../../catalog/data-access/resource-api.service';
+} from '../../../../core/resources/data-access/resource-api.service';
 
 import {
-  PublicResourceDetailsDto,
-} from '../../../resource-details/models/public-resource-details.dto';
+  ResourceDetails,
+} from '../../../../core/resources/models/resource-details.model';
 
 import {
   RESOURCE_TYPE_OPTIONS,
@@ -59,7 +59,7 @@ export class ResourceViewerPage {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resource = signal<PublicResourceDetailsDto | null>(null);
+  readonly resource = signal<ResourceDetails | null>(null);
 
   readonly resourceUrl = signal<string | null>(null);
 
