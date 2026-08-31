@@ -46,7 +46,7 @@ import { CatalogState } from '../../components/catalog-state/catalog-state';
 
 import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.model';
 import { ResourceSortOption } from '../../../../core/models/resource-sort.model';
-import { CatalogFilters } from '../../components/catalog-filters/catalog-filters';
+import { CatalogFilters } from '../../../../shared/ui/catalog-filters/catalog-filters';
 
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',

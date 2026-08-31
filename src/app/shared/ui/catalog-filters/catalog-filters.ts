@@ -8,8 +8,8 @@ import {
   SubjectLookup,
   GradeLevelLookup,
   CategoryLookup,
-} from '../../../../core/lookups/models/lookup.models';
-import { ResourceTypeOption } from '../../../../core/models/resource-type.model';
+} from '../../../core/lookups/models/lookup.models';
+import { ResourceTypeOption } from '../../../core/models/resource-type.model';
 
 @Component({
   selector: 'sl-catalog-filters',
