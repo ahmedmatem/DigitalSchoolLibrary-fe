@@ -6,6 +6,9 @@
 
   <sl-mobile-navigation
     [open]="mobileMenuOpen()"
+    [authenticated]="authenticated()"
+    [displayName]="displayName()"
+    [role]="role()"
     (close)="closeMobileMenu()"
   />
 

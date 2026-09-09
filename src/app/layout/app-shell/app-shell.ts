@@ -1,8 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { AppHeader } from '../app-header/app-header';
 import { MobileNavigation } from '../mobile-navigation/mobile-navigation';
+import { AuthStateService } from '../../core/auth/services/auth-state.service';
+import { AuthRole, AUTH_ROLES } from '../../core/auth/constants/auth-roles';
 
 @Component({
   selector: 'sl-app-shell',
@@ -15,7 +17,33 @@ import { MobileNavigation } from '../mobile-navigation/mobile-navigation';
   styleUrl: './app-shell.scss',
 })
 export class AppShell {
+  private readonly authState = inject(AuthStateService);
+
+  readonly authenticated = this.authState.isAuthenticated;
+  readonly currentUser = this.authState.currentUser;
   readonly mobileMenuOpen = signal(false);
+
+  readonly displayName = computed(
+    () => this.currentUser()?.fullName ?? null
+  );
+
+  readonly role = computed<AuthRole | null>(() => {
+    const roles = this.currentUser()?.roles ?? [];
+
+    if (roles.includes(AUTH_ROLES.Admin)) {
+      return AUTH_ROLES.Admin;
+    }
+
+    if (roles.includes(AUTH_ROLES.Teacher)) {
+      return AUTH_ROLES.Teacher;
+    }
+
+    if (roles.includes(AUTH_ROLES.Student)) {
+      return AUTH_ROLES.Student;
+    }
+
+    return null;
+  });
 
   openMobileMenu(): void {
     this.mobileMenuOpen.set(true);
