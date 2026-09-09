@@ -6,21 +6,13 @@ import { ResourceListItem  } from '../../../core/resources/models/resource-list-
 export function mapResourceToCard(resource: ResourceListItem ): ResourceCardVm {
   return {
     id: resource.id,
-
     title: resource.title,
-
     author: resource.author ?? undefined,
-
     subject: resource.subjectName,
-
     category: resource.categoryName,
-
     resourceType: getResourceTypeLabel(resource.type),
-
     hasCover: resource.hasCover,
-
-    isSaved: false,
-
+    isSaved: resource['isSaved'],
     createdAt: resource.createdAtUtc,
   };
 }

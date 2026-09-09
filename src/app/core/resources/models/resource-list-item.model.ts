@@ -15,5 +15,7 @@ export interface ResourceListItem  {
 
   hasCover: boolean;
 
+  isSaved: boolean;
+
   createdAtUtc: string;
 }

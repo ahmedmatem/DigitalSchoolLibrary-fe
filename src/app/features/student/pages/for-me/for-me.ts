@@ -75,6 +75,7 @@ import {
   Pagination,
 } from '../../../../shared/ui/pagination/pagination';
 import { mapResourceToCard } from '../../../../shared/ui/resource-card/resource.mapper';
+import { SavedResourcesApiService } from '../../../../core/resources/data-access/saved-resources-api.service';
 
 
 interface ForMeQuery {
@@ -132,6 +133,9 @@ export class ForMe {
 
   private readonly resourceApi =
     inject(ResourceApiService);
+
+  private readonly savedResourcesApi =
+    inject(SavedResourcesApiService);
 
   private readonly lookupApi =
     inject(LookupApiService);
@@ -609,23 +613,41 @@ export class ForMe {
   }
 
 
-  onSavedChange(
-    resourceId: string,
-    saved: boolean
-  ): void {
+  onSavedChange(resourceId: string, saved: boolean): void {
 
-    this.resources.update(
-      resources =>
-        resources.map(
-          resource =>
-            resource.id === resourceId
-              ? {
-                  ...resource,
-                  isSaved: saved,
-                }
-              : resource
+    const request$ = saved
+      ? this.savedResourcesApi.save(resourceId)
+      : this.savedResourcesApi.remove(resourceId);
+
+    request$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
         )
-    );
+      )
+      .subscribe({
+        next: () => {
+          this.resources.update(
+            resources =>
+              resources.map(
+                resource =>
+                  resource.id === resourceId
+                    ? {
+                        ...resource,
+                        isSaved: saved,
+                      }
+                    : resource
+              )
+          );
+        },
+        error: () => {
+          this.error.set(
+            saved
+              ? 'Ресурсът не можа да бъде запазен.'
+              : 'Ресурсът не можа да бъде премахнат от библиотеката.'
+          );
+        },
+      });
   }
 
 
