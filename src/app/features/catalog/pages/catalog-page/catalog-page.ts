@@ -561,9 +561,7 @@ export class CatalogPage {
       )
       .subscribe({
         next: response => {
-          console.log('API item:', response.items[0]);
           const resources = response.items.map(mapResourceToCard);
-          console.log('Mapped item:', resources[0]);
 
           this.resources.set(resources);
 
