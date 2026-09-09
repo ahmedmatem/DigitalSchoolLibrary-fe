@@ -48,6 +48,13 @@ export const routes: Routes = [
       import('./features/student/pages/for-me/for-me')
         .then(m => m.ForMe),
   },
+  {
+    path: 'my-library',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/student/pages/my-library/my-library')
+        .then(m => m.MyLibrary),
+  },
   /* =========================
      SYSTEM
   ========================= */

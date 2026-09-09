@@ -47,6 +47,7 @@ import { CatalogState } from '../../components/catalog-state/catalog-state';
 import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.model';
 import { ResourceSortOption } from '../../../../core/models/resource-sort.model';
 import { CatalogFilters } from '../../../../shared/ui/catalog-filters/catalog-filters';
+import { SavedResourcesApiService } from '../../../../core/resources/data-access/saved-resources-api.service';
 
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
@@ -80,6 +81,8 @@ export class CatalogPage {
   readonly query = signal<CatalogQuery>({ ...DEFAULT_QUERY });
 
   private readonly resourceApi = inject(ResourceApiService);
+
+  private readonly savedResourcesApi = inject(SavedResourcesApiService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -415,17 +418,43 @@ export class CatalogPage {
   }
 
   onSavedChange(resourceId: string, saved: boolean): void {
-    this.resources.update(resources =>
-      resources.map(resource =>
-        resource.id === resourceId
-          ? {
-              ...resource,
-              isSaved: saved,
-            }
-          : resource
+
+    const request$ = saved
+      ? this.savedResourcesApi.save(resourceId)
+      : this.savedResourcesApi.remove(resourceId);
+
+    request$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
       )
-    );
-  }
+      .subscribe({
+        next: () => {
+          this.resources.update(
+            resources =>
+              resources.map(
+                resource =>
+                  resource.id === resourceId
+                    ? {
+                        ...resource,
+                        isSaved: saved,
+                      }
+                    : resource
+              )
+          );
+
+        },
+        error: () => {
+          this.error.set(
+            saved
+              ? 'Ресурсът не можа да бъде запазен.'
+              : 'Ресурсът не можа да бъде премахнат от библиотеката.'
+          );
+
+        },
+      });
+}
 
   private parsePage(value: string | null): number {
     const page = Number(value);

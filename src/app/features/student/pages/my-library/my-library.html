@@ -1,1 +1,208 @@
-<p>my-library works!</p>
+<sl-page-container>
+
+  <section class="my-library">
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <section class="my-library__hero">
+
+      <div class="my-library__hero-content">
+
+        <p class="my-library__eyebrow">
+          МОЯТА БИБЛИОТЕКА
+        </p>
+
+        <h1 class="my-library__title">
+          Запазени ресурси
+        </h1>
+
+        <p class="my-library__description">
+          Всички материали, които сте запазили за по-късно,
+          на едно място.
+        </p>
+
+      </div>
+
+
+      <div class="my-library__saved-count">
+
+        <strong>
+          {{ totalCount() }}
+        </strong>
+
+        <span>
+          @if (totalCount() === 1) {
+            запазен ресурс
+          } @else {
+            запазени ресурса
+          }
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+    <div class="my-library__search">
+
+      <sl-search-field
+        placeholder="Търсене в библиотеката…"
+        [value]="query().search"
+        (valueChange)="updateSearch($event)"
+      />
+
+    </div>
+
+
+    <!-- =====================================================
+         SECTION HEADER
+    ====================================================== -->
+    <header class="my-library__resources-header">
+
+      <h2>
+        Вашите запазени ресурси
+      </h2>
+
+      <span>
+        {{ totalCount() }}
+
+        @if (totalCount() === 1) {
+          ресурс
+        } @else {
+          ресурса
+        }
+      </span>
+
+    </header>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+    @if (loading()) {
+
+      <div class="my-library__message">
+        Зареждане...
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+    @else if (error()) {
+
+      <div class="my-library__state">
+
+        <h2>
+          Неуспешно зареждане
+        </h2>
+
+        <p>
+          {{ error() }}
+        </p>
+
+        <button
+          type="button"
+          class="my-library__state-action"
+          (click)="retryLoad()"
+        >
+          Опитай отново
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         RESOURCE GRID
+    ====================================================== -->
+    @else if (resources().length > 0) {
+
+      <div class="my-library__grid">
+
+        @for (
+          resource of resources();
+          track resource.id
+        ) {
+
+          <sl-resource-card
+            [resource]="resource"
+            (openResource)="openResource($event)"
+            (savedChange)="removeSavedResource(resource.id)"
+          />
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         EMPTY STATE
+    ====================================================== -->
+    @else {
+
+      <div class="my-library__state">
+
+        @if (query().search.trim()) {
+
+          <h2>
+            Няма намерени ресурси
+          </h2>
+
+          <p>
+            Няма запазени ресурси, които отговарят
+            на търсенето.
+          </p>
+
+        } @else {
+
+          <h2>
+            Все още нямате запазени ресурси
+          </h2>
+
+          <p>
+            Запазените от вас материали ще се появяват тук.
+          </p>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         PAGINATION
+         Само при повече от една страница
+    ====================================================== -->
+    @if (
+      !loading()
+      && !error()
+      && resources().length > 0
+      && totalPages() > 1
+    ) {
+
+      <div class="my-library__pagination">
+
+        <sl-pagination
+          [page]="query().page"
+          [pageCount]="totalPages()"
+          (pageChange)="updatePage($event)"
+        />
+
+      </div>
+
+    }
+
+  </section>
+
+</sl-page-container>

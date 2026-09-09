@@ -200,17 +200,12 @@
 
       <div class="catalog__grid">
 
-        @for (
-          resource of resources();
-          track resource.id
-        ) {
-
+        @for (resource of resources(); track resource.id) {
           <sl-resource-card
             [resource]="resource"
             (openResource)="openResource($event)"
             (savedChange)="onSavedChange(resource.id, $event)"
           />
-
         }
 
       </div>
