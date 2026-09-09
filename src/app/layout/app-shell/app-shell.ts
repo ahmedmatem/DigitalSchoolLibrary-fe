@@ -1,10 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { AppHeader } from '../app-header/app-header';
 import { MobileNavigation } from '../mobile-navigation/mobile-navigation';
 import { AuthStateService } from '../../core/auth/services/auth-state.service';
 import { AuthRole, AUTH_ROLES } from '../../core/auth/constants/auth-roles';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'sl-app-shell',
@@ -18,6 +19,9 @@ import { AuthRole, AUTH_ROLES } from '../../core/auth/constants/auth-roles';
 })
 export class AppShell {
   private readonly authState = inject(AuthStateService);
+  private readonly router = inject(Router);
+
+  readonly loggingOut = signal(false);
 
   readonly authenticated = this.authState.isAuthenticated;
   readonly currentUser = this.authState.currentUser;
@@ -51,5 +55,32 @@ export class AppShell {
 
   closeMobileMenu(): void {
     this.mobileMenuOpen.set(false);
+  }
+
+  logout(): void {
+    if (this.loggingOut()) {
+      return;
+    }
+
+    this.loggingOut.set(true);
+
+    this.authState
+      .logout()
+      .pipe(
+        finalize(() => {
+          this.loggingOut.set(false);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.closeMobileMenu();
+
+          void this.router.navigate(['/']);
+        },
+
+        error: () => {
+          this.closeMobileMenu();
+        },
+      });
   }
 }

@@ -18,6 +18,7 @@ import {
   LucideUser,
   LucideLogIn,
   LucideSparkles,
+  LucideLogOut,
 } from '@lucide/angular';
 
 import { IconButton } from '../../shared/ui/icon-button/icon-button';
@@ -37,6 +38,7 @@ import { IconButton } from '../../shared/ui/icon-button/icon-button';
     LucideUser,
     LucideLogIn,
     LucideSparkles,
+    LucideLogOut,
   ],
   templateUrl: './mobile-navigation.html',
   styleUrl: './mobile-navigation.scss',
@@ -51,4 +53,6 @@ export class MobileNavigation {
   readonly role = input<'Student' | 'Teacher' | 'Admin' | null>(null);
 
   readonly close = output<void>();
+  
+  readonly logout = output<void>();
 }
