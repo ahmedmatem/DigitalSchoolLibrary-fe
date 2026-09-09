@@ -137,24 +137,73 @@
 
           <section class="resource-details__actions">
 
-            <button
-              type="button"
-              class="resource-details__primary-action"
-              (click)="openResource()"
-            >
-              <svg
-                lucideBookOpen
-                aria-hidden="true"
-              ></svg>
+            @if (isAuthenticated()) {
+              <button
+                type="button"
+                class="resource-details__primary-action"
+                [disabled]="openingResource()"
+                (click)="openResource()"
+              >
+                <svg lucideBookOpen aria-hidden="true"></svg>
+                Отвори ресурса
+              </button>
 
-              Отвори ресурса
-            </button>
+              <button
+                type="button"
+                class="resource-details__save-action"
+                [disabled]="savingResource()"
+                (click)="toggleSaved()"
+              >
+                @if (item.isSaved) {
+                  <svg lucideBookmarkCheck aria-hidden="true"></svg>
+                  Премахни от библиотеката
+                } @else {
+                  <svg lucideBookmark aria-hidden="true"></svg>
+                  Запази в библиотеката
+                }
+              </button>
+
+              <div class="resource-details__access-status">
+                <strong>
+                  Имате достъп до този ресурс
+                </strong>
+
+                <span>
+                  Можете да го отворите или да го запазите
+                  в своята библиотека.
+                </span>
+              </div>
+
+            } @else {
+
+              <div class="resource-details__auth-notice">
+                <strong>
+                  Входът е необходим за достъп
+                </strong>
+
+                <span>
+                  Можете да разгледате информацията за ресурса свободно.
+                  За отваряне или изтегляне влезте в профила си.
+                </span>
+              </div>
+
+            }
 
             @if (openError()) {
               <p
                 class="resource-details__action-error"
-                role="alert">
+                role="alert"
+              >
                 {{ openError() }}
+              </p>
+            }
+
+            @if (saveError()) {
+              <p
+                class="resource-details__action-error"
+                role="alert"
+              >
+                {{ saveError() }}
               </p>
             }
 

@@ -18,5 +18,7 @@ export interface ResourceDetails {
 
   createdAtUtc: string;
 
+  isSaved: boolean;
+
   externalUrl: string | null;
 }

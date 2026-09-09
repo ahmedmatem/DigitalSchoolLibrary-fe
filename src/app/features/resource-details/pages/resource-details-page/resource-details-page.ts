@@ -10,6 +10,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   LucideArrowLeft,
   LucideBookOpen,
+  LucideBookmark,
+  LucideBookmarkCheck,
   LucideCalendarDays,
   LucideFileText,
   LucideUserRound,
@@ -22,6 +24,8 @@ import { ResourceApiService } from '../../../../core/resources/data-access/resou
 import { ResourceDetails } from '../../../../core/resources/models/resource-details.model';
 import { RESOURCE_TYPE_OPTIONS, } from '../../../../core/models/resource-type.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SavedResourcesApiService } from '../../../../core/resources/data-access/saved-resources-api.service';
+import { AuthStateService } from '../../../../core/auth/services/auth-state.service';
 
 @Component({
   selector: 'sl-resource-details-page',
@@ -31,6 +35,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     Chip,
     LucideArrowLeft,
     LucideBookOpen,
+    LucideBookmark,
+    LucideBookmarkCheck,
     LucideCalendarDays,
     LucideFileText,
     LucideUserRound,
@@ -41,15 +47,22 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ResourceDetailsPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly authState = inject(AuthStateService);
+  
   private readonly resourceApi = inject(ResourceApiService);
+  private readonly savedResourcesApi = inject(SavedResourcesApiService);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly isAuthenticated = this.authState.isAuthenticated;
   readonly resource = signal<ResourceDetails | null>(null);
   
   readonly coverUrl = signal<string | null>(null);
 
   readonly openingResource = signal(false);
   readonly openError = signal<string | null>(null);
+
+  readonly savingResource = signal(false);
+  readonly saveError = signal<string | null>(null);
 
   readonly loading = signal(true);
   readonly notFound = signal(false);
@@ -169,5 +182,51 @@ export class ResourceDetailsPage {
       resource.id,
       'view',
     ]);
+  }
+
+  toggleSaved(): void {
+    const resource = this.resource();
+
+    if (!resource || this.savingResource()) {
+      return;
+    }
+
+    this.savingResource.set(true);
+    this.saveError.set(null);
+
+    const request$ = resource.isSaved
+      ? this.savedResourcesApi.remove(resource.id)
+      : this.savedResourcesApi.save(resource.id);
+
+    request$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.resource.update(current =>
+            current
+              ? {
+                  ...current,
+                  isSaved: !current.isSaved,
+                }
+              : current
+          );
+
+          this.savingResource.set(false);
+        },
+
+        error: () => {
+          this.saveError.set(
+            resource.isSaved
+              ? 'Ресурсът не можа да бъде премахнат от библиотеката.'
+              : 'Ресурсът не можа да бъде запазен в библиотеката.'
+          );
+
+          this.savingResource.set(false);
+        },
+      });
   }
 }
