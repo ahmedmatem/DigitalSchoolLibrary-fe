@@ -54,6 +54,14 @@
 
       @if (authenticated()) {
         <a
+          routerLink="/for-me"
+          routerLinkActive="is-active"
+          (click)="close.emit()"
+        >
+          <svg lucideSparkles></svg>
+          За мен
+        </a>
+        <a
           routerLink="/my-library"
           routerLinkActive="is-active"
           (click)="close.emit()"

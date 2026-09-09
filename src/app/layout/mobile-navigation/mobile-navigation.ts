@@ -17,6 +17,7 @@ import {
   LucideShield,
   LucideUser,
   LucideLogIn,
+  LucideSparkles,
 } from '@lucide/angular';
 
 import { IconButton } from '../../shared/ui/icon-button/icon-button';
@@ -35,6 +36,7 @@ import { IconButton } from '../../shared/ui/icon-button/icon-button';
     LucideShield,
     LucideUser,
     LucideLogIn,
+    LucideSparkles,
   ],
   templateUrl: './mobile-navigation.html',
   styleUrl: './mobile-navigation.scss',
