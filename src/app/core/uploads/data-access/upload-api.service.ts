@@ -3,12 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 
 import { API_CONFIG } from '../../config/api.config';
-
-interface PresignedUpload {
-  key: string;
-  uploadUrl: string;
-  publicUrl: string;
-}
+import { PresignedUpload } from '../models/presigned-upload.model';
+import { StoredFileKind } from '../models/stored-file-kind.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +12,24 @@ interface PresignedUpload {
 export class UploadApiService {
   private readonly http = inject(HttpClient);
 
-  upload(file: File): Observable<PresignedUpload> {
+  upload(
+    file: File,
+    kind: StoredFileKind
+  ): Observable<PresignedUpload> {
+    const contentType = file.type || 'application/octet-stream';
+
     return this.http.post<PresignedUpload>(
-      `${API_CONFIG.baseUrl}/uploads`,
+      `${API_CONFIG.baseUrl}/files/upload-url`,
       {
-        fileName: file.name,
-        contentType: file.type || 'application/octet-stream',
+        originalFileName: file.name,
+        contentType,
+        fileSize: file.size,
+        kind,
       }
     ).pipe(
-      switchMap(presigned => from(this.putFile(presigned, file)))
+      switchMap(presigned => from(
+        this.putFile(presigned, file)
+      ))
     );
   }
 
@@ -35,7 +40,7 @@ export class UploadApiService {
     const response = await fetch(presigned.uploadUrl, {
       method: 'PUT',
       headers: {
-        'Content-Type': file.type || 'application/octet-stream',
+        'Content-Type': presigned.contentType,
       },
       body: file,
     });
