@@ -3,7 +3,7 @@
   inset: 0;
   z-index: 190;
 
-  background: rgb(0 0 0 / 35%);
+  background: var(--sl-color-overlay);
 }
 
 .mobile-nav {
@@ -23,7 +23,7 @@
   background: var(--sl-color-surface);
 
   box-shadow:
-    -12px 0 30px rgb(0 0 0 / 12%);
+    -12px 0 30px var(--sl-shadow-drawer);
 
   animation:
     mobile-nav-in
@@ -175,7 +175,7 @@
   }
 
   &:hover {
-    background: rgb(179 58 58 / 8%);
+    background: var(--sl-color-error-hover-bg);
   }
 }
 
