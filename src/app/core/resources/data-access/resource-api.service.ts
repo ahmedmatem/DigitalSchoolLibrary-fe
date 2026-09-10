@@ -10,6 +10,7 @@ import { ResourceDetails } from '../models/resource-details.model';
 import { ResourceOpen } from '../models/resource-open.model';
 import { MyResourcesResponse } from '../models/my-resources-response.model';
 import { MyResourcesSummary } from '../models/my-resources-summary.model';
+import { ManagementResourceDetails } from '../models/management-resource-details.model';
 import {
   CreateResourceRequest,
   CreateResourceResponse,
@@ -45,6 +46,12 @@ export class ResourceApiService {
   getMineSummary(): Observable<MyResourcesSummary> {
     return this.http.get<MyResourcesSummary>(
       `${API_CONFIG.baseUrl}/resources/mine/summary`
+    );
+  }
+
+  getManagementResource(resourceId: string): Observable<ManagementResourceDetails> {
+    return this.http.get<ManagementResourceDetails>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/manage`
     );
   }
 
