@@ -41,6 +41,10 @@ import {
   IconButton,
 } from '../../shared/ui/icon-button/icon-button';
 
+import {
+  getAppNavigation,
+} from '../../core/navigation/app-navigation.config';
+
 
 @Component({
   selector: 'sl-app-header',
@@ -109,6 +113,11 @@ export class AppHeader {
 
     return null;
   });
+
+
+  readonly navigationItems = computed(
+    () => getAppNavigation(this.role())
+  );
 
 
   readonly roleLabel = computed(() => {
