@@ -35,14 +35,16 @@
       <header class="teacher-resource-details__header">
         <h1>{{ item.title }}</h1>
 
-        <button
-          type="button"
-          class="teacher-resource-details__edit"
-          (click)="editResource()"
-        >
-          <svg lucidePencil aria-hidden="true"></svg>
-          Редакция
-        </button>
+        @if (canEdit()) {
+          <button
+            type="button"
+            class="teacher-resource-details__edit"
+            (click)="editResource()"
+          >
+            <svg lucidePencil aria-hidden="true"></svg>
+            Редакция
+          </button>
+        }
       </header>
 
       <div class="teacher-resource-details__layout">
