@@ -1,0 +1,178 @@
+<sl-page-container>
+  <section class="teacher-resource-details">
+    <button
+      type="button"
+      class="teacher-resource-details__back"
+      (click)="goBack()"
+    >
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Назад към Моите ресурси
+    </button>
+
+    @if (loading()) {
+      <div class="teacher-resource-details__state" role="status">
+        Зареждане на ресурса...
+      </div>
+    } @else if (notFound()) {
+      <section class="teacher-resource-details__state">
+        <h1>Ресурсът не е намерен</h1>
+        <p>
+          Ресурсът не съществува или нямате право да го управлявате.
+        </p>
+        <button type="button" (click)="goBack()">
+          Към Моите ресурси
+        </button>
+      </section>
+    } @else if (error()) {
+      <section class="teacher-resource-details__state" role="alert">
+        <h1>Неуспешно зареждане</h1>
+        <p>{{ error() }}</p>
+        <button type="button" (click)="retryLoad()">
+          Опитай отново
+        </button>
+      </section>
+    } @else if (resource(); as item) {
+      <header class="teacher-resource-details__header">
+        <div>
+          <p class="teacher-resource-details__eyebrow">
+            УЧИТЕЛСКИ ПАНЕЛ
+          </p>
+          <h1>{{ item.title }}</h1>
+        </div>
+
+        <button
+          type="button"
+          class="teacher-resource-details__edit"
+          (click)="editResource()"
+        >
+          <svg lucidePencil aria-hidden="true"></svg>
+          Редакция
+        </button>
+      </header>
+
+      <div class="teacher-resource-details__layout">
+        <aside class="teacher-resource-details__preview">
+          @if (coverUrl()) {
+            <img
+              [src]="coverUrl()!"
+              [alt]="'Корица на ' + item.title"
+            />
+          } @else {
+            <div class="teacher-resource-details__placeholder">
+              <svg lucideFileText aria-hidden="true"></svg>
+              <span>{{ getResourceTypeLabel(item.type) }}</span>
+            </div>
+          }
+
+          <span
+            class="teacher-resource-details__status"
+            [class.teacher-resource-details__status--pending]="
+              item.moderationStatus === moderationStatus.Pending
+            "
+            [class.teacher-resource-details__status--approved]="
+              item.moderationStatus === moderationStatus.Approved
+            "
+            [class.teacher-resource-details__status--rejected]="
+              item.moderationStatus === moderationStatus.Rejected
+            "
+          >
+            {{ getStatusLabel(item.moderationStatus) }}
+          </span>
+        </aside>
+
+        <main class="teacher-resource-details__content">
+          @if (item.author) {
+            <p class="teacher-resource-details__author">
+              Автор: {{ item.author }}
+            </p>
+          }
+
+          <p class="teacher-resource-details__lead">
+            {{ item.description }}
+          </p>
+
+          @if (
+            item.moderationStatus === moderationStatus.Rejected
+            && item.rejectionReason
+          ) {
+            <section class="teacher-resource-details__rejection" role="note">
+              <strong>Причина за отхвърляне</strong>
+              <p>{{ item.rejectionReason }}</p>
+            </section>
+          }
+
+          <dl class="teacher-resource-details__metadata">
+            <div>
+              <dt>Предмет</dt>
+              <dd>{{ item.subjectName }}</dd>
+            </div>
+            <div>
+              <dt>Категория</dt>
+              <dd>{{ item.categoryName }}</dd>
+            </div>
+            <div>
+              <dt>Тип ресурс</dt>
+              <dd>{{ getResourceTypeLabel(item.type) }}</dd>
+            </div>
+            <div>
+              <dt>Аудитория</dt>
+              <dd>{{ getAudienceLabel(item) }}</dd>
+            </div>
+            <div>
+              <dt>Публичен каталог</dt>
+              <dd>{{ item.isPubliclyVisible ? 'Да' : 'Не' }}</dd>
+            </div>
+            <div>
+              <dt>Изпратен на</dt>
+              <dd>{{ item.submittedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</dd>
+            </div>
+          </dl>
+
+          <section class="teacher-resource-details__file">
+            <h2>
+              {{
+                item.type === resourceType.ExternalLink
+                  ? 'Външен адрес'
+                  : 'Файл'
+              }}
+            </h2>
+
+            @if (item.type === resourceType.ExternalLink) {
+              <p>{{ item.externalUrl }}</p>
+            } @else {
+              <p>
+                <strong>{{ item.originalFileName || 'Файл без име' }}</strong>
+                @if (item.fileSize !== null) {
+                  <span>
+                    {{ item.fileSize / 1024 / 1024 | number:'1.1-2' }} MB
+                  </span>
+                }
+                @if (item.fileContentType) {
+                  <span>{{ item.fileContentType }}</span>
+                }
+              </p>
+            }
+
+            @if (canOpen() || (
+              item.type === resourceType.ExternalLink
+              && item.externalUrl
+            )) {
+              <button
+                type="button"
+                class="teacher-resource-details__open"
+                (click)="openResource()"
+              >
+                <svg lucideExternalLink aria-hidden="true"></svg>
+                Отвори ресурса
+              </button>
+            } @else {
+              <p class="teacher-resource-details__pending-note">
+                Прегледът на файла ще бъде достъпен след одобрение.
+              </p>
+            }
+          </section>
+        </main>
+      </div>
+    }
+  </section>
+</sl-page-container>
