@@ -342,7 +342,7 @@
         <button
           type="submit"
           class="add-resource__button add-resource__button--primary"
-          [disabled]="submitting() || loadingLookups() || !!loadError()"
+          [disabled]="submitting() || !!loadError()"
         >
           @if (submitting()) {
             Запазване…
