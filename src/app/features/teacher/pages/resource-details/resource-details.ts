@@ -9,6 +9,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import {
   LucideArrowLeft,
@@ -47,6 +48,7 @@ export class TeacherResourceDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authState = inject(AuthStateService);
+  private readonly toastr = inject(ToastrService);
   private readonly resourceApi = inject(ResourceApiService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -57,6 +59,9 @@ export class TeacherResourceDetails {
   readonly error = signal<string | null>(null);
   readonly openingResource = signal(false);
   readonly openError = signal<string | null>(null);
+  readonly archiveDialogOpen = signal(false);
+  readonly archiving = signal(false);
+  readonly archiveError = signal<string | null>(null);
 
   readonly moderationStatus = ResourceModerationStatus;
   readonly resourceType = ResourceType;
@@ -154,6 +159,47 @@ export class TeacherResourceDetails {
           this.openingResource.set(false);
           this.openError.set(
             'Ресурсът не можа да бъде отворен. Моля, опитайте отново.'
+          );
+        },
+      });
+  }
+
+  openArchiveDialog(): void {
+    this.archiveError.set(null);
+    this.archiveDialogOpen.set(true);
+  }
+
+  closeArchiveDialog(): void {
+    if (!this.archiving()) {
+      this.archiveDialogOpen.set(false);
+      this.archiveError.set(null);
+    }
+  }
+
+  archiveResource(): void {
+    const resource = this.resource();
+
+    if (!resource || this.archiving()) {
+      return;
+    }
+
+    this.archiving.set(true);
+    this.archiveError.set(null);
+
+    this.resourceApi
+      .archive(resource.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.archiving.set(false);
+          this.archiveDialogOpen.set(false);
+          this.toastr.success('Ресурсът е архивиран.');
+          void this.router.navigate(['/teacher']);
+        },
+        error: () => {
+          this.archiving.set(false);
+          this.archiveError.set(
+            'Ресурсът не можа да бъде архивиран. Моля, опитайте отново.'
           );
         },
       });
