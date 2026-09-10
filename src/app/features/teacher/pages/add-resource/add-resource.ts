@@ -12,7 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { forkJoin, of, switchMap } from 'rxjs';
+import { forkJoin, map, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 import { LookupApiService } from '../../../../core/lookups/services/lookup-api.service';
@@ -159,23 +159,35 @@ export class AddResource {
     this.submitting.set(true);
 
     const file = this.selectedFile();
-    const upload$ = file ? this.uploadApi.upload(file) : of(null);
+    const upload$ = file
+      ? this.uploadApi.upload(file).pipe(
+          map(upload => upload.key)
+        )
+      : of<string | null>(null);
 
     upload$
       .pipe(
-        switchMap(upload => this.resourceApi.submitPending(
-          this.buildRequest(upload?.key ?? null)
-        )),
+        switchMap(fileKey =>
+          this.resourceApi.submitPending(
+            this.buildRequest(fileKey)
+          )
+        ),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: () => {
           this.submitting.set(false);
-          this.toastr.success('Ресурсът е изпратен за одобрение.');
+
+          this.toastr.success(
+            'Ресурсът е изпратен за одобрение.'
+          );
+
           void this.router.navigate(['/teacher']);
         },
+
         error: () => {
           this.submitting.set(false);
+
           this.submitError.set(
             'Ресурсът не беше изпратен. Моля, опитайте отново.'
           );
