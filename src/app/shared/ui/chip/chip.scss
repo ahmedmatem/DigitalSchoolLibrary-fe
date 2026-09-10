@@ -63,7 +63,7 @@
 }
 
 .sl-chip__remove:hover {
-  background: rgb(0 0 0 / 6%);
+  background: var(--sl-color-hover-overlay);
 }
 
 .sl-chip__remove svg {
