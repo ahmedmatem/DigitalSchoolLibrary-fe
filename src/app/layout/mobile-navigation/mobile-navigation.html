@@ -42,56 +42,52 @@
     }
 
     <nav class="mobile-nav__links">
-      <a
-        routerLink="/"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="close.emit()"
-      >
-        <svg lucideBookOpen></svg>
-        Каталог
-      </a>
+
+      @for (
+        item of navigationItems();
+        track item.routerLink
+      ) {
+
+        <a
+          [routerLink]="item.routerLink"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{
+            exact: item.exact
+          }"
+          (click)="close.emit()"
+        >
+          @switch (item.icon) {
+            @case ('catalog') {
+              <svg lucideBookOpen></svg>
+            }
+
+            @case ('for-me') {
+              <svg lucideSparkles></svg>
+            }
+
+            @case ('my-library') {
+              <svg lucideBookmark></svg>
+            }
+
+            @case ('my-resources') {
+              <svg lucideFolderCog></svg>
+            }
+
+            @case ('add-resource') {
+              <svg lucidePlus></svg>
+            }
+
+            @case ('administration') {
+              <svg lucideShield></svg>
+            }
+          }
+
+          {{ item.label }}
+        </a>
+
+      }
 
       @if (authenticated()) {
-        <a
-          routerLink="/for-me"
-          routerLinkActive="is-active"
-          (click)="close.emit()"
-        >
-          <svg lucideSparkles></svg>
-          За мен
-        </a>
-        <a
-          routerLink="/my-library"
-          routerLinkActive="is-active"
-          (click)="close.emit()"
-        >
-          <svg lucideBookmark></svg>
-          Моята библиотека
-        </a>
-
-        @if (role() === 'Teacher' || role() === 'Admin') {
-          <a
-            routerLink="/teacher"
-            routerLinkActive="is-active"
-            (click)="close.emit()"
-          >
-            <svg lucideGraduationCap></svg>
-            Учител
-          </a>
-        }
-
-        @if (role() === 'Admin') {
-          <a
-            routerLink="/admin"
-            routerLinkActive="is-active"
-            (click)="close.emit()"
-          >
-            <svg lucideShield></svg>
-            Администрация
-          </a>
-        }
-
         <a
           routerLink="/profile"
           routerLinkActive="is-active"
@@ -120,6 +116,7 @@
           Вход
         </a>
       }
+
     </nav>
   </aside>
 }
