@@ -85,9 +85,16 @@ export class EditResource {
     this.resource()?.moderationStatus === ResourceModerationStatus.Rejected
   );
 
-  readonly statusLabel = computed(() =>
-    this.isRejected() ? 'Отхвърлен ресурс' : 'В изчакване'
-  );
+  readonly statusLabel = computed(() => {
+    switch (this.resource()?.moderationStatus) {
+      case ResourceModerationStatus.Rejected:
+        return 'Отхвърлен ресурс';
+      case ResourceModerationStatus.Approved:
+        return 'Одобрен ресурс';
+      default:
+        return 'В изчакване';
+    }
+  });
 
   readonly form = new FormGroup({
     title: new FormControl('', {
