@@ -36,7 +36,7 @@
   background:
     var(
       --sl-color-surface-subtle,
-      #eef4fb
+      var(--sl-color-surface-subtle)
     );
 }
 
@@ -86,7 +86,7 @@
   color:
     var(
       --sl-color-text-secondary,
-      #617082
+      var(--sl-color-text-secondary)
     );
 
   font-size: 16px;
@@ -127,7 +127,7 @@
   background:
     var(
       --sl-color-surface-subtle,
-      #eef4fb
+      var(--sl-color-surface-subtle)
     );
 
   color:
@@ -221,7 +221,7 @@
   background:
     var(
       --sl-color-surface-subtle,
-      #eef4fb
+      var(--sl-color-surface-subtle)
     );
 
   color:
@@ -386,7 +386,7 @@
   background:
     var(
       --sl-color-surface-subtle,
-      #eef4fb
+      var(--sl-color-surface-subtle)
     );
 }
 
@@ -428,9 +428,9 @@
 
   border-radius: 999px;
 
-  background: #ddf4f2;
+  background: var(--sl-color-chip-bg);
 
-  color: #0f6e69;
+  color: var(--sl-color-chip-text);
 
   font-size: 12px;
   line-height: 16px;
@@ -491,7 +491,7 @@
   color:
     var(
       --sl-color-text-secondary,
-      #617082
+      var(--sl-color-text-secondary)
     );
 
   font-size: 14px;
