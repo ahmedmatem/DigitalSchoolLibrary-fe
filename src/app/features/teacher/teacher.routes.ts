@@ -23,6 +23,12 @@ export const TEACHER_ROUTES: Routes = [
           .then(m => m.AddResource),
       },
       {
+        path: 'resources/:id/edit',
+        title: 'Редактиране на ресурс',
+        loadComponent: () => import('./pages/edit-resource/edit-resource')
+          .then(m => m.EditResource),
+      },
+      {
         path: 'resources/:id',
         title: 'Детайли за ресурс',
         loadComponent: () => import('./pages/resource-details/resource-details')
