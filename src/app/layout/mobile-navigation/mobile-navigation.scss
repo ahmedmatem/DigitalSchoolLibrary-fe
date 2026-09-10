@@ -22,8 +22,7 @@
 
   background: var(--sl-color-surface);
 
-  box-shadow:
-    -12px 0 30px var(--sl-shadow-drawer);
+  box-shadow: var(--sl-shadow-drawer);
 
   animation:
     mobile-nav-in
