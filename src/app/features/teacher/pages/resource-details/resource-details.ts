@@ -18,6 +18,8 @@ import {
 } from '@lucide/angular';
 
 import { PageContainer } from '../../../../layout/page-container/page-container';
+import { AUTH_ROLES } from '../../../../core/auth/constants/auth-roles';
+import { AuthStateService } from '../../../../core/auth/services/auth-state.service';
 import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
 import { ManagementResourceDetails } from '../../../../core/resources/models/management-resource-details.model';
 import { ResourceModerationStatus } from '../../../../core/resources/models/resource-moderation-status.model';
@@ -44,6 +46,7 @@ import {
 export class TeacherResourceDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly authState = inject(AuthStateService);
   private readonly resourceApi = inject(ResourceApiService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -57,6 +60,16 @@ export class TeacherResourceDetails {
 
   readonly moderationStatus = ResourceModerationStatus;
   readonly resourceType = ResourceType;
+
+  readonly canEdit = computed(() => {
+    const resource = this.resource();
+
+    return !!resource && (
+      this.authState.hasRole(AUTH_ROLES.Admin)
+      || resource.moderationStatus === ResourceModerationStatus.Pending
+      || resource.moderationStatus === ResourceModerationStatus.Rejected
+    );
+  });
 
   readonly canOpen = computed(() => {
     const resource = this.resource();
