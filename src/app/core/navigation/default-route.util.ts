@@ -11,7 +11,7 @@ export function getDefaultRouteForRoles(
   }
 
   if (roles.includes(AUTH_ROLES.Teacher)) {
-    return '/';
+    return '/teacher';
   }
 
   if (roles.includes(AUTH_ROLES.Student)) {
