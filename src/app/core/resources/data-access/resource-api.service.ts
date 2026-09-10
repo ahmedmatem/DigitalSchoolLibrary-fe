@@ -1,32 +1,28 @@
 import { Injectable, inject } from '@angular/core';
-
 import { HttpClient, HttpParams } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 
 import { ResourceCatalogRequest } from '../models/resource-catalog-request.model';
-
 import { ResourceCatalogResponse } from '../models/resource-catalog-response.model';
-
 import { API_CONFIG } from '../../config/api.config';
-
 import { PresignedDownload } from '../models/presigned-download.model';
 import { ResourceDetails } from '../models/resource-details.model';
 import { ResourceOpen } from '../models/resource-open.model';
 import { MyResourcesResponse } from '../models/my-resources-response.model';
 import { MyResourcesSummary } from '../models/my-resources-summary.model';
+import { SubmitPendingResourceRequest } from '../models/submit-pending-resource-request.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResourceApiService {
-
   private readonly http = inject(HttpClient);
 
   getPublicCatalog(request: ResourceCatalogRequest): Observable<ResourceCatalogResponse> {
     return this.http.get<ResourceCatalogResponse>(
       `${API_CONFIG.baseUrl}/resources`,
-      { params: this.buildCatalogParams(request) });
+      { params: this.buildCatalogParams(request) }
+    );
   }
 
   getForMe(request: ResourceCatalogRequest): Observable<ResourceCatalogResponse> {
@@ -49,6 +45,13 @@ export class ResourceApiService {
     );
   }
 
+  submitPending(request: SubmitPendingResourceRequest): Observable<void> {
+    return this.http.post<void>(
+      `${API_CONFIG.baseUrl}/resources/pending`,
+      request
+    );
+  }
+
   getPublicCover(resourceId: string): Observable<PresignedDownload> {
     return this.http.get<PresignedDownload>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/cover`
@@ -68,10 +71,9 @@ export class ResourceApiService {
   }
 
   private buildCatalogParams(request: ResourceCatalogRequest): HttpParams {
-
     let params = new HttpParams()
-        .set('page', request.page)
-        .set('pageSize', request.pageSize);
+      .set('page', request.page)
+      .set('pageSize', request.pageSize);
 
     if (request.search) {
       params = params.set('search', request.search);
@@ -86,7 +88,7 @@ export class ResourceApiService {
     }
 
     if (request.gradeLevelId !== undefined) {
-      params = params.set('gradeLevelId', request.gradeLevelId );
+      params = params.set('gradeLevelId', request.gradeLevelId);
     }
 
     if (request.schoolClassId) {
@@ -102,10 +104,7 @@ export class ResourceApiService {
     }
 
     if (request.moderationStatus !== undefined) {
-      params = params.set(
-        'moderationStatus',
-        request.moderationStatus
-      );
+      params = params.set('moderationStatus', request.moderationStatus);
     }
 
     if (request.sort !== undefined) {
