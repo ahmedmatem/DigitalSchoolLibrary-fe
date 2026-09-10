@@ -135,7 +135,7 @@ export class TeacherResourceDetails {
       .subscribe({
         next: result => {
           this.openingResource.set(false);
-          window.open(result.url, '_blank', 'noopener,noreferrer');
+          window.location.assign(result.url);
         },
         error: () => {
           this.openingResource.set(false);
