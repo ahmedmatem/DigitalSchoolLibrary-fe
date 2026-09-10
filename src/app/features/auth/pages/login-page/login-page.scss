@@ -36,7 +36,7 @@
 
   border-radius: 24px;
 
-  background: #eef4fb;
+  background: var(--sl-color-surface-subtle);
 }
 
 .login-page__eyebrow {
@@ -95,8 +95,7 @@
 
   background: var(--sl-color-surface);
 
-  box-shadow:
-    0 4px 14px rgb(26 33 46 / 8%);
+  box-shadow: var(--sl-shadow-card);
 }
 
 .login-card__title {
@@ -181,7 +180,7 @@
 }
 
 .login-field__control::placeholder {
-  color: #9aa8b8;
+  color: var(--sl-color-text-muted);
 }
 
 .login-field__control:focus {
@@ -190,14 +189,14 @@
 }
 
 .login-field__control--error {
-  border: 2px solid #b33a3a;
+  border: 2px solid var(--sl-color-error);
   padding-inline: 13px;
 }
 
 .login-field__error {
   margin: 6px 0 0;
 
-  color: #b33a3a;
+  color: var(--sl-color-error);
 
   font-size: 12px;
   line-height: 16px;
@@ -266,8 +265,8 @@
   width: 6px;
   height: 3px;
 
-  border-left: 2px solid white;
-  border-bottom: 2px solid white;
+  border-left: 2px solid var(--sl-color-on-primary);
+  border-bottom: 2px solid var(--sl-color-on-primary);
 
   transform: translateY(-1px) rotate(-45deg);
 }
@@ -306,12 +305,12 @@
 
   box-sizing: border-box;
 
-  border: 1px solid rgb(179 58 58 / 25%);
+  border: 1px solid var(--sl-color-error-border);
   border-radius: 10px;
 
-  background: rgb(179 58 58 / 6%);
+  background: var(--sl-color-error-bg-subtle);
 
-  color: #b33a3a;
+  color: var(--sl-color-error);
 
   font-size: 13px;
   line-height: 1.35;
@@ -340,7 +339,7 @@
 
   background: var(--sl-color-primary);
 
-  color: white;
+  color: var(--sl-color-on-primary);
 
   font: inherit;
   font-size: 14px;
@@ -373,8 +372,8 @@
 
   box-sizing: border-box;
 
-  border: 2px solid rgb(255 255 255 / 40%);
-  border-top-color: white;
+  border: 2px solid var(--sl-color-on-primary-muted);
+  border-top-color: var(--sl-color-on-primary);
   border-radius: 50%;
 
   animation: login-spin 700ms linear infinite;
