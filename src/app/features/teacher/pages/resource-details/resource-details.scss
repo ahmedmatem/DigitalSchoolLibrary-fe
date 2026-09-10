@@ -119,18 +119,18 @@
 }
 
 .teacher-resource-details__status--pending {
-  background: var(--sl-color-warning-subtle);
+  background: var(--sl-color-warning-bg);
   color: var(--sl-color-warning);
 }
 
 .teacher-resource-details__status--approved {
-  background: var(--sl-color-success-subtle);
+  background: var(--sl-color-success-bg);
   color: var(--sl-color-success);
 }
 
 .teacher-resource-details__status--rejected {
-  background: var(--sl-color-danger-subtle);
-  color: var(--sl-color-danger);
+  background: var(--sl-color-error-bg);
+  color: var(--sl-color-error);
 }
 
 .teacher-resource-details__content {
@@ -206,11 +206,11 @@
 .teacher-resource-details__rejection {
   margin-bottom: var(--sl-space-5);
   padding: var(--sl-space-4);
-  border-color: var(--sl-color-danger);
-  background: var(--sl-color-danger-subtle);
+  border-color: var(--sl-color-error);
+  background: var(--sl-color-error-bg);
 
   strong {
-    color: var(--sl-color-danger);
+    color: var(--sl-color-error);
   }
 
   p {
