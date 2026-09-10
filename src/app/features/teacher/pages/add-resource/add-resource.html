@@ -43,12 +43,13 @@
             <input
               type="text"
               formControlName="title"
-              maxlength="300"
+              minlength="3"
+              maxlength="200"
               placeholder="Напр. Уравнения от първа степен"
               [class.is-invalid]="fieldInvalid('title')"
             />
             @if (fieldInvalid('title')) {
-              <small>Въведете заглавие на ресурса.</small>
+              <small>Заглавието трябва да съдържа между 3 и 200 символа.</small>
             }
           </label>
 
@@ -66,13 +67,14 @@
             <span>Описание <em>*</em></span>
             <textarea
               formControlName="description"
+              minlength="10"
               maxlength="4000"
               rows="5"
               placeholder="Опишете накратко съдържанието и целта на ресурса"
               [class.is-invalid]="fieldInvalid('description')"
             ></textarea>
             @if (fieldInvalid('description')) {
-              <small>Добавете кратко описание.</small>
+              <small>Описанието трябва да съдържа поне 10 символа.</small>
             }
           </label>
         </div>
@@ -264,8 +266,8 @@
             </label>
           </div>
           <p class="add-resource__hint">
-            Качването на корица е подготвено в интерфейса; текущият backend договор
-            все още не приема поле за нея.
+            Разрешени файлове: PDF, Word, PowerPoint, Excel, TXT и ZIP.
+            Корицата може да бъде JPG, PNG или WebP.
           </p>
         }
       </section>
