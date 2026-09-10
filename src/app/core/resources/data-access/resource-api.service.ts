@@ -55,6 +55,18 @@ export class ResourceApiService {
     );
   }
 
+  getManagementCover(resourceId: string): Observable<PresignedDownload> {
+    return this.http.get<PresignedDownload>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/manage-cover`
+    );
+  }
+
+  getManagementOpen(resourceId: string): Observable<ResourceOpen> {
+    return this.http.get<ResourceOpen>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/manage-open`
+    );
+  }
+
   create(request: CreateResourceRequest): Observable<CreateResourceResponse> {
     return this.http.post<CreateResourceResponse>(
       `${API_CONFIG.baseUrl}/resources`,
