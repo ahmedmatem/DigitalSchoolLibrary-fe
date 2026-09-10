@@ -55,6 +55,16 @@ export const routes: Routes = [
       import('./features/student/pages/my-library/my-library')
         .then(m => m.MyLibrary),
   },
+
+  /* =========================
+     TEACHER
+  ========================= */
+  {
+    path: 'teacher',
+    loadChildren: () => import('./features/teacher/teacher.routes')
+        .then(m => m.TEACHER_ROUTES),
+  },
+
   /* =========================
      SYSTEM
   ========================= */
