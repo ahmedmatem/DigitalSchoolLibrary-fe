@@ -1,0 +1,311 @@
+<sl-page-container>
+  <main class="add-resource">
+    <button
+      type="button"
+      class="add-resource__back"
+      (click)="back()"
+    >
+      <span aria-hidden="true">←</span>
+      Назад към моите ресурси
+    </button>
+
+    <header class="add-resource__header">
+      <div>
+        <h1>Добавяне на нов ресурс</h1>
+        <p>
+          Попълнете информацията за ресурса. След изпращане той ще бъде
+          със статус Pending и ще очаква одобрение от администратор.
+        </p>
+      </div>
+
+      <span class="add-resource__status">Очаква одобрение</span>
+    </header>
+
+    @if (loadError()) {
+      <div class="add-resource__alert add-resource__alert--error" role="alert">
+        {{ loadError() }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <section class="add-resource__card" aria-labelledby="basic-title">
+        <div class="add-resource__section-heading">
+          <span class="add-resource__step">1</span>
+          <div>
+            <h2 id="basic-title">Основна информация</h2>
+            <p>Заглавие, автор и кратко описание на учебния материал.</p>
+          </div>
+        </div>
+
+        <div class="add-resource__fields">
+          <label class="add-resource__field add-resource__field--wide">
+            <span>Заглавие <em>*</em></span>
+            <input
+              type="text"
+              formControlName="title"
+              maxlength="300"
+              placeholder="Напр. Уравнения от първа степен"
+              [class.is-invalid]="fieldInvalid('title')"
+            />
+            @if (fieldInvalid('title')) {
+              <small>Въведете заглавие на ресурса.</small>
+            }
+          </label>
+
+          <label class="add-resource__field">
+            <span>Автор</span>
+            <input
+              type="text"
+              formControlName="author"
+              maxlength="200"
+              placeholder="Име на автора (по избор)"
+            />
+          </label>
+
+          <label class="add-resource__field add-resource__field--wide">
+            <span>Описание <em>*</em></span>
+            <textarea
+              formControlName="description"
+              maxlength="4000"
+              rows="5"
+              placeholder="Опишете накратко съдържанието и целта на ресурса"
+              [class.is-invalid]="fieldInvalid('description')"
+            ></textarea>
+            @if (fieldInvalid('description')) {
+              <small>Добавете кратко описание.</small>
+            }
+          </label>
+        </div>
+      </section>
+
+      <section class="add-resource__card" aria-labelledby="classification-title">
+        <div class="add-resource__section-heading">
+          <span class="add-resource__step">2</span>
+          <div>
+            <h2 id="classification-title">Класификация</h2>
+            <p>Помогнете на учениците да открият по-лесно ресурса.</p>
+          </div>
+        </div>
+
+        <div class="add-resource__fields add-resource__fields--three">
+          <label class="add-resource__field">
+            <span>Предмет <em>*</em></span>
+            <select
+              formControlName="subjectId"
+              [class.is-invalid]="fieldInvalid('subjectId')"
+            >
+              <option value="">Изберете предмет</option>
+              @for (subject of subjects(); track subject.id) {
+                <option [value]="subject.id">{{ subject.name }}</option>
+              }
+            </select>
+            @if (fieldInvalid('subjectId')) {
+              <small>Изберете предмет.</small>
+            }
+          </label>
+
+          <label class="add-resource__field">
+            <span>Категория <em>*</em></span>
+            <select
+              formControlName="categoryId"
+              [class.is-invalid]="fieldInvalid('categoryId')"
+            >
+              <option value="">Изберете категория</option>
+              @for (category of categories(); track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+              }
+            </select>
+            @if (fieldInvalid('categoryId')) {
+              <small>Изберете категория.</small>
+            }
+          </label>
+
+          <label class="add-resource__field">
+            <span>Тип ресурс <em>*</em></span>
+            <select
+              formControlName="resourceType"
+              [class.is-invalid]="fieldInvalid('resourceType')"
+            >
+              <option [ngValue]="null">Изберете тип</option>
+              @for (type of resourceTypes; track type.value) {
+                <option [ngValue]="type.value">{{ type.label }}</option>
+              }
+            </select>
+            @if (fieldInvalid('resourceType')) {
+              <small>Изберете тип ресурс.</small>
+            }
+          </label>
+        </div>
+      </section>
+
+      <section class="add-resource__card" aria-labelledby="audience-title">
+        <div class="add-resource__section-heading">
+          <span class="add-resource__step">3</span>
+          <div>
+            <h2 id="audience-title">Аудитория</h2>
+            <p>Определете за кои ученици е предназначен ресурсът.</p>
+          </div>
+        </div>
+
+        <fieldset class="add-resource__audience">
+          <legend>Достъп <em>*</em></legend>
+
+          <div class="add-resource__radio-group">
+            <label>
+              <input type="radio" formControlName="audience" value="all" />
+              Всички ученици
+            </label>
+            <label>
+              <input type="radio" formControlName="audience" value="grade" />
+              Конкретен клас
+            </label>
+            <label>
+              <input type="radio" formControlName="audience" value="class" />
+              Конкретна паралелка
+            </label>
+          </div>
+        </fieldset>
+
+        @if (form.controls.audience.value !== 'all') {
+          <div class="add-resource__fields">
+            <label class="add-resource__field">
+              <span>Клас <em>*</em></span>
+              <select
+                formControlName="gradeLevelId"
+                [class.is-invalid]="fieldInvalid('gradeLevelId')"
+              >
+                <option [ngValue]="null">Изберете клас</option>
+                @for (grade of gradeLevels(); track grade.id) {
+                  <option [ngValue]="grade.id">{{ grade.displayName }}</option>
+                }
+              </select>
+              @if (fieldInvalid('gradeLevelId')) {
+                <small>Изберете клас.</small>
+              }
+            </label>
+
+            @if (form.controls.audience.value === 'class') {
+              <label class="add-resource__field">
+                <span>Паралелка <em>*</em></span>
+                <select
+                  formControlName="schoolClassId"
+                  [class.is-invalid]="fieldInvalid('schoolClassId')"
+                >
+                  <option value="">Изберете паралелка</option>
+                  @for (schoolClass of schoolClasses(); track schoolClass.id) {
+                    <option [value]="schoolClass.id">
+                      {{ schoolClass.displayName }}
+                    </option>
+                  }
+                </select>
+                @if (fieldInvalid('schoolClassId')) {
+                  <small>Изберете паралелка.</small>
+                }
+              </label>
+            }
+          </div>
+        }
+
+        <label class="add-resource__toggle">
+          <input type="checkbox" formControlName="publicVisibility" />
+          <span class="add-resource__toggle-control" aria-hidden="true"></span>
+          <span>
+            <strong>Публична видимост</strong>
+            <small>Ресурсът ще бъде видим и в общия каталог след одобрение.</small>
+          </span>
+        </label>
+      </section>
+
+      <section class="add-resource__card" aria-labelledby="content-title">
+        <div class="add-resource__section-heading">
+          <span class="add-resource__step">4</span>
+          <div>
+            <h2 id="content-title">Съдържание и файлове</h2>
+            <p>Добавете основния материал и корица по желание.</p>
+          </div>
+        </div>
+
+        @if (isExternalLink()) {
+          <label class="add-resource__field add-resource__field--wide">
+            <span>Външен линк <em>*</em></span>
+            <input
+              type="url"
+              formControlName="externalUrl"
+              maxlength="2000"
+              placeholder="https://example.com/resource"
+              [class.is-invalid]="fieldInvalid('externalUrl')"
+            />
+            @if (fieldInvalid('externalUrl')) {
+              <small>Въведете валиден адрес, започващ с http:// или https://.</small>
+            }
+          </label>
+        } @else {
+          <div class="add-resource__uploads">
+            <label class="add-resource__upload">
+              <span class="add-resource__upload-icon" aria-hidden="true">↑</span>
+              <strong>Основен файл <em>*</em></strong>
+              <span>
+                {{ selectedFile()?.name || 'Изберете файл от устройството' }}
+              </span>
+              <input type="file" (change)="chooseMainFile($event)" />
+            </label>
+
+            <label class="add-resource__upload">
+              <span class="add-resource__upload-icon" aria-hidden="true">＋</span>
+              <strong>Корица</strong>
+              <span>
+                {{ selectedCover()?.name || 'PNG или JPG (по избор)' }}
+              </span>
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                (change)="chooseCover($event)"
+              />
+            </label>
+          </div>
+          <p class="add-resource__hint">
+            Качването на корица е подготвено в интерфейса; текущият backend договор
+            все още не приема поле за нея.
+          </p>
+        }
+      </section>
+
+      <aside class="add-resource__notice">
+        <span aria-hidden="true">i</span>
+        <p>
+          <strong>Преглед преди публикуване</strong>
+          Всеки нов ресурс преминава през преглед от администратор. Можете да
+          следите статуса му от страницата „Моите ресурси“.
+        </p>
+      </aside>
+
+      @if (submitError()) {
+        <div class="add-resource__alert add-resource__alert--error" role="alert">
+          {{ submitError() }}
+        </div>
+      }
+
+      <div class="add-resource__actions">
+        <button
+          type="button"
+          class="add-resource__button add-resource__button--secondary"
+          [disabled]="submitting()"
+          (click)="cancel()"
+        >
+          Отказ
+        </button>
+        <button
+          type="submit"
+          class="add-resource__button add-resource__button--primary"
+          [disabled]="submitting() || loadingLookups() || !!loadError()"
+        >
+          @if (submitting()) {
+            Изпращане…
+          } @else {
+            Изпрати за одобрение
+          }
+        </button>
+      </div>
+    </form>
+  </main>
+</sl-page-container>
