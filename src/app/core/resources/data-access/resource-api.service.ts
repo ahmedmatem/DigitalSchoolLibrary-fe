@@ -85,6 +85,13 @@ export class ResourceApiService {
     );
   }
 
+  archive(resourceId: string): Observable<void> {
+    return this.http.patch<void>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/archive`,
+      {}
+    );
+  }
+
   create(request: CreateResourceRequest): Observable<CreateResourceResponse> {
     return this.http.post<CreateResourceResponse>(
       `${API_CONFIG.baseUrl}/resources`,
