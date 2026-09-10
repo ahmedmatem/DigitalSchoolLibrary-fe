@@ -1,0 +1,531 @@
+<sl-page-container>
+
+  <section class="my-resources">
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="my-resources__hero">
+
+      <div class="my-resources__hero-content">
+
+        <p class="my-resources__eyebrow">
+          УЧИТЕЛСКИ ПАНЕЛ
+        </p>
+
+        <h1 class="my-resources__title">
+          Моите ресурси
+        </h1>
+
+        <p class="my-resources__description">
+          Управлявайте учебните материали, които сте добавили,
+          и следете статуса им на одобрение.
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="my-resources__add-button"
+        (click)="addResource()"
+      >
+        <span aria-hidden="true">
+          +
+        </span>
+
+        Добави нов ресурс
+      </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <section
+      class="my-resources__summary"
+      aria-label="Обобщение на ресурсите"
+    >
+
+      <button
+        type="button"
+        class="my-resources__summary-card"
+        [class.my-resources__summary-card--active]="
+          selectedStatus() === null
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === null
+        "
+        (click)="updateStatus(null)"
+      >
+
+        <strong>
+          {{ summary().total }}
+        </strong>
+
+        <span>
+          Всички
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__summary-card"
+        [class.my-resources__summary-card--active]="
+          selectedStatus() === moderationStatus.Pending
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Pending
+        "
+        (click)="updateStatus(moderationStatus.Pending)"
+      >
+
+        <strong>
+          {{ summary().pending }}
+        </strong>
+
+        <span>
+          В изчакване
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__summary-card"
+        [class.my-resources__summary-card--active]="
+          selectedStatus() === moderationStatus.Approved
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Approved
+        "
+        (click)="updateStatus(moderationStatus.Approved)"
+      >
+
+        <strong>
+          {{ summary().approved }}
+        </strong>
+
+        <span>
+          Одобрени
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__summary-card"
+        [class.my-resources__summary-card--active]="
+          selectedStatus() === moderationStatus.Rejected
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Rejected
+        "
+        (click)="updateStatus(moderationStatus.Rejected)"
+      >
+
+        <strong>
+          {{ summary().rejected }}
+        </strong>
+
+        <span>
+          Отхвърлени
+        </span>
+
+      </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="my-resources__search">
+
+      <sl-search-field
+        placeholder="Търсене в библиотеката…"
+        [value]="query().search"
+        (valueChange)="updateSearch($event)"
+      />
+
+    </div>
+
+
+    <!-- =====================================================
+         STATUS FILTERS
+    ====================================================== -->
+
+    <nav
+      class="my-resources__filters"
+      aria-label="Филтриране по статус"
+    >
+
+      <button
+        type="button"
+        class="my-resources__filter"
+        [class.my-resources__filter--active]="
+          selectedStatus() === null
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === null
+        "
+        (click)="updateStatus(null)"
+      >
+        Всички
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__filter"
+        [class.my-resources__filter--active]="
+          selectedStatus() === moderationStatus.Pending
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Pending
+        "
+        (click)="updateStatus(moderationStatus.Pending)"
+      >
+        В изчакване
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__filter"
+        [class.my-resources__filter--active]="
+          selectedStatus() === moderationStatus.Approved
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Approved
+        "
+        (click)="updateStatus(moderationStatus.Approved)"
+      >
+        Одобрени
+      </button>
+
+
+      <button
+        type="button"
+        class="my-resources__filter"
+        [class.my-resources__filter--active]="
+          selectedStatus() === moderationStatus.Rejected
+        "
+        [attr.aria-pressed]="
+          selectedStatus() === moderationStatus.Rejected
+        "
+        (click)="updateStatus(moderationStatus.Rejected)"
+      >
+        Отхвърлени
+      </button>
+
+    </nav>
+
+
+    <!-- =====================================================
+         SECTION HEADER
+    ====================================================== -->
+
+    <header class="my-resources__section-header">
+
+      <h2>
+        Вашите ресурси
+      </h2>
+
+      <span>
+        {{ totalCount() }}
+
+        @if (totalCount() === 1) {
+          ресурс
+        } @else {
+          ресурса
+        }
+      </span>
+
+    </header>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    @if (loading()) {
+
+      <div
+        class="my-resources__message"
+        role="status"
+      >
+        Зареждане на ресурсите...
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    @else if (error()) {
+
+      <section
+        class="my-resources__state"
+        role="alert"
+      >
+
+        <h2>
+          Неуспешно зареждане
+        </h2>
+
+        <p>
+          {{ error() }}
+        </p>
+
+        <button
+          type="button"
+          class="my-resources__state-action"
+          (click)="retryLoad()"
+        >
+          Опитай отново
+        </button>
+
+      </section>
+
+    }
+
+
+    <!-- =====================================================
+         RESOURCE LIST
+    ====================================================== -->
+
+    @else if (hasResources()) {
+
+      <div class="my-resources__list">
+
+        @for (
+          resource of resources();
+          track resource.id
+        ) {
+
+          <article class="my-resources__card">
+
+            <div class="my-resources__card-main">
+
+              <h3>
+                {{ resource.title }}
+              </h3>
+
+
+              <p class="my-resources__card-description">
+
+                @switch (resource.moderationStatus) {
+
+                  @case (moderationStatus.Pending) {
+
+                    Добавен на
+
+                    {{
+                      resource.submittedAtUtc
+                        | date:'dd.MM.yyyy'
+                    }}
+
+                    · Очаква преглед от администратор
+
+                  }
+
+
+                  @case (moderationStatus.Approved) {
+
+                    Одобрен на
+
+                    {{
+                      resource.reviewedAtUtc
+                        | date:'dd.MM.yyyy'
+                    }}
+
+                    · Видим в каталога
+
+                  }
+
+
+                  @case (moderationStatus.Rejected) {
+
+                    Отхвърлен
+
+                    @if (resource.rejectionReason) {
+
+                      · Причина:
+                      {{ resource.rejectionReason }}
+
+                    }
+
+                  }
+
+                }
+
+              </p>
+
+            </div>
+
+
+            <div class="my-resources__card-side">
+
+              <span
+                class="my-resources__status"
+                [class.my-resources__status--pending]="
+                  resource.moderationStatus
+                    === moderationStatus.Pending
+                "
+                [class.my-resources__status--approved]="
+                  resource.moderationStatus
+                    === moderationStatus.Approved
+                "
+                [class.my-resources__status--rejected]="
+                  resource.moderationStatus
+                    === moderationStatus.Rejected
+                "
+              >
+
+                @switch (resource.moderationStatus) {
+
+                  @case (moderationStatus.Pending) {
+                    В изчакване
+                  }
+
+                  @case (moderationStatus.Approved) {
+                    Одобрен
+                  }
+
+                  @case (moderationStatus.Rejected) {
+                    Отхвърлен
+                  }
+
+                }
+
+              </span>
+
+
+              <p class="my-resources__card-meta">
+                {{ resource.subjectName }}
+
+                ·
+
+                {{ resource.categoryName }}
+              </p>
+
+
+              <div class="my-resources__card-actions">
+
+                <button
+                  type="button"
+                  class="my-resources__card-action"
+                  (click)="editResource(resource.id)"
+                >
+                  Редакция
+                </button>
+
+                <button
+                  type="button"
+                  class="my-resources__card-action
+                         my-resources__card-action--secondary"
+                  (click)="openDetails(resource.id)"
+                >
+                  Детайли
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         EMPTY STATE
+    ====================================================== -->
+
+    @else {
+
+      <section class="my-resources__state">
+
+        <h2>
+          Няма намерени ресурси
+        </h2>
+
+        <p>
+
+          @if (hasActiveFilter()) {
+
+            Няма ресурси, които отговарят на избраното
+            търсене или статус.
+
+          } @else {
+
+            Все още не сте добавили учебни ресурси.
+
+          }
+
+        </p>
+
+
+        @if (hasActiveFilter()) {
+
+          <button
+            type="button"
+            class="my-resources__state-action"
+            (click)="clearFilters()"
+          >
+            Изчисти филтрите
+          </button>
+
+        } @else {
+
+          <button
+            type="button"
+            class="my-resources__state-action"
+            (click)="addResource()"
+          >
+            Добави ресурс
+          </button>
+
+        }
+
+      </section>
+
+    }
+
+
+    <!-- =====================================================
+         PAGINATION
+    ====================================================== -->
+
+    @if (showPagination()) {
+
+      <div class="my-resources__pagination">
+
+        <sl-pagination
+          [page]="query().page"
+          [pageCount]="totalPages()"
+          (pageChange)="updatePage($event)"
+        />
+
+      </div>
+
+    }
+
+  </section>
+
+</sl-page-container>
