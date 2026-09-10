@@ -52,13 +52,21 @@ export class TeacherResourceDetails {
   readonly loading = signal(true);
   readonly notFound = signal(false);
   readonly error = signal<string | null>(null);
+  readonly openingResource = signal(false);
+  readonly openError = signal<string | null>(null);
 
   readonly moderationStatus = ResourceModerationStatus;
   readonly resourceType = ResourceType;
 
-  readonly canOpen = computed(() =>
-    this.resource()?.moderationStatus === ResourceModerationStatus.Approved
-  );
+  readonly canOpen = computed(() => {
+    const resource = this.resource();
+
+    return !!resource && (
+      resource.type === ResourceType.ExternalLink
+        ? !!resource.externalUrl
+        : !!resource.fileStorageKey
+    );
+  });
 
   constructor() {
     this.loadResource();
@@ -114,21 +122,28 @@ export class TeacherResourceDetails {
   openResource(): void {
     const resource = this.resource();
 
-    if (!resource) {
+    if (!resource || !this.canOpen() || this.openingResource()) {
       return;
     }
 
-    if (
-      resource.type === ResourceType.ExternalLink
-      && resource.externalUrl
-    ) {
-      window.open(resource.externalUrl, '_blank', 'noopener,noreferrer');
-      return;
-    }
+    this.openingResource.set(true);
+    this.openError.set(null);
 
-    if (this.canOpen()) {
-      void this.router.navigate(['/resources', resource.id, 'view']);
-    }
+    this.resourceApi
+      .getManagementOpen(resource.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: result => {
+          this.openingResource.set(false);
+          window.open(result.url, '_blank', 'noopener,noreferrer');
+        },
+        error: () => {
+          this.openingResource.set(false);
+          this.openError.set(
+            'Ресурсът не можа да бъде отворен. Моля, опитайте отново.'
+          );
+        },
+      });
   }
 
   retryLoad(): void {
@@ -157,11 +172,8 @@ export class TeacherResourceDetails {
           this.resource.set(resource);
           this.loading.set(false);
 
-          if (
-            resource.coverStorageKey
-            && resource.moderationStatus === ResourceModerationStatus.Approved
-          ) {
-            this.loadPublicCover(resource.id);
+          if (resource.coverStorageKey) {
+            this.loadManagementCover(resource.id);
           }
         },
         error: (httpError: HttpErrorResponse) => {
@@ -180,9 +192,9 @@ export class TeacherResourceDetails {
       });
   }
 
-  private loadPublicCover(id: string): void {
+  private loadManagementCover(id: string): void {
     this.resourceApi
-      .getPublicCover(id)
+      .getManagementCover(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => this.coverUrl.set(result.downloadUrl),
