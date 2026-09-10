@@ -4,6 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -12,7 +13,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import {
+  Observable,
+  forkJoin,
+  of,
+  switchMap,
+} from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 import { LookupApiService } from '../../../../core/lookups/services/lookup-api.service';
@@ -23,26 +29,18 @@ import {
   SubjectLookup,
 } from '../../../../core/lookups/models/lookup.models';
 import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
-import { SubmitPendingResourceRequest } from '../../../../core/resources/models/submit-pending-resource-request.model';
+import { CreateResourceRequest } from '../../../../core/resources/models/create-resource-request.model';
+import { ResourceAudienceType } from '../../../../core/resources/models/resource-audience-type.model';
 import { UploadApiService } from '../../../../core/uploads/data-access/upload-api.service';
+import { PresignedUpload } from '../../../../core/uploads/models/presigned-upload.model';
+import { StoredFileKind } from '../../../../core/uploads/models/stored-file-kind.model';
 import {
   RESOURCE_TYPE_OPTIONS,
   ResourceType,
 } from '../../../../core/models/resource-type.model';
 import { PageContainer } from '../../../../layout/page-container/page-container';
 
-enum ApiResourceType {
-  File = 0,
-  Link = 1,
-}
-
-enum ApiResourceFormat {
-  Pdf = 0,
-  Video = 2,
-  Doc = 4,
-  Ppt = 5,
-  Other = 6,
-}
+type AudienceSelection = 'all' | 'grade' | 'class';
 
 @Component({
   selector: 'sl-add-resource',
@@ -76,7 +74,11 @@ export class AddResource {
   readonly form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(300)],
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(200),
+      ],
     }),
     author: new FormControl('', {
       nonNullable: true,
@@ -84,7 +86,11 @@ export class AddResource {
     }),
     description: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(4000)],
+      validators: [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(4000),
+      ],
     }),
     subjectId: new FormControl('', {
       nonNullable: true,
@@ -97,12 +103,12 @@ export class AddResource {
     resourceType: new FormControl<ResourceType | null>(null, {
       validators: [Validators.required],
     }),
-    audience: new FormControl<'all' | 'grade' | 'class'>('all', {
+    audience: new FormControl<AudienceSelection>('all', {
       nonNullable: true,
       validators: [Validators.required],
     }),
     gradeLevelId: new FormControl<number | null>(null),
-    schoolClassId: new FormControl(''),
+    schoolClassId: new FormControl('', { nonNullable: true }),
     publicVisibility: new FormControl(true, { nonNullable: true }),
     externalUrl: new FormControl('', { nonNullable: true }),
   });
@@ -116,9 +122,7 @@ export class AddResource {
 
     this.form.controls.resourceType.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(type => {
-        this.configureContentValidators(type);
-      });
+      .subscribe(type => this.configureContentValidators(type));
 
     this.form.controls.audience.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -159,17 +163,24 @@ export class AddResource {
     this.submitting.set(true);
 
     const file = this.selectedFile();
-    const upload$ = file
-      ? this.uploadApi.upload(file).pipe(
-          map(upload => upload.key)
-        )
-      : of<string | null>(null);
+    const cover = this.selectedCover();
 
-    upload$
+    const fileUpload$: Observable<PresignedUpload | null> = file
+      ? this.uploadApi.upload(file, StoredFileKind.Resource)
+      : of(null);
+
+    const coverUpload$: Observable<PresignedUpload | null> = cover
+      ? this.uploadApi.upload(cover, StoredFileKind.Cover)
+      : of(null);
+
+    forkJoin({
+      fileUpload: fileUpload$,
+      coverUpload: coverUpload$,
+    })
       .pipe(
-        switchMap(fileKey =>
-          this.resourceApi.submitPending(
-            this.buildRequest(fileKey)
+        switchMap(({ fileUpload, coverUpload }) =>
+          this.resourceApi.create(
+            this.buildRequest(fileUpload, coverUpload)
           )
         ),
         takeUntilDestroyed(this.destroyRef)
@@ -177,20 +188,12 @@ export class AddResource {
       .subscribe({
         next: () => {
           this.submitting.set(false);
-
-          this.toastr.success(
-            'Ресурсът е изпратен за одобрение.'
-          );
-
+          this.toastr.success('Ресурсът е изпратен за одобрение.');
           void this.router.navigate(['/teacher']);
         },
-
-        error: () => {
+        error: (error: unknown) => {
           this.submitting.set(false);
-
-          this.submitError.set(
-            'Ресурсът не беше изпратен. Моля, опитайте отново.'
-          );
+          this.submitError.set(this.getSubmitError(error));
         },
       });
   }
@@ -258,9 +261,7 @@ export class AddResource {
     externalUrl.updateValueAndValidity({ emitEvent: false });
   }
 
-  private configureAudienceValidators(
-    audience: 'all' | 'grade' | 'class'
-  ): void {
+  private configureAudienceValidators(audience: AudienceSelection): void {
     const grade = this.form.controls.gradeLevelId;
     const schoolClass = this.form.controls.schoolClassId;
 
@@ -278,57 +279,75 @@ export class AddResource {
     schoolClass.updateValueAndValidity({ emitEvent: false });
   }
 
-  private buildRequest(fileKey: string | null): SubmitPendingResourceRequest {
+  private buildRequest(
+    fileUpload: PresignedUpload | null,
+    coverUpload: PresignedUpload | null
+  ): CreateResourceRequest {
     const value = this.form.getRawValue();
-    const subject = this.subjects().find(item => item.id === value.subjectId);
-    const category = this.categories().find(item => item.id === value.categoryId);
+    const file = this.selectedFile();
 
     return {
       title: value.title.trim(),
-      subject: subject?.name ?? '',
+      description: value.description.trim(),
       author: value.author.trim() || null,
-      description: value.description.trim() || null,
-      type: this.isExternalLink() ? ApiResourceType.Link : ApiResourceType.File,
-      format: this.toApiFormat(value.resourceType),
-      language: 'bg',
-      tags: category ? [category.name] : [],
-      fileUrl: fileKey,
+      type: value.resourceType as ResourceType,
+      isPubliclyVisible: value.publicVisibility,
+      fileStorageKey: fileUpload?.storageKey ?? null,
+      originalFileName: file?.name ?? null,
+      fileContentType: fileUpload?.contentType ?? null,
+      fileSize: file?.size ?? null,
+      coverStorageKey: coverUpload?.storageKey ?? null,
       externalUrl: this.isExternalLink()
         ? value.externalUrl.trim()
         : null,
-      visibility: this.buildVisibility(value),
+      subjectId: value.subjectId,
+      categoryId: value.categoryId,
+      audienceType: this.toAudienceType(value.audience),
+      gradeLevelIds: value.audience === 'grade' && value.gradeLevelId != null
+        ? [value.gradeLevelId]
+        : [],
+      schoolClassIds: value.audience === 'class' && value.schoolClassId
+        ? [value.schoolClassId]
+        : [],
     };
   }
 
-  private buildVisibility(value: ReturnType<AddResource['form']['getRawValue']>): string[] {
-    if (value.publicVisibility || value.audience === 'all') {
-      return ['ALL'];
+  private toAudienceType(audience: AudienceSelection): ResourceAudienceType {
+    switch (audience) {
+      case 'grade':
+        return ResourceAudienceType.GradeLevels;
+      case 'class':
+        return ResourceAudienceType.SchoolClasses;
+      default:
+        return ResourceAudienceType.AllStudents;
     }
-
-    if (value.audience === 'class' && value.schoolClassId) {
-      const schoolClass = this.schoolClasses()
-        .find(item => item.id === value.schoolClassId);
-      return schoolClass ? [schoolClass.displayName] : ['ALL'];
-    }
-
-    const grade = this.gradeLevels()
-      .find(item => item.id === value.gradeLevelId);
-    return grade ? [String(grade.number)] : ['ALL'];
   }
 
-  private toApiFormat(type: ResourceType | null): ApiResourceFormat {
-    switch (type) {
-      case ResourceType.PdfDocument:
-        return ApiResourceFormat.Pdf;
-      case ResourceType.Presentation:
-        return ApiResourceFormat.Ppt;
-      case ResourceType.Video:
-        return ApiResourceFormat.Video;
-      case ResourceType.Worksheet:
-      case ResourceType.Test:
-        return ApiResourceFormat.Doc;
-      default:
-        return ApiResourceFormat.Other;
+  private getSubmitError(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return 'Ресурсът не беше изпратен. Моля, опитайте отново.';
     }
+
+    const response = error.error;
+
+    if (typeof response === 'string' && response.trim()) {
+      return response;
+    }
+
+    if (response?.message) {
+      return response.message;
+    }
+
+    if (response?.errors) {
+      const validationMessages = Object.values(response.errors)
+        .flatMap(value => Array.isArray(value) ? value : [value])
+        .filter((value): value is string => typeof value === 'string');
+
+      if (validationMessages.length > 0) {
+        return validationMessages.join(' ');
+      }
+    }
+
+    return 'Ресурсът не беше изпратен. Моля, опитайте отново.';
   }
 }
