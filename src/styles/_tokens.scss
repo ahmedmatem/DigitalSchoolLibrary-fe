@@ -18,6 +18,7 @@
   --sl-shadow-sm: 0 5px 16px rgb(31 61 100 / 8%);
 
   --sl-shadow-md: 0 7px 20px rgb(31 61 100 / 7%);
+  --sl-shadow-card: 0 4px 14px rgb(26 33 46 / 8%);
 
   /* Text */
   --sl-color-text-primary: #1a222d;
@@ -33,6 +34,8 @@
 
   --sl-color-error: #b33a3a;
   --sl-color-error-bg: #fbe1e1;
+  --sl-color-error-bg-subtle: rgb(179 58 58 / 6%);
+  --sl-color-error-border: rgb(179 58 58 / 25%);
 
   --sl-color-info-bg: #e8f2fc;
 
@@ -66,6 +69,7 @@
 
   /* Button */
   --sl-color-on-primary: #ffffff;
+  --sl-color-on-primary-muted: rgb(255 255 255 / 40%);
 
   --sl-color-secondary-bg: #ffffff;
   --sl-color-secondary-hover: #eef4fb;
