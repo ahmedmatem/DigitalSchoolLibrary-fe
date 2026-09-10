@@ -37,9 +37,7 @@
       var(--sl-color-border)
     );
 
-  box-shadow:
-    0 10px 24px
-    var(--sl-shadow-card-hover);
+  box-shadow: var(--sl-shadow-card-hover);
 }
 
 .resource-card:focus-visible {
