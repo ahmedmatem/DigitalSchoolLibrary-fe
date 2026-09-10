@@ -274,7 +274,7 @@
 
   box-shadow:
     0 6px 10px
-    rgb(26 33 46 / 12%);
+    var(--sl-shadow-menu);
 }
 
 
@@ -411,12 +411,12 @@
 
 
 .profile-menu__item--logout {
-  color: #b33a3a;
+  color: var(--sl-color-error);
 }
 
 
 .profile-menu__item--logout svg {
-  color: #b33a3a;
+  color: var(--sl-color-error);
 }
 
 
