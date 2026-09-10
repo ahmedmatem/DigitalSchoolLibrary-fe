@@ -39,7 +39,7 @@
 
   box-shadow:
     0 10px 24px
-    rgb(26 34 45 / 8%);
+    var(--sl-shadow-card-hover);
 }
 
 .resource-card:focus-visible {
