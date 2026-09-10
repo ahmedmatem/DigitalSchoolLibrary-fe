@@ -11,6 +11,7 @@ import { ResourceOpen } from '../models/resource-open.model';
 import { MyResourcesResponse } from '../models/my-resources-response.model';
 import { MyResourcesSummary } from '../models/my-resources-summary.model';
 import { ManagementResourceDetails } from '../models/management-resource-details.model';
+import { UpdateResourceRequest } from '../models/update-resource-request.model';
 import {
   CreateResourceRequest,
   CreateResourceResponse,
@@ -64,6 +65,23 @@ export class ResourceApiService {
   getManagementOpen(resourceId: string): Observable<ResourceOpen> {
     return this.http.get<ResourceOpen>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/manage-open`
+    );
+  }
+
+  update(
+    resourceId: string,
+    request: UpdateResourceRequest
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}`,
+      request
+    );
+  }
+
+  resubmit(resourceId: string): Observable<void> {
+    return this.http.post<void>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/resubmit`,
+      {}
     );
   }
 
