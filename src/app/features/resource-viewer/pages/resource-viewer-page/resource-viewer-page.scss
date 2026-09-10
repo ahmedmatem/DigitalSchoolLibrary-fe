@@ -109,7 +109,7 @@
 
   border-radius: 999px;
 
-  background: #eef4fb;
+  background: var(--sl-color-surface-subtle);
 
   font-size: 13px;
   font-weight: 600;
@@ -168,7 +168,7 @@
 
   border:
     4px solid
-    #eef4fb;
+    var(--sl-color-surface-subtle);
 
   border-top-color:
     var(--sl-color-primary);
@@ -242,7 +242,7 @@
 
   border-radius: 50%;
 
-  background: #eef4fb;
+  background: var(--sl-color-surface-subtle);
 
   color:
     var(--sl-color-primary);
@@ -324,7 +324,7 @@
   cursor: pointer;
 
   &:hover {
-    background: #f7f9fc;
+    background: var(--sl-color-background);
   }
 
   &:focus-visible {
