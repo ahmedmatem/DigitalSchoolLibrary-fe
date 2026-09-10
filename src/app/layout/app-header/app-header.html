@@ -28,60 +28,20 @@
       aria-label="Основна навигация"
     >
 
-      <a
-        routerLink="/"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
-      >
-        Каталог
-      </a>
-
-
-      @if (authenticated()) {
+      @for (
+        item of navigationItems();
+        track item.routerLink
+      ) {
 
         <a
-          routerLink="/for-me"
+          [routerLink]="item.routerLink"
           routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{
+            exact: item.exact
+          }"
         >
-          За мен
+          {{ item.label }}
         </a>
-
-
-        <a
-          routerLink="/my-library"
-          routerLinkActive="is-active"
-        >
-          Моята библиотека
-        </a>
-
-
-        @if (
-          role() === 'Teacher' ||
-          role() === 'Admin'
-        ) {
-
-          <a
-            routerLink="/teacher"
-            routerLinkActive="is-active"
-          >
-            Учител
-          </a>
-
-        }
-
-
-        @if (role() === 'Admin') {
-
-          <a
-            routerLink="/admin"
-            routerLinkActive="is-active"
-          >
-            Администрация
-          </a>
-
-        }
 
       }
 
@@ -233,7 +193,7 @@
 
                 <a
                   class="profile-menu__item"
-                  routerLink="/teacher/add"
+                  routerLink="/teacher/resources/new"
                   role="menuitem"
                   (click)="closeProfileMenu()"
                 >
