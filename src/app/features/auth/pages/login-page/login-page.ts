@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 
 import { AuthStateService } from '../../../../core/auth/services/auth-state.service';
+import { getDefaultRouteForRoles } from '../../../../core/navigation/default-route.util';
 
 @Component({
   selector: 'sl-login-page',
@@ -71,10 +72,15 @@ export class LoginPage {
         })
       )
       .subscribe({
-        next: () => {
-          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        next: user => {
+          const returnUrl =
+            this.route.snapshot.queryParamMap.get('returnUrl');
 
-          void this.router.navigateByUrl(returnUrl || '/');
+          const destination =
+            returnUrl ||
+            getDefaultRouteForRoles(user.roles);
+
+          void this.router.navigateByUrl(destination);
         },
 
         error: (error: HttpErrorResponse) => {
