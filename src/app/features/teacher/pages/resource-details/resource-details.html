@@ -148,21 +148,24 @@
               </p>
             }
 
-            @if (canOpen() || (
-              item.type === resourceType.ExternalLink
-              && item.externalUrl
-            )) {
+            @if (canOpen()) {
               <button
                 type="button"
                 class="teacher-resource-details__open"
+                [disabled]="openingResource()"
                 (click)="openResource()"
               >
                 <svg lucideExternalLink aria-hidden="true"></svg>
-                Отвори ресурса
+                {{ openingResource() ? 'Отваряне...' : 'Отвори ресурса' }}
               </button>
-            } @else {
-              <p class="teacher-resource-details__pending-note">
-                Прегледът на файла ще бъде достъпен след одобрение.
+            }
+
+            @if (openError()) {
+              <p
+                class="teacher-resource-details__pending-note"
+                role="alert"
+              >
+                {{ openError() }}
               </p>
             }
           </section>
