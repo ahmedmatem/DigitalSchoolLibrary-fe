@@ -10,7 +10,10 @@ import { ResourceDetails } from '../models/resource-details.model';
 import { ResourceOpen } from '../models/resource-open.model';
 import { MyResourcesResponse } from '../models/my-resources-response.model';
 import { MyResourcesSummary } from '../models/my-resources-summary.model';
-import { SubmitPendingResourceRequest } from '../models/submit-pending-resource-request.model';
+import {
+  CreateResourceRequest,
+  CreateResourceResponse,
+} from '../models/create-resource-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,9 +48,9 @@ export class ResourceApiService {
     );
   }
 
-  submitPending(request: SubmitPendingResourceRequest): Observable<void> {
-    return this.http.post<void>(
-      `${API_CONFIG.baseUrl}/resources/pending`,
+  create(request: CreateResourceRequest): Observable<CreateResourceResponse> {
+    return this.http.post<CreateResourceResponse>(
+      `${API_CONFIG.baseUrl}/resources`,
       request
     );
   }
