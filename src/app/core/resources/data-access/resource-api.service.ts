@@ -13,6 +13,8 @@ import { API_CONFIG } from '../../config/api.config';
 import { PresignedDownload } from '../models/presigned-download.model';
 import { ResourceDetails } from '../models/resource-details.model';
 import { ResourceOpen } from '../models/resource-open.model';
+import { MyResourcesResponse } from '../models/my-resources-response.model';
+import { MyResourcesSummary } from '../models/my-resources-summary.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +33,19 @@ export class ResourceApiService {
     return this.http.get<ResourceCatalogResponse>(
       `${API_CONFIG.baseUrl}/resources/for-me`,
       { params: this.buildCatalogParams(request) }
+    );
+  }
+
+  getMine(request: ResourceCatalogRequest): Observable<MyResourcesResponse> {
+    return this.http.get<MyResourcesResponse>(
+      `${API_CONFIG.baseUrl}/resources/mine`,
+      { params: this.buildCatalogParams(request) }
+    );
+  }
+
+  getMineSummary(): Observable<MyResourcesSummary> {
+    return this.http.get<MyResourcesSummary>(
+      `${API_CONFIG.baseUrl}/resources/mine/summary`
     );
   }
 
@@ -84,6 +99,13 @@ export class ResourceApiService {
 
     if (request.audienceType !== undefined) {
       params = params.set('audienceType', request.audienceType);
+    }
+
+    if (request.moderationStatus !== undefined) {
+      params = params.set(
+        'moderationStatus',
+        request.moderationStatus
+      );
     }
 
     if (request.sort !== undefined) {
