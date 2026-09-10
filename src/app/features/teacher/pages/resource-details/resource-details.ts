@@ -15,7 +15,7 @@ import {
   LucideExternalLink,
   LucideFileText,
   LucidePencil,
-} from 'lucide-angular';
+} from '@lucide/angular';
 
 import { PageContainer } from '../../../../layout/page-container/page-container';
 import { ResourceApiService } from '../../../../core/resources/data-access/resource-api.service';
