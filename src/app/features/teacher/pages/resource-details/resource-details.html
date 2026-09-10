@@ -35,16 +35,26 @@
       <header class="teacher-resource-details__header">
         <h1>{{ item.title }}</h1>
 
-        @if (canEdit()) {
+        <div class="teacher-resource-details__header-actions">
+          @if (canEdit()) {
+            <button
+              type="button"
+              class="teacher-resource-details__edit"
+              (click)="editResource()"
+            >
+              <svg lucidePencil aria-hidden="true"></svg>
+              Редакция
+            </button>
+          }
+
           <button
             type="button"
-            class="teacher-resource-details__edit"
-            (click)="editResource()"
+            class="teacher-resource-details__archive"
+            (click)="openArchiveDialog()"
           >
-            <svg lucidePencil aria-hidden="true"></svg>
-            Редакция
+            Архивирай
           </button>
-        }
+        </div>
       </header>
 
       <div class="teacher-resource-details__layout">
@@ -175,4 +185,71 @@
       </div>
     }
   </section>
+
+  @if (archiveDialogOpen()) {
+    <div
+      class="teacher-resource-details__dialog-backdrop"
+      role="presentation"
+      (click)="closeArchiveDialog()"
+    >
+      <section
+        class="teacher-resource-details__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="archive-dialog-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header>
+          <div>
+            <h2 id="archive-dialog-title">Архивиране на ресурс</h2>
+            <span>БЕЗОПАСНО</span>
+          </div>
+
+          <button
+            type="button"
+            class="teacher-resource-details__dialog-close"
+            aria-label="Затвори"
+            [disabled]="archiving()"
+            (click)="closeArchiveDialog()"
+          >
+            ×
+          </button>
+        </header>
+
+        <p>
+          Ресурсът ще бъде премахнат от „Моите ресурси“ и няма да бъде
+          достъпен в каталога. За възстановяване ще е необходим администратор.
+        </p>
+
+        @if (archiveError()) {
+          <p
+            class="teacher-resource-details__dialog-error"
+            role="alert"
+          >
+            {{ archiveError() }}
+          </p>
+        }
+
+        <footer>
+          <button
+            type="button"
+            class="teacher-resource-details__dialog-cancel"
+            [disabled]="archiving()"
+            (click)="closeArchiveDialog()"
+          >
+            Отказ
+          </button>
+
+          <button
+            type="button"
+            class="teacher-resource-details__dialog-confirm"
+            [disabled]="archiving()"
+            (click)="archiveResource()"
+          >
+            {{ archiving() ? 'Архивиране...' : 'Архивирай' }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  }
 </sl-page-container>
