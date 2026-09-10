@@ -19,11 +19,15 @@
 
   --sl-shadow-md: 0 7px 20px rgb(31 61 100 / 7%);
   --sl-shadow-card: 0 4px 14px rgb(26 33 46 / 8%);
+  --sl-shadow-menu: 0 12px 30px rgb(26 33 46 / 12%);
+  --sl-shadow-drawer: -12px 0 30px rgb(0 0 0 / 12%);
+  --sl-shadow-card-hover: 0 10px 24px rgb(26 34 45 / 8%);
 
   /* Text */
   --sl-color-text-primary: #1a222d;
   --sl-color-text-secondary: #616f82;
   --sl-color-text-muted: #9aa8b8;
+  --sl-color-text-subtle: #8f9db1;
 
   /* Semantic */
   --sl-color-success: #257a52;
@@ -36,8 +40,12 @@
   --sl-color-error-bg: #fbe1e1;
   --sl-color-error-bg-subtle: rgb(179 58 58 / 6%);
   --sl-color-error-border: rgb(179 58 58 / 25%);
+  --sl-color-error-hover-bg: rgb(179 58 58 / 8%);
 
   --sl-color-info-bg: #e8f2fc;
+
+  --sl-color-warning-strong: #8a5a00;
+  --sl-color-warning-bg-subtle: #fff5d9;
 
   /* Radius */
   --sl-radius-sm: 6px;
@@ -91,4 +99,8 @@
   --sl-color-skeleton-highlight: #f1f5f9;
 
   --sl-color-resource-cover: #dce9f8;
+  --sl-color-surface-soft: #f4f7fb;
+  --sl-color-video-background: #000000;
+  --sl-color-overlay: rgb(0 0 0 / 35%);
+  --sl-color-hover-overlay: rgb(0 0 0 / 6%);
 }
