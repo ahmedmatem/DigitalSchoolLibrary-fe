@@ -50,7 +50,7 @@
 
   border-radius: 24px;
 
-  background: #eef4fb;
+  background: var(--sl-color-surface-subtle);
 }
 
 
@@ -129,7 +129,7 @@
     var(--sl-color-surface);
 
   box-shadow:
-    0 4px 14px rgb(26 33 46 / 8%);
+    0 4px 14px var(--sl-shadow-card);
 }
 
 
@@ -256,7 +256,7 @@
 
 
 .register-field__control::placeholder {
-  color: #9aa8b8;
+  color: var(--sl-color-text-muted);
 }
 
 
@@ -270,7 +270,7 @@
 
 .register-field__control--error {
   border:
-    2px solid #b33a3a;
+    2px solid var(--sl-color-error);
 
   padding-inline: 13px;
 }
@@ -287,11 +287,11 @@
     linear-gradient(
       45deg,
       transparent 50%,
-      #617082 50%
+      var(--sl-color-text-secondary) 50%
     ),
     linear-gradient(
       135deg,
-      #617082 50%,
+      var(--sl-color-text-secondary) 50%,
       transparent 50%
     );
 
@@ -319,7 +319,7 @@
   margin:
     6px 0 0;
 
-  color: #b33a3a;
+  color: var(--sl-color-error);
 
   font-size: 12px;
 
@@ -347,7 +347,7 @@
 
   border-radius: 10px;
 
-  background: #eef4fb;
+  background: var(--sl-color-surface-subtle);
 }
 
 
@@ -380,7 +380,7 @@
 .register-form__lookup-error {
   margin: -6px 0 0;
 
-  color: #b33a3a;
+  color: var(--sl-color-error);
 
   font-size: 12px;
 
@@ -397,14 +397,14 @@
   box-sizing: border-box;
 
   border:
-    1px solid rgb(179 58 58 / 25%);
+    1px solid var(--sl-color-error-border);
 
   border-radius: 10px;
 
   background:
-    rgb(179 58 58 / 6%);
+    var(--sl-color-error-bg-subtle);
 
-  color: #b33a3a;
+  color: var(--sl-color-error);
 
   font-size: 13px;
 
@@ -438,7 +438,7 @@
   background:
     var(--sl-color-primary);
 
-  color: white;
+  color: var(--sl-color-on-primary);
 
   font: inherit;
 
@@ -480,9 +480,9 @@
   box-sizing: border-box;
 
   border:
-    2px solid rgb(255 255 255 / 40%);
+    2px solid var(--sl-color-on-primary-muted);
 
-  border-top-color: white;
+  border-top-color: var(--sl-color-on-primary);
 
   border-radius: 50%;
 
