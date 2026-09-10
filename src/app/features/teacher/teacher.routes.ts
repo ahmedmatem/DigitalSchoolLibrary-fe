@@ -17,6 +17,12 @@ export const TEACHER_ROUTES: Routes = [
           .then(m => m.MyResources),
       },
       {
+        path: 'resources/:id',
+        title: 'Детайли за ресурс',
+        loadComponent: () => import('./pages/resource-details/resource-details')
+          .then(m => m.TeacherResourceDetails),
+      },
+      {
         path: 'resources/new',
         title: 'Добавяне на ресурс',
         loadComponent: () => import('./pages/add-resource/add-resource')
