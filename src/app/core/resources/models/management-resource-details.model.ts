@@ -32,6 +32,7 @@ export interface ManagementResourceDetails {
 
   moderationStatus: ResourceModerationStatus;
   submittedByUserId: string;
+  submittedByName: string;
   submittedAtUtc: string;
   reviewedByUserId: string | null;
   reviewedAtUtc: string | null;

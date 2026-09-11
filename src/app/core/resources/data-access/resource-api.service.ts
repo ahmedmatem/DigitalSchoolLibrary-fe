@@ -50,6 +50,33 @@ export class ResourceApiService {
     );
   }
 
+  getModeration(request: ResourceCatalogRequest): Observable<MyResourcesResponse> {
+    return this.http.get<MyResourcesResponse>(
+      `${API_CONFIG.baseUrl}/resources/moderation`,
+      { params: this.buildCatalogParams(request) }
+    );
+  }
+
+  getModerationSummary(): Observable<MyResourcesSummary> {
+    return this.http.get<MyResourcesSummary>(
+      `${API_CONFIG.baseUrl}/resources/moderation/summary`
+    );
+  }
+
+  approve(resourceId: string): Observable<void> {
+    return this.http.post<void>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/approve`,
+      {}
+    );
+  }
+
+  reject(resourceId: string, reason: string): Observable<void> {
+    return this.http.post<void>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/reject`,
+      { reason }
+    );
+  }
+
   getManagementResource(resourceId: string): Observable<ManagementResourceDetails> {
     return this.http.get<ManagementResourceDetails>(
       `${API_CONFIG.baseUrl}/resources/${resourceId}/manage`

@@ -1,0 +1,32 @@
+<sl-page-container>
+  <main class="moderation-review">
+    <button type="button" class="back" (click)="goBack()">← Назад към модерацията</button>
+    @if (loading()) { <section class="state">Зареждане на ресурса…</section> }
+    @else if (notFound()) { <section class="state"><h1>Ресурсът не е намерен</h1><button type="button" (click)="goBack()">Към модерацията</button></section> }
+    @else if (error()) { <section class="state state--error">{{ error() }}</section> }
+    @else if (resource(); as item) {
+      <header class="title"><div><h1>Преглед на ресурс</h1><p>Проверете съдържанието и метаданните преди решение.</p></div><span [class]="'status status--' + item.moderationStatus">{{ item.moderationStatus === status.Pending ? 'В изчакване' : item.moderationStatus === status.Approved ? 'Одобрен' : 'Отхвърлен' }}</span></header>
+
+      <section class="panel summary">
+        <div class="cover">
+          @if (coverUrl()) { <img [src]="coverUrl()" [alt]="'Корица на ' + item.title"> }
+          @else { <strong>{{ getTypeLabel(item.type) }}</strong><span>{{ item.subjectName }}</span> }
+        </div>
+        <div class="summary__content"><h2>{{ item.title }}</h2><p>Подаден от {{ item.submittedByName || 'Учител' }} · {{ item.submittedAtUtc | date:'dd.MM.yyyy' }}</p><p>{{ item.description }}</p>
+          <dl><div><dt>Предмет</dt><dd>{{ item.subjectName }}</dd></div><div><dt>Категория</dt><dd>{{ item.categoryName }}</dd></div><div><dt>Аудитория</dt><dd>{{ getAudienceLabel(item) }}</dd></div><div><dt>Видимост</dt><dd>{{ item.isPubliclyVisible ? 'Публичен каталог' : 'Само избраната аудитория' }}</dd></div></dl>
+        </div>
+      </section>
+
+      <section class="panel"><h2>Описание и съдържание</h2><p>{{ item.description }}</p><div class="file-info"><div><span>{{ item.type === type.ExternalLink ? 'Външен линк' : 'Основен файл' }}</span><strong>{{ item.originalFileName || item.externalUrl || 'Няма файл' }}</strong></div>@if (item.fileSize) { <div><span>Размер</span><strong>{{ item.fileSize / 1048576 | number:'1.1-2' }} MB</strong></div> }<div><span>Тип</span><strong>{{ getTypeLabel(item.type) }}</strong></div></div>
+        @if (item.fileStorageKey || item.externalUrl) { <button type="button" class="secondary open" [disabled]="opening()" (click)="openResource()">{{ opening() ? 'Отваряне…' : 'Отвори ресурса' }}</button> }
+      </section>
+
+      <section class="panel"><h2>Информация за подаването</h2><dl class="submission"><div><dt>Учител</dt><dd>{{ item.submittedByName || 'Учител' }}</dd></div><div><dt>Дата на подаване</dt><dd>{{ item.submittedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</dd></div><div><dt>Последна редакция</dt><dd>{{ (item.updatedAtUtc | date:'dd.MM.yyyy, HH:mm') || '—' }}</dd></div></dl></section>
+
+      <section class="panel decision" id="decision"><h2>Решение</h2>
+        @if (pending()) { <p>Одобрете ресурса или посочете причина за отхвърляне. Причината ще бъде видима за учителя.</p><label>Причина за отхвърляне<textarea maxlength="1000" [ngModel]="rejectionReason()" (ngModelChange)="rejectionReason.set($event)" placeholder="Напр. Добавете по-подробно описание…"></textarea></label>@if (decisionError()) { <p class="decision__error">{{ decisionError() }}</p> }<div class="decision__actions"><button type="button" class="danger" [disabled]="processing()" (click)="reject()">Отхвърли ресурса</button><button type="button" class="primary" [disabled]="processing()" (click)="approve()">Одобри ресурса</button></div> }
+        @else { <p>За този ресурс вече е взето решение.</p>@if (item.rejectionReason) { <div class="rejection"><strong>Причина за отхвърляне</strong><p>{{ item.rejectionReason }}</p></div> } }
+      </section>
+    }
+  </main>
+</sl-page-container>

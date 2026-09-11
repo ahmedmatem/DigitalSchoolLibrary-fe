@@ -4,7 +4,9 @@ export type AppNavigationIcon =
   | 'my-library'
   | 'my-resources'
   | 'add-resource'
-  | 'administration';
+  | 'administration'
+  | 'moderation'
+  | 'users';
 
 
 export interface AppNavigationItem {

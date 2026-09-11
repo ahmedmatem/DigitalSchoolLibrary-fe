@@ -1,0 +1,50 @@
+.moderation-review { display: grid; gap: var(--sl-space-5); }
+.back { width: fit-content; padding: 0; border: 0; color: var(--sl-color-primary); background: transparent; font: inherit; font-weight: 600; cursor: pointer; }
+.title { display: flex; justify-content: space-between; align-items: start; gap: var(--sl-space-4); }
+h1, h2, p { margin: 0; }
+h1 { color: var(--sl-color-text-primary); font-size: 34px; }
+h2 { color: var(--sl-color-primary); font-size: 20px; }
+.title p, .panel > p { margin-top: var(--sl-space-2); color: var(--sl-color-text-secondary); }
+.status { padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.status--1 { color: var(--sl-color-warning); background: var(--sl-color-warning-bg); }
+.status--2 { color: var(--sl-color-success); background: var(--sl-color-success-bg); }
+.status--3 { color: var(--sl-color-error); background: var(--sl-color-error-bg); }
+.panel { padding: var(--sl-space-5); border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-lg); background: var(--sl-color-surface); }
+.summary { display: grid; grid-template-columns: 320px 1fr; gap: 36px; }
+.cover { display: grid; align-content: center; gap: var(--sl-space-4); min-height: 250px; padding: var(--sl-space-5); overflow: hidden; border-radius: var(--sl-radius-md); color: var(--sl-color-primary); background: var(--sl-color-resource-cover); }
+.cover img { width: 100%; height: 100%; object-fit: cover; }
+.cover strong { font-size: 24px; }
+.summary__content h2 { color: var(--sl-color-text-primary); font-size: 24px; }
+.summary__content > p { margin-top: var(--sl-space-3); color: var(--sl-color-text-secondary); line-height: 1.5; }
+dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sl-space-5); margin: var(--sl-space-5) 0 0; }
+dt, .file-info span { color: var(--sl-color-text-secondary); font-size: 12px; }
+dd { margin: 7px 0 0; color: var(--sl-color-text-primary); font-weight: 600; }
+.file-info { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--sl-space-5); margin-top: var(--sl-space-5); padding-top: var(--sl-space-4); border-top: 1px solid var(--sl-color-border); }
+.file-info div { display: grid; gap: var(--sl-space-2); min-width: 0; }
+.file-info strong { overflow-wrap: anywhere; }
+button.primary, button.secondary, button.danger, .state button { min-height: 44px; padding: 0 20px; border-radius: var(--sl-radius-md); font: inherit; font-weight: 600; cursor: pointer; }
+.primary { border: 0; color: var(--sl-color-on-primary); background: var(--sl-color-primary); }
+.secondary, .danger { border: 1px solid var(--sl-color-border); background: var(--sl-color-surface); }
+.secondary { color: var(--sl-color-primary); }
+.danger { color: var(--sl-color-error); }
+.open { display: block; margin: var(--sl-space-5) 0 0 auto; }
+.submission { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.decision label { display: grid; gap: var(--sl-space-2); margin-top: var(--sl-space-5); color: var(--sl-color-text-primary); font-weight: 600; }
+textarea { min-height: 130px; padding: var(--sl-space-4); resize: vertical; border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-md); font: inherit; }
+.decision__actions { display: flex; justify-content: end; gap: var(--sl-space-3); margin-top: var(--sl-space-4); }
+.decision__error { color: var(--sl-color-error) !important; }
+.rejection { margin-top: var(--sl-space-4); padding: var(--sl-space-4); border-radius: var(--sl-radius-md); color: var(--sl-color-error); background: var(--sl-color-error-bg-subtle); }
+.rejection p { margin-top: var(--sl-space-2); }
+.state { padding: var(--sl-space-7); border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-lg); background: var(--sl-color-surface); text-align: center; }
+.state--error { color: var(--sl-color-error); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 767px) {
+  h1 { font-size: 28px; }
+  .title { display: grid; }
+  .panel { padding: var(--sl-space-4); }
+  .summary { grid-template-columns: 1fr; gap: var(--sl-space-4); }
+  .cover { min-height: 190px; }
+  dl, .submission, .file-info { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .decision__actions { display: grid; }
+  .decision__actions button { width: 100%; }
+}

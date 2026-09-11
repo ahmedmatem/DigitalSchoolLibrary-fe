@@ -28,6 +28,8 @@ export interface ModerationResource {
 
   submittedByUserId: string;
 
+  submittedByName: string;
+
   submittedAtUtc: string;
 
   reviewedByUserId: string | null;

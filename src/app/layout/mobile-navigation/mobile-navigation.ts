@@ -21,6 +21,8 @@ import {
   LucideLogOut,
   LucideFolderCog,
   LucidePlus,
+  LucideUsers,
+  LucideListChecks,
 } from '@lucide/angular';
 
 import { IconButton } from '../../shared/ui/icon-button/icon-button';
@@ -43,6 +45,8 @@ import { getAppNavigation } from '../../core/navigation/app-navigation.config';
     LucideLogOut,
     LucideFolderCog,
     LucidePlus,
+    LucideUsers,
+    LucideListChecks,
   ],
   templateUrl: './mobile-navigation.html',
   styleUrl: './mobile-navigation.scss',

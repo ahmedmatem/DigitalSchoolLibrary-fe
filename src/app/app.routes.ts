@@ -64,6 +64,11 @@ export const routes: Routes = [
     loadChildren: () => import('./features/teacher/teacher.routes')
         .then(m => m.TEACHER_ROUTES),
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.routes')
+      .then(m => m.ADMIN_ROUTES),
+  },
 
   /* =========================
      SYSTEM

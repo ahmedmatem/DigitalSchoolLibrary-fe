@@ -51,12 +51,18 @@ const TEACHER_NAVIGATION: readonly AppNavigationItem[] = [
 
 
 const ADMIN_NAVIGATION: readonly AppNavigationItem[] = [
-  ...TEACHER_NAVIGATION,
+  CATALOG_ITEM,
   {
-    label: 'Администрация',
-    routerLink: '/admin',
+    label: 'Модерация',
+    routerLink: '/admin/moderation',
     exact: false,
-    icon: 'administration',
+    icon: 'moderation',
+  },
+  {
+    label: 'Потребители',
+    routerLink: '/admin/users',
+    exact: false,
+    icon: 'users',
   },
 ];
 

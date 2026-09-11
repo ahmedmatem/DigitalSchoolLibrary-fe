@@ -1,0 +1,50 @@
+<sl-page-container>
+  <main class="moderation-queue">
+    <header class="moderation-queue__heading">
+      <div><h1>Модерация на ресурси</h1><p>Прегледайте предложенията от учители и вземете решение за публикуване.</p></div>
+      <span class="moderation-queue__pending">{{ summary().pending }} чакат преглед</span>
+    </header>
+
+    <section class="moderation-queue__filters" aria-label="Филтри">
+      <sl-search-field [value]="search()" placeholder="Търсене по заглавие, учител или предмет…" (valueChange)="updateSearch($event)" />
+      <select aria-label="Сортиране" [value]="sort()" (change)="updateSort($event)">
+        <option [value]="1">Най-нови първо</option><option [value]="2">Най-стари първо</option>
+        <option [value]="3">Заглавие А–Я</option><option [value]="4">Заглавие Я–А</option>
+      </select>
+    </section>
+
+    <nav class="moderation-queue__tabs" aria-label="Статус">
+      <button type="button" [class.is-active]="selectedStatus() === status.Pending" (click)="selectStatus(status.Pending)">Чакащи <span>{{ summary().pending }}</span></button>
+      <button type="button" [class.is-active]="selectedStatus() === status.Approved" (click)="selectStatus(status.Approved)">Одобрени <span>{{ summary().approved }}</span></button>
+      <button type="button" [class.is-active]="selectedStatus() === status.Rejected" (click)="selectStatus(status.Rejected)">Отхвърлени <span>{{ summary().rejected }}</span></button>
+    </nav>
+
+    @if (loading()) { <div class="moderation-queue__state">Зареждане на ресурсите…</div> }
+    @else if (error()) { <div class="moderation-queue__state moderation-queue__state--error"><p>{{ error() }}</p><button type="button" (click)="loadInitial()">Опитай отново</button></div> }
+    @else if (!resources().length) { <div class="moderation-queue__state">Няма ресурси с избрания статус.</div> }
+    @else {
+      <section class="moderation-queue__list">
+        @for (resource of resources(); track resource.id) {
+          <article class="moderation-card">
+            <div class="moderation-card__type">{{ getTypeLabel(resource.type) }}</div>
+            <div class="moderation-card__content">
+              <h2>{{ resource.title }}</h2>
+              <p>Подаден от {{ resource.submittedByName || 'Учител' }}</p>
+              <strong>{{ resource.subjectName }} · {{ resource.categoryName }}</strong>
+            </div>
+            <div class="moderation-card__meta"><time>{{ resource.submittedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</time><span [class]="'status status--' + resource.moderationStatus">{{ getStatusLabel(resource.moderationStatus) }}</span></div>
+            <div class="moderation-card__actions">
+              <button type="button" class="secondary" (click)="review(resource.id)">Преглед</button>
+              @if (resource.moderationStatus === status.Pending) {
+                <button type="button" class="primary" [disabled]="processingId() === resource.id" (click)="approve(resource)">Одобри</button>
+                <button type="button" class="danger" (click)="reject(resource)">Отхвърли</button>
+              }
+            </div>
+          </article>
+        }
+      </section>
+    }
+
+    @if (showPagination()) { <sl-pagination [page]="page()" [pageCount]="totalPages()" (pageChange)="updatePage($event)" /> }
+  </main>
+</sl-page-container>
