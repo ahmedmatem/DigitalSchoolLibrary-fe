@@ -32,6 +32,7 @@ button.primary, button.secondary, button.danger, .state button { min-height: 44p
 .decision label { display: grid; gap: var(--sl-space-2); margin-top: var(--sl-space-5); color: var(--sl-color-text-primary); font-weight: 600; }
 textarea { min-height: 130px; padding: var(--sl-space-4); resize: vertical; border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-md); font: inherit; }
 .decision__actions { display: flex; justify-content: end; gap: var(--sl-space-3); margin-top: var(--sl-space-4); }
+.file-actions { display: flex; justify-content: end; gap: var(--sl-space-3); margin-top: var(--sl-space-4); }
 .decision__error { color: var(--sl-color-error) !important; }
 .rejection { margin-top: var(--sl-space-4); padding: var(--sl-space-4); border-radius: var(--sl-radius-md); color: var(--sl-color-error); background: var(--sl-color-error-bg-subtle); }
 .rejection p { margin-top: var(--sl-space-2); }
@@ -47,4 +48,6 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   dl, .submission, .file-info { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .decision__actions { display: grid; }
   .decision__actions button { width: 100%; }
+  .file-actions { display: grid; }
+  .file-actions button { width: 100%; }
 }
