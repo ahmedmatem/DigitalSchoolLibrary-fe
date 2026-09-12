@@ -18,7 +18,14 @@
       </section>
 
       <section class="panel"><h2>Описание и съдържание</h2><p>{{ item.description }}</p><div class="file-info"><div><span>{{ item.type === type.ExternalLink ? 'Външен линк' : 'Основен файл' }}</span><strong>{{ item.originalFileName || item.externalUrl || 'Няма файл' }}</strong></div>@if (item.fileSize) { <div><span>Размер</span><strong>{{ item.fileSize / 1048576 | number:'1.1-2' }} MB</strong></div> }<div><span>Тип</span><strong>{{ getTypeLabel(item.type) }}</strong></div></div>
-        @if (item.fileStorageKey || item.externalUrl) { <button type="button" class="secondary open" [disabled]="opening()" (click)="openResource()">{{ opening() ? 'Отваряне…' : 'Отвори ресурса' }}</button> }
+        @if (item.fileStorageKey || item.externalUrl) {
+          <div class="file-actions">
+            @if (item.fileStorageKey) {
+              <button type="button" class="secondary" [disabled]="downloading()" (click)="downloadResource()">{{ downloading() ? 'Сваляне…' : 'Свали ресурса' }}</button>
+            }
+            <button type="button" class="primary" [disabled]="opening()" (click)="openResource()">{{ opening() ? 'Отваряне…' : 'Отвори ресурса' }}</button>
+          </div>
+        }
       </section>
 
       <section class="panel"><h2>Информация за подаването</h2><dl class="submission"><div><dt>Учител</dt><dd>{{ item.submittedByName || 'Учител' }}</dd></div><div><dt>Дата на подаване</dt><dd>{{ item.submittedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</dd></div><div><dt>Последна редакция</dt><dd>{{ (item.updatedAtUtc | date:'dd.MM.yyyy, HH:mm') || '—' }}</dd></div></dl></section>
