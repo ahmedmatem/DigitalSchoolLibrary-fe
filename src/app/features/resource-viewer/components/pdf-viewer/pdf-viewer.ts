@@ -1,7 +1,13 @@
 import {
   Component,
+  computed,
+  inject,
   input,
 } from '@angular/core';
+
+import {
+  DomSanitizer,
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'sl-pdf-viewer',
@@ -10,8 +16,16 @@ import {
   styleUrl: './pdf-viewer.scss',
 })
 export class PdfViewer {
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly url =
     input.required<string>();
+
+  readonly safeUrl = computed(() =>
+    this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.url()
+    )
+  );
 
   readonly title =
     input<string>('PDF документ');
