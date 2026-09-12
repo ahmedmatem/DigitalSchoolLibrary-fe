@@ -37,7 +37,7 @@ export class ModerationReview {
   readonly rejectionReason = signal('');
   readonly decisionError = signal<string | null>(null);
   readonly processing = signal(false);
-  readonly opening = signal(false);
+  readonly opening = signal(false);\n  readonly downloading = signal(false);
   readonly pending = computed(() => this.resource()?.moderationStatus === this.status.Pending);
 
   constructor() { this.load(); }
@@ -63,9 +63,18 @@ export class ModerationReview {
     }
     if (!item.fileStorageKey) return;
     this.opening.set(true);
-    this.api.getManagementOpen(item.id)
+    this.api.getModerationPreview(item.id)
       .pipe(finalize(() => this.opening.set(false)), takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: result => window.open(result.url, '_blank', 'noopener,noreferrer'), error: () => this.toastr.error('Файлът не можа да бъде отворен.') });
+      .subscribe({ next: result => window.open(result.downloadUrl, '_blank', 'noopener,noreferrer'), error: () => this.toastr.error('Файлът не можа да бъде отворен.') });
+  }
+
+  downloadResource(): void {
+    const item = this.resource();
+    if (!item?.fileStorageKey || this.downloading()) return;
+    this.downloading.set(true);
+    this.api.getModerationDownload(item.id)
+      .pipe(finalize(() => this.downloading.set(false)), takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: result => window.open(result.downloadUrl, '_blank', 'noopener,noreferrer'), error: () => this.toastr.error('Файлът не можа да бъде свален.') });
   }
 
   approve(): void {
