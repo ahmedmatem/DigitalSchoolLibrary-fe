@@ -95,6 +95,18 @@ export class ResourceApiService {
     );
   }
 
+  getModerationPreview(resourceId: string): Observable<PresignedDownload> {
+    return this.http.get<PresignedDownload>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/moderation-preview`
+    );
+  }
+
+  getModerationDownload(resourceId: string): Observable<PresignedDownload> {
+    return this.http.get<PresignedDownload>(
+      `${API_CONFIG.baseUrl}/resources/${resourceId}/moderation-download`
+    );
+  }
+
   update(
     resourceId: string,
     request: UpdateResourceRequest
