@@ -37,7 +37,8 @@ export class ModerationReview {
   readonly rejectionReason = signal('');
   readonly decisionError = signal<string | null>(null);
   readonly processing = signal(false);
-  readonly opening = signal(false);\n  readonly downloading = signal(false);
+  readonly opening = signal(false);
+  readonly downloading = signal(false);
   readonly pending = computed(() => this.resource()?.moderationStatus === this.status.Pending);
 
   constructor() { this.load(); }
