@@ -63,7 +63,8 @@ export class AddResource {
   private readonly toastr = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;\n  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
+  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;
+  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
   readonly subjects = signal<SubjectLookup[]>([]);
   readonly categories = signal<CategoryLookup[]>([]);
   readonly gradeLevels = signal<GradeLevelLookup[]>([]);
