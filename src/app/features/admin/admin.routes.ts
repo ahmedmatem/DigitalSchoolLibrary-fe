@@ -16,6 +16,13 @@ export const ADMIN_ROUTES: Routes = [
           .then(m => m.ModerationQueue),
       },
       {
+        path: 'moderation/:id/view',
+        title: 'Преглед на ресурс',
+        data: { viewerMode: 'admin' },
+        loadComponent: () => import('../resource-viewer/pages/resource-viewer-page/resource-viewer-page')
+          .then(m => m.ResourceViewerPage),
+      },
+      {
         path: 'moderation/:id',
         title: 'Преглед на ресурс',
         loadComponent: () => import('./pages/moderation-review/moderation-review')
