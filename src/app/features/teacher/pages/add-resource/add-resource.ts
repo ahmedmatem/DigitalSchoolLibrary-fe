@@ -35,6 +35,10 @@ import { UploadApiService } from '../../../../core/uploads/data-access/upload-ap
 import { PresignedUpload } from '../../../../core/uploads/models/presigned-upload.model';
 import { StoredFileKind } from '../../../../core/uploads/models/stored-file-kind.model';
 import {
+  RESOURCE_FILE_ACCEPT,
+  getResourceFileValidationError,
+} from '../../../../core/uploads/utils/resource-file-validation.util';
+import {
   RESOURCE_TYPE_OPTIONS,
   ResourceType,
 } from '../../../../core/models/resource-type.model';
@@ -59,7 +63,7 @@ export class AddResource {
   private readonly toastr = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;
+  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;\n  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
   readonly subjects = signal<SubjectLookup[]>([]);
   readonly categories = signal<CategoryLookup[]>([]);
   readonly gradeLevels = signal<GradeLevelLookup[]>([]);
@@ -139,7 +143,24 @@ export class AddResource {
 
   chooseMainFile(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.selectedFile.set(input.files?.[0] ?? null);
+    const file = input.files?.[0] ?? null;
+
+    if (file) {
+      const validationError = getResourceFileValidationError(
+        file,
+        this.form.controls.resourceType.value
+      );
+
+      if (validationError) {
+        this.selectedFile.set(null);
+        this.submitError.set(validationError);
+        input.value = '';
+        return;
+      }
+    }
+
+    this.submitError.set(null);
+    this.selectedFile.set(file);
   }
 
   chooseCover(event: Event): void {
@@ -153,6 +174,19 @@ export class AddResource {
 
   submit(): void {
     this.submitError.set(null);
+
+    const selectedFile = this.selectedFile();
+    const fileValidationError = selectedFile
+      ? getResourceFileValidationError(
+          selectedFile,
+          this.form.controls.resourceType.value
+        )
+      : null;
+
+    if (fileValidationError) {
+      this.submitError.set(fileValidationError);
+      return;
+    }
 
     if (this.form.invalid || (!this.isExternalLink() && !this.selectedFile())) {
       this.form.markAllAsTouched();
@@ -256,6 +290,16 @@ export class AddResource {
     } else {
       externalUrl.clearValidators();
       externalUrl.setValue('', { emitEvent: false });
+
+      const selectedFile = this.selectedFile();
+      const validationError = selectedFile
+        ? getResourceFileValidationError(selectedFile, type)
+        : null;
+
+      if (validationError) {
+        this.selectedFile.set(null);
+        this.submitError.set(validationError);
+      }
     }
 
     externalUrl.updateValueAndValidity({ emitEvent: false });
