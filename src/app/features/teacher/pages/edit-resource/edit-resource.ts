@@ -85,6 +85,11 @@ export class EditResource {
     this.resource()?.moderationStatus === ResourceModerationStatus.Rejected
   );
 
+  readonly isApprovedTeacherResource = computed(() =>
+    this.resource()?.moderationStatus === ResourceModerationStatus.Approved
+    && !this.authState.hasRole(AUTH_ROLES.Admin)
+  );
+
   readonly statusLabel = computed(() => {
     switch (this.resource()?.moderationStatus) {
       case ResourceModerationStatus.Rejected:
@@ -248,6 +253,8 @@ export class EditResource {
           this.toastr.success(
             this.isRejected()
               ? 'Ресурсът е редактиран и изпратен отново за одобрение.'
+              : this.isApprovedTeacherResource()
+                ? 'Промените са изпратени за повторно одобрение.'
               : 'Промените са запазени.'
           );
           void this.router.navigate(['/teacher/resources', current.id]);
@@ -291,17 +298,6 @@ export class EditResource {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => {
-          if (
-            data.resource.moderationStatus === ResourceModerationStatus.Approved
-            && !this.authState.hasRole(AUTH_ROLES.Admin)
-          ) {
-            this.loading.set(false);
-            this.loadError.set(
-              'Одобрен ресурс не може да бъде редактиран от учител.'
-            );
-            return;
-          }
-
           this.resource.set(data.resource);
           this.subjects.set(data.subjects);
           this.categories.set(data.categories);
