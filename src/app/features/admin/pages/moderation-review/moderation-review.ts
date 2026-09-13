@@ -40,6 +40,8 @@ export class ModerationReview {
   readonly opening = signal(false);
   readonly downloading = signal(false);
   readonly pending = computed(() => this.resource()?.moderationStatus === this.status.Pending);
+  readonly approved = computed(() => this.resource()?.moderationStatus === this.status.Approved);
+  readonly canReject = computed(() => this.pending() || this.approved());
 
   constructor() { this.load(); }
 
@@ -90,12 +92,12 @@ export class ModerationReview {
   reject(): void {
     const item = this.resource();
     const reason = this.rejectionReason().trim();
-    if (!item || !this.pending() || this.processing()) return;
+    if (!item || !this.canReject() || this.processing()) return;
     if (reason.length < 5) { this.decisionError.set('Въведете причина с поне 5 символа.'); return; }
     this.processing.set(true); this.decisionError.set(null);
     this.api.reject(item.id, reason)
       .pipe(finalize(() => this.processing.set(false)), takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: () => this.finish('Ресурсът е отхвърлен.'), error: error => this.decisionError.set(this.validationMessage(error)) });
+      .subscribe({ next: () => this.finish(this.approved() ? 'Одобрението е оттеглено.' : 'Ресурсът е отхвърлен.'), error: error => this.decisionError.set(this.validationMessage(error)) });
   }
 
   private finish(message: string): void { this.toastr.success(message); void this.router.navigate(['/admin/moderation']); }
