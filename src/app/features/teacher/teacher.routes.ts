@@ -29,6 +29,13 @@ export const TEACHER_ROUTES: Routes = [
           .then(m => m.EditResource),
       },
       {
+        path: 'resources/:id/view',
+        title: 'Преглед на ресурс',
+        data: { viewerMode: 'management' },
+        loadComponent: () => import('../resource-viewer/pages/resource-viewer-page/resource-viewer-page')
+          .then(m => m.ResourceViewerPage),
+      },
+      {
         path: 'resources/:id',
         title: 'Детайли за ресурс',
         loadComponent: () => import('./pages/resource-details/resource-details')
