@@ -103,6 +103,10 @@
   line-height: 19px;
 }
 
+.add-resource sl-resource-collection-switcher {
+  margin-bottom: var(--sl-space-4);
+}
+
 .add-resource__fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -514,23 +518,5 @@
   .add-resource__notice,
   .add-resource__alert {
     padding: var(--sl-space-4);
-  }
-
-  .add-resource__actions {
-    flex-direction: column-reverse;
-  }
-
-  .add-resource__button {
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .add-resource__field input,
-  .add-resource__field select,
-  .add-resource__field textarea,
-  .add-resource__toggle-control,
-  .add-resource__toggle-control::after {
-    transition: none;
   }
 }
