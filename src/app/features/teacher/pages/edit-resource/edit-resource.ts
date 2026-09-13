@@ -40,6 +40,11 @@ import { UploadApiService } from '../../../../core/uploads/data-access/upload-ap
 import { PresignedUpload } from '../../../../core/uploads/models/presigned-upload.model';
 import { StoredFileKind } from '../../../../core/uploads/models/stored-file-kind.model';
 import {
+  RESOURCE_FILE_ACCEPT,
+  ResourceFileDescriptor,
+  getResourceFileValidationError,
+} from '../../../../core/uploads/utils/resource-file-validation.util';
+import {
   RESOURCE_TYPE_OPTIONS,
   ResourceType,
 } from '../../../../core/models/resource-type.model';
@@ -66,7 +71,7 @@ export class EditResource {
   private readonly toastr = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;
+  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;\n  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
   readonly resource = signal<ManagementResourceDetails | null>(null);
   readonly subjects = signal<SubjectLookup[]>([]);
   readonly categories = signal<CategoryLookup[]>([]);
@@ -173,7 +178,24 @@ export class EditResource {
 
   chooseMainFile(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.selectedFile.set(input.files?.[0] ?? null);
+    const file = input.files?.[0] ?? null;
+
+    if (file) {
+      const validationError = getResourceFileValidationError(
+        file,
+        this.form.controls.resourceType.value
+      );
+
+      if (validationError) {
+        this.selectedFile.set(null);
+        this.submitError.set(validationError);
+        input.value = '';
+        return;
+      }
+    }
+
+    this.submitError.set(null);
+    this.selectedFile.set(file);
   }
 
   chooseCover(event: Event): void {
@@ -200,6 +222,19 @@ export class EditResource {
     this.submitError.set(null);
 
     if (!current) {
+      return;
+    }
+
+    const fileDescriptor = this.getEffectiveFileDescriptor(current);
+    const fileValidationError = fileDescriptor
+      ? getResourceFileValidationError(
+          fileDescriptor,
+          this.form.controls.resourceType.value
+        )
+      : null;
+
+    if (fileValidationError) {
+      this.submitError.set(fileValidationError);
       return;
     }
 
@@ -390,9 +425,43 @@ export class EditResource {
     } else {
       externalUrl.clearValidators();
       externalUrl.setValue('', { emitEvent: false });
+
+      const selectedFile = this.selectedFile();
+      const validationError = selectedFile
+        ? getResourceFileValidationError(selectedFile, type)
+        : null;
+
+      if (validationError) {
+        this.selectedFile.set(null);
+        this.submitError.set(validationError);
+      }
     }
 
     externalUrl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private getEffectiveFileDescriptor(
+    resource: ManagementResourceDetails
+  ): ResourceFileDescriptor | null {
+    const selectedFile = this.selectedFile();
+
+    if (selectedFile) {
+      return selectedFile;
+    }
+
+    if (
+      !resource.fileStorageKey ||
+      !resource.originalFileName ||
+      !resource.fileContentType
+    ) {
+      return null;
+    }
+
+    return {
+      name: resource.originalFileName,
+      type: resource.fileContentType,
+      size: resource.fileSize ?? 0,
+    };
   }
 
   private configureAudienceValidators(audience: AudienceSelection): void {
