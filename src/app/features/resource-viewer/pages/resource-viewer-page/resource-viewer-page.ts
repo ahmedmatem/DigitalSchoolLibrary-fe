@@ -62,8 +62,12 @@ export class ResourceViewerPage {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly managementMode =
-    this.route.snapshot.data['viewerMode'] === 'management';
+  readonly viewerMode =
+    this.route.snapshot.data['viewerMode'] as 'management' | 'admin' | undefined;
+
+  readonly managementMode = !!this.viewerMode;
+
+  readonly adminMode = this.viewerMode === 'admin';
 
   readonly resource = signal<ViewerResource | null>(null);
 
@@ -98,16 +102,22 @@ export class ResourceViewerPage {
 
     if (resource) {
       void this.router.navigate(
-        this.managementMode
-          ? ['/teacher/resources', resource.id]
-          : ['/resources', resource.id]
+        this.adminMode
+          ? ['/admin/moderation', resource.id]
+          : this.managementMode
+            ? ['/teacher/resources', resource.id]
+            : ['/resources', resource.id]
       );
 
       return;
     }
 
     void this.router.navigate(
-      this.managementMode ? ['/teacher'] : ['/catalog']
+      this.adminMode
+        ? ['/admin/moderation']
+        : this.managementMode
+          ? ['/teacher']
+          : ['/catalog']
     );
   }
 
@@ -147,9 +157,11 @@ export class ResourceViewerPage {
       return;
     }
 
-    const returnUrl = this.managementMode
-      ? `/teacher/resources/${resource.id}/view`
-      : `/resources/${resource.id}/view`;
+    const returnUrl = this.adminMode
+      ? `/admin/moderation/${resource.id}/view`
+      : this.managementMode
+        ? `/teacher/resources/${resource.id}/view`
+        : `/resources/${resource.id}/view`;
 
     void this.router.navigate(
       ['/login'],
