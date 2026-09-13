@@ -141,28 +141,11 @@ export class TeacherResourceDetails {
   openResource(): void {
     const resource = this.resource();
 
-    if (!resource || !this.canOpen() || this.openingResource()) {
+    if (!resource || !this.canOpen()) {
       return;
     }
 
-    this.openingResource.set(true);
-    this.openError.set(null);
-
-    this.resourceApi
-      .getManagementOpen(resource.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          this.openingResource.set(false);
-          window.location.assign(result.url);
-        },
-        error: () => {
-          this.openingResource.set(false);
-          this.openError.set(
-            'Ресурсът не можа да бъде отворен. Моля, опитайте отново.'
-          );
-        },
-      });
+    void this.router.navigate(['/teacher/resources', resource.id, 'view']);
   }
 
   openArchiveDialog(): void {
