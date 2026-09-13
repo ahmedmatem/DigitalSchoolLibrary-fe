@@ -348,6 +348,8 @@
             Запазване…
           } @else if (isRejected()) {
             Изпрати отново за одобрение
+          } @else if (isApprovedTeacherResource()) {
+            Запази и изпрати за одобрение
           } @else {
             Запази промените
           }
