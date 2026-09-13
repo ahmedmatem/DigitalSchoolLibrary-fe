@@ -71,7 +71,8 @@ export class EditResource {
   private readonly toastr = inject(ToastrService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;\n  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
+  readonly resourceTypes = RESOURCE_TYPE_OPTIONS;
+  readonly resourceFileAccept = RESOURCE_FILE_ACCEPT;
   readonly resource = signal<ManagementResourceDetails | null>(null);
   readonly subjects = signal<SubjectLookup[]>([]);
   readonly categories = signal<CategoryLookup[]>([]);
