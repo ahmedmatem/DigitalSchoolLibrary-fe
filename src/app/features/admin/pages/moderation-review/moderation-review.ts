@@ -60,15 +60,14 @@ export class ModerationReview {
   openResource(): void {
     const item = this.resource();
     if (!item || this.opening()) return;
-    if (item.type === this.type.ExternalLink && item.externalUrl) {
-      window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
-      return;
-    }
-    if (!item.fileStorageKey) return;
-    this.opening.set(true);
-    this.api.getModerationPreview(item.id)
-      .pipe(finalize(() => this.opening.set(false)), takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: result => window.open(result.downloadUrl, '_blank', 'noopener,noreferrer'), error: () => this.toastr.error('Файлът не можа да бъде отворен.') });
+
+    const canOpen = item.type === this.type.ExternalLink
+      ? !!item.externalUrl
+      : !!item.fileStorageKey;
+
+    if (!canOpen) return;
+
+    void this.router.navigate(['/admin/moderation', item.id, 'view']);
   }
 
   downloadResource(): void {
