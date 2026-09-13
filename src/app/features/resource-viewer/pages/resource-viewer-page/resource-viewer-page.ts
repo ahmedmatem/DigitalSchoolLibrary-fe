@@ -17,6 +17,7 @@ import {
 import {
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import {
   ResourceApiService,
@@ -25,6 +26,7 @@ import {
 import {
   ResourceDetails,
 } from '../../../../core/resources/models/resource-details.model';
+import { ManagementResourceDetails } from '../../../../core/resources/models/management-resource-details.model';
 
 import {
   RESOURCE_TYPE_OPTIONS,
@@ -36,7 +38,8 @@ import { VideoViewer } from '../../components/video-viewer/video-viewer';
 import { GenericViewer } from '../../components/generic-viewer/generic-viewer';
 import { ExternalLinkViewer } from '../../components/external-link-viewer/external-link-viewer';
 import { Button } from '../../../../shared/ui/button/button';
-import { LucideLockKeyhole, LucideLogIn, LucideArrowLeft } from '@lucide/angular';
+
+type ViewerResource = ResourceDetails | ManagementResourceDetails;
 
 @Component({
   selector: 'sl-resource-viewer-page',
@@ -59,7 +62,10 @@ export class ResourceViewerPage {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly resource = signal<ResourceDetails | null>(null);
+  readonly managementMode =
+    this.route.snapshot.data['viewerMode'] === 'management';
+
+  readonly resource = signal<ViewerResource | null>(null);
 
   readonly resourceUrl = signal<string | null>(null);
 
@@ -91,12 +97,18 @@ export class ResourceViewerPage {
     const resource = this.resource();
 
     if (resource) {
-      void this.router.navigate(['/resources', resource.id, ]);
+      void this.router.navigate(
+        this.managementMode
+          ? ['/teacher/resources', resource.id]
+          : ['/resources', resource.id]
+      );
 
       return;
     }
 
-    void this.router.navigate(['/catalog', ]);
+    void this.router.navigate(
+      this.managementMode ? ['/teacher'] : ['/catalog']
+    );
   }
 
   retry(): void {
@@ -135,7 +147,9 @@ export class ResourceViewerPage {
       return;
     }
 
-    const returnUrl = `/resources/${resource.id}/view`;
+    const returnUrl = this.managementMode
+      ? `/teacher/resources/${resource.id}/view`
+      : `/resources/${resource.id}/view`;
 
     void this.router.navigate(
       ['/login'],
@@ -159,8 +173,11 @@ export class ResourceViewerPage {
     this.notFound.set(false);
     this.unauthorized.set(false);
 
-    this.resourceApi
-      .getPublicResource(resourceId)
+    const resourceRequest: Observable<ViewerResource> = this.managementMode
+      ? this.resourceApi.getManagementResource(resourceId)
+      : this.resourceApi.getPublicResource(resourceId);
+
+    resourceRequest
       .pipe(
         takeUntilDestroyed(
           this.destroyRef
@@ -189,8 +206,11 @@ export class ResourceViewerPage {
   }
 
   private loadResourceUrl(resourceId: string): void {
-    this.resourceApi
-      .getOpenUrl(resourceId)
+    const openRequest = this.managementMode
+      ? this.resourceApi.getManagementOpen(resourceId)
+      : this.resourceApi.getOpenUrl(resourceId);
+
+    openRequest
       .pipe(
         takeUntilDestroyed(
           this.destroyRef
