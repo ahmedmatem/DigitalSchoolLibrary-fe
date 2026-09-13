@@ -1,5 +1,6 @@
 import { ResourceType } from '../../models/resource-type.model';
 import { ResourceModerationStatus } from './resource-moderation-status.model';
+import { ResourceCollectionType } from './resource-collection-type.model';
 
 export interface ModerationResource {
   id: string;
@@ -10,9 +11,11 @@ export interface ModerationResource {
 
   author: string | null;
 
+  collectionType: ResourceCollectionType;
+
   type: ResourceType;
 
-  subjectName: string;
+  subjectName: string | null;
 
   categoryName: string;
 

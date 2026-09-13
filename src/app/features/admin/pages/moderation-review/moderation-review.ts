@@ -13,6 +13,7 @@ import { ManagementResourceDetails } from '../../../../core/resources/models/man
 import { ResourceAudienceType } from '../../../../core/resources/models/resource-audience-type.model';
 import { ResourceModerationStatus } from '../../../../core/resources/models/resource-moderation-status.model';
 import { PageContainer } from '../../../../layout/page-container/page-container';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
 
 @Component({
   selector: 'sl-moderation-review',
@@ -29,6 +30,7 @@ export class ModerationReview {
 
   readonly status = ResourceModerationStatus;
   readonly type = ResourceType;
+  readonly collectionType = ResourceCollectionType;
   readonly resource = signal<ManagementResourceDetails | null>(null);
   readonly coverUrl = signal<string | null>(null);
   readonly loading = signal(true);

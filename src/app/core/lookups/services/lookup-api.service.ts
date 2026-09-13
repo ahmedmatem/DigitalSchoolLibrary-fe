@@ -21,6 +21,7 @@ import {
 import {
   API_CONFIG,
 } from '../../config/api.config';
+import { ResourceCollectionType } from '../../resources/models/resource-collection-type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,10 +37,17 @@ export class LookupApiService {
     );
   }
 
-  getCategories(): Observable<CategoryLookup[]> {
+  getCategories(
+    collectionType?: ResourceCollectionType
+  ): Observable<CategoryLookup[]> {
 
     return this.http.get<CategoryLookup[]>(
-      `${API_CONFIG.baseUrl}/lookups/categories`
+      `${API_CONFIG.baseUrl}/lookups/categories`,
+      {
+        params: collectionType === undefined
+          ? undefined
+          : { collectionType },
+      }
     );
   }
 

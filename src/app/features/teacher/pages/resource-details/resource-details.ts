@@ -29,6 +29,7 @@ import {
   RESOURCE_TYPE_OPTIONS,
   ResourceType,
 } from '../../../../core/models/resource-type.model';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
 
 @Component({
   selector: 'sl-teacher-resource-details',
@@ -65,6 +66,7 @@ export class TeacherResourceDetails {
 
   readonly moderationStatus = ResourceModerationStatus;
   readonly resourceType = ResourceType;
+  readonly collectionType = ResourceCollectionType;
 
   readonly canEdit = computed(() => {
     const resource = this.resource();

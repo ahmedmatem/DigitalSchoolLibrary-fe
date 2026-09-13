@@ -1,0 +1,18 @@
+<div
+  class="collection-switcher"
+  role="group"
+  aria-label="Секция с ресурси"
+>
+  @for (collection of collections; track collection) {
+    <button
+      type="button"
+      class="collection-switcher__option"
+      [class.collection-switcher__option--active]="value() === collection"
+      [attr.aria-pressed]="value() === collection"
+      (click)="select(collection)"
+    >
+      {{ labels[collection] }}
+    </button>
+  }
+</div>
+

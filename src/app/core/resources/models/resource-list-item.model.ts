@@ -1,4 +1,5 @@
 import { ResourceType } from "../../models/resource-type.model";
+import { ResourceCollectionType } from "./resource-collection-type.model";
 
 export interface ResourceListItem  {
   id: string;
@@ -7,9 +8,11 @@ export interface ResourceListItem  {
 
   author: string | null;
 
+  collectionType: ResourceCollectionType;
+
   type: ResourceType;
 
-  subjectName: string;
+  subjectName: string | null;
 
   categoryName: string;
 

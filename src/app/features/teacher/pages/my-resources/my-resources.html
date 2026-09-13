@@ -40,6 +40,13 @@
 
     </section>
 
+    <div class="my-resources__collection">
+      <sl-resource-collection-switcher
+        [value]="query().collectionType"
+        (valueChange)="updateCollection($event)"
+      />
+    </div>
+
 
     <!-- =====================================================
          SUMMARY
@@ -237,7 +244,7 @@
     <header class="my-resources__section-header">
 
       <h2>
-        Вашите ресурси
+        {{ isEducational() ? 'Вашите учебни ресурси' : 'Вашите ресурси в Е-библиотеката' }}
       </h2>
 
       <span>

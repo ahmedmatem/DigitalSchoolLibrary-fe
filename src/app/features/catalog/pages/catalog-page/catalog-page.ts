@@ -48,9 +48,12 @@ import { RESOURCE_TYPE_OPTIONS } from '../../../../core/models/resource-type.mod
 import { ResourceSortOption } from '../../../../core/models/resource-sort.model';
 import { CatalogFilters } from '../../../../shared/ui/catalog-filters/catalog-filters';
 import { SavedResourcesApiService } from '../../../../core/resources/data-access/saved-resources-api.service';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
+import { ResourceCollectionSwitcher } from '../../../../shared/ui/resource-collection-switcher/resource-collection-switcher';
 
 const DEFAULT_QUERY: CatalogQuery = {
   search: '',
+  collectionType: ResourceCollectionType.ELibrary,
   subject: null,
   category: null,
   grade: null,
@@ -72,7 +75,8 @@ const USE_REAL_API = true;
     ResourceCard,
     CatalogFilters,
     CatalogSkeleton,
-    CatalogState
+    CatalogState,
+    ResourceCollectionSwitcher,
   ],
   templateUrl: './catalog-page.html',
   styleUrl: './catalog-page.scss',
@@ -97,6 +101,13 @@ export class CatalogPage {
   readonly categories = signal<CategoryLookup[]>([]);
 
   readonly gradeLevels = signal<GradeLevelLookup[]>([]);
+
+  readonly collectionType = ResourceCollectionType;
+
+  readonly isEducational = computed(() =>
+    this.query().collectionType ===
+      ResourceCollectionType.EducationalResources
+  );
 
   readonly selectedResourceType = computed<number | null>(() => {
     const resourceType = this.query().resourceType;
@@ -187,13 +198,11 @@ export class CatalogPage {
   constructor() {
     forkJoin({
       subjects: this.lookupApi.getSubjects(),
-      categories: this.lookupApi.getCategories(),
       grades: this.lookupApi.getGradeLevels(),
     })
       .pipe(
-        tap(({ subjects, categories, grades }) => {
+        tap(({ subjects, grades }) => {
           this.subjects.set(subjects);
-          this.categories.set(categories);
           this.gradeLevels.set(grades);
         }),
 
@@ -217,6 +226,8 @@ export class CatalogPage {
         this.query.set({
           search: params.get('search') ?? '',
 
+          collectionType: this.parseCollection(params.get('section')),
+
           subject: params.get('subject'),
 
           category: params.get('category'),
@@ -232,9 +243,7 @@ export class CatalogPage {
           pageSize: 12,
         });
 
-        if (USE_REAL_API) {
-          this.loadPublicCatalog();
-        }
+        this.loadCategoriesAndCatalog();
       });
   }
 
@@ -274,7 +283,17 @@ export class CatalogPage {
   });
 
   retryLoad(): void {
-    this.loadPublicCatalog();
+    this.loadCategoriesAndCatalog();
+  }
+
+  updateCollection(collectionType: ResourceCollectionType): void {
+    this.updateQuery({
+      collectionType,
+      subject: null,
+      category: null,
+      grade: null,
+      page: 1,
+    });
   }
 
   updateSubjectById(
@@ -495,6 +514,10 @@ export class CatalogPage {
         queryParams: {
           search: nextQuery.search || null,
 
+          section: nextQuery.collectionType === ResourceCollectionType.ELibrary
+            ? null
+            : 'educational',
+
           subject: nextQuery.subject,
 
           category: nextQuery.category,
@@ -544,6 +567,30 @@ export class CatalogPage {
     }
 
     return grade;
+  }
+
+  private parseCollection(value: string | null): ResourceCollectionType {
+    return value === 'educational'
+      ? ResourceCollectionType.EducationalResources
+      : ResourceCollectionType.ELibrary;
+  }
+
+  private loadCategoriesAndCatalog(): void {
+    this.lookupApi
+      .getCategories(this.query().collectionType)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: categories => {
+          this.categories.set(categories);
+
+          if (USE_REAL_API) {
+            this.loadPublicCatalog();
+          }
+        },
+        error: () => {
+          this.error.set('Категориите не могат да бъдат заредени.');
+        },
+      });
   }
 
   private loadPublicCatalog(): void {
@@ -657,6 +704,8 @@ export class CatalogPage {
 
     return {
       search: query.search.trim() || undefined,
+
+      collectionType: query.collectionType,
 
       subjectId: subject?.id,
 

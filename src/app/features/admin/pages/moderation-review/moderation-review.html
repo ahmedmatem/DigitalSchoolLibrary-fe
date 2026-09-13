@@ -10,10 +10,10 @@
       <section class="panel summary">
         <div class="cover">
           @if (coverUrl()) { <img [src]="coverUrl()" [alt]="'Корица на ' + item.title"> }
-          @else { <strong>{{ getTypeLabel(item.type) }}</strong><span>{{ item.subjectName }}</span> }
+          @else { <strong>{{ getTypeLabel(item.type) }}</strong><span>{{ item.subjectName ?? 'Е-библиотека' }}</span> }
         </div>
         <div class="summary__content"><h2>{{ item.title }}</h2><p>Подаден от {{ item.submittedByName || 'Учител' }} · {{ item.submittedAtUtc | date:'dd.MM.yyyy' }}</p><p>{{ item.description }}</p>
-          <dl><div><dt>Предмет</dt><dd>{{ item.subjectName }}</dd></div><div><dt>Категория</dt><dd>{{ item.categoryName }}</dd></div><div><dt>Аудитория</dt><dd>{{ getAudienceLabel(item) }}</dd></div><div><dt>Видимост</dt><dd>{{ item.isPubliclyVisible ? 'Публичен каталог' : 'Само избраната аудитория' }}</dd></div></dl>
+          <dl><div><dt>{{ item.collectionType === collectionType.ELibrary ? 'Секция' : 'Предмет' }}</dt><dd>{{ item.collectionType === collectionType.ELibrary ? 'Е-библиотека' : item.subjectName }}</dd></div><div><dt>{{ item.collectionType === collectionType.ELibrary ? 'Жанр / категория' : 'Категория' }}</dt><dd>{{ item.categoryName }}</dd></div><div><dt>Аудитория</dt><dd>{{ getAudienceLabel(item) }}</dd></div><div><dt>Видимост</dt><dd>{{ item.isPubliclyVisible ? 'Публичен каталог' : 'Само избраната аудитория' }}</dd></div></dl>
         </div>
       </section>
 

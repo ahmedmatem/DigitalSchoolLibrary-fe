@@ -17,6 +17,8 @@ import { ResourceTypeOption } from '../../../core/models/resource-type.model';
   styleUrl: './catalog-filters.scss',
 })
 export class CatalogFilters {
+  readonly showEducationalFilters = input(true);
+
   readonly subjects = input<SubjectLookup[]>([]);
 
   readonly categories = input<CategoryLookup[]>([]);

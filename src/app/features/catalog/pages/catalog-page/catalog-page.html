@@ -8,19 +8,27 @@
     <section class="catalog__hero">
 
       <p class="catalog__eyebrow">
-        ДИГИТАЛНА УЧИЛИЩНА БИБЛИОТЕКА
+        {{ isEducational() ? 'ДИГИТАЛНА УЧИЛИЩНА БИБЛИОТЕКА' : 'Е-БИБЛИОТЕКА' }}
       </p>
 
       <h1 class="catalog__hero-title">
-        Учебни ресурси на едно място
+        {{ isEducational() ? 'Учебни ресурси на едно място' : 'Книги и четива на едно място' }}
       </h1>
 
       <p class="catalog__hero-description">
-        Открийте учебни материали, книги и полезни ресурси
-        по предмет, клас и категория.
+        @if (isEducational()) {
+          Открийте учебни материали и полезни ресурси по предмет, клас и категория.
+        } @else {
+          Открийте художествена литература, поезия, статии, списания и научнопопулярни издания.
+        }
       </p>
 
     </section>
+
+    <sl-resource-collection-switcher
+      [value]="query().collectionType"
+      (valueChange)="updateCollection($event)"
+    />
 
 
     <!-- =====================================================
@@ -77,6 +85,7 @@
           [categories]="categories()"
           [grades]="gradeLevels()"
           [resourceTypes]="resourceTypes"
+          [showEducationalFilters]="isEducational()"
 
           [subjectId]="selectedSubjectId()"
           [categoryId]="selectedCategoryId()"

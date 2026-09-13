@@ -14,6 +14,7 @@ import { ResourceModerationStatus } from '../../../../core/resources/models/reso
 import { PageContainer } from '../../../../layout/page-container/page-container';
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { SearchField } from '../../../../shared/ui/search-field/search-field';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
 
 @Component({
   selector: 'sl-moderation-queue',
@@ -31,6 +32,8 @@ export class ModerationQueue {
   readonly resources = signal<ModerationResource[]>([]);
   readonly summary = signal<MyResourcesSummary>({ total: 0, pending: 0, approved: 0, rejected: 0 });
   readonly selectedStatus = signal(ResourceModerationStatus.Pending);
+  readonly selectedCollection = signal<ResourceCollectionType | null>(null);
+  readonly collectionType = ResourceCollectionType;
   readonly search = signal('');
   readonly sort = signal(ResourceSortOption.Newest);
   readonly page = signal(1);
@@ -57,6 +60,15 @@ export class ModerationQueue {
 
   updateSort(event: Event): void {
     this.sort.set(Number((event.target as HTMLSelectElement).value));
+    this.page.set(1);
+    this.loadResources();
+  }
+
+  updateCollection(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedCollection.set(
+      value ? Number(value) as ResourceCollectionType : null
+    );
     this.page.set(1);
     this.loadResources();
   }
@@ -124,7 +136,7 @@ export class ModerationQueue {
   }
 
   private request() {
-    return { search: this.search().trim() || undefined, moderationStatus: this.selectedStatus(), sort: this.sort(), page: this.page(), pageSize: 10 };
+    return { search: this.search().trim() || undefined, collectionType: this.selectedCollection() ?? undefined, moderationStatus: this.selectedStatus(), sort: this.sort(), page: this.page(), pageSize: 10 };
   }
 
   private setLoadError(): void {

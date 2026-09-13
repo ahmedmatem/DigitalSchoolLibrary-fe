@@ -89,7 +89,13 @@
           </div>
         </div>
 
+        <sl-resource-collection-switcher
+          [value]="form.controls.collectionType.value"
+          (valueChange)="updateCollection($event)"
+        />
+
         <div class="add-resource__fields add-resource__fields--three">
+          @if (isEducational()) {
           <label class="add-resource__field">
             <span>Предмет <em>*</em></span>
             <select
@@ -105,6 +111,7 @@
               <small>Изберете предмет.</small>
             }
           </label>
+          }
 
           <label class="add-resource__field">
             <span>Категория <em>*</em></span>
@@ -149,6 +156,7 @@
           </div>
         </div>
 
+        @if (isEducational()) {
         <fieldset class="add-resource__audience">
           <legend>Достъп <em>*</em></legend>
 
@@ -216,6 +224,11 @@
             <small>Ресурсът ще бъде видим и в общия каталог след одобрение.</small>
           </span>
         </label>
+        } @else {
+          <div class="add-resource__info">
+            Ресурсите в Е-библиотеката са достъпни за всички ученици и са видими в публичния каталог. Отварянето им изисква вход.
+          </div>
+        }
       </section>
 
       <section class="add-resource__card" aria-labelledby="content-title">

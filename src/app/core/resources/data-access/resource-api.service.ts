@@ -16,6 +16,7 @@ import {
   CreateResourceRequest,
   CreateResourceResponse,
 } from '../models/create-resource-request.model';
+import { ResourceCollectionType } from '../models/resource-collection-type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,9 +45,16 @@ export class ResourceApiService {
     );
   }
 
-  getMineSummary(): Observable<MyResourcesSummary> {
+  getMineSummary(
+    collectionType?: ResourceCollectionType
+  ): Observable<MyResourcesSummary> {
     return this.http.get<MyResourcesSummary>(
-      `${API_CONFIG.baseUrl}/resources/mine/summary`
+      `${API_CONFIG.baseUrl}/resources/mine/summary`,
+      {
+        params: collectionType === undefined
+          ? undefined
+          : { collectionType },
+      }
     );
   }
 
@@ -163,6 +171,10 @@ export class ResourceApiService {
 
     if (request.search) {
       params = params.set('search', request.search);
+    }
+
+    if (request.collectionType !== undefined) {
+      params = params.set('collectionType', request.collectionType);
     }
 
     if (request.subjectId) {

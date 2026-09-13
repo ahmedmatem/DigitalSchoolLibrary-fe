@@ -7,6 +7,11 @@
 
     <section class="moderation-queue__filters" aria-label="Филтри">
       <sl-search-field [value]="search()" placeholder="Търсене по заглавие, учител или предмет…" (valueChange)="updateSearch($event)" />
+      <select aria-label="Секция" [value]="selectedCollection() ?? ''" (change)="updateCollection($event)">
+        <option value="">Всички секции</option>
+        <option [value]="collectionType.ELibrary">Е-библиотека</option>
+        <option [value]="collectionType.EducationalResources">Учебни ресурси</option>
+      </select>
       <select aria-label="Сортиране" [value]="sort()" (change)="updateSort($event)">
         <option [value]="1">Най-нови първо</option><option [value]="2">Най-стари първо</option>
         <option [value]="3">Заглавие А–Я</option><option [value]="4">Заглавие Я–А</option>
@@ -30,7 +35,7 @@
             <div class="moderation-card__content">
               <h2>{{ resource.title }}</h2>
               <p>Подаден от {{ resource.submittedByName || 'Учител' }}</p>
-              <strong>{{ resource.subjectName }} · {{ resource.categoryName }}</strong>
+              <strong>{{ resource.subjectName ?? 'Е-библиотека' }} · {{ resource.categoryName }}</strong>
             </div>
             <div class="moderation-card__meta"><time>{{ resource.submittedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</time><span [class]="'status status--' + resource.moderationStatus">{{ getStatusLabel(resource.moderationStatus) }}</span></div>
             <div class="moderation-card__actions">

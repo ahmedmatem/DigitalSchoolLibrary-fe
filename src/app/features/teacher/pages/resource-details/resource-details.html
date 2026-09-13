@@ -110,11 +110,11 @@
 
           <dl class="teacher-resource-details__metadata">
             <div>
-              <dt>Предмет</dt>
-              <dd>{{ item.subjectName }}</dd>
+              <dt>{{ item.collectionType === collectionType.ELibrary ? 'Секция' : 'Предмет' }}</dt>
+              <dd>{{ item.collectionType === collectionType.ELibrary ? 'Е-библиотека' : item.subjectName }}</dd>
             </div>
             <div>
-              <dt>Категория</dt>
+              <dt>{{ item.collectionType === collectionType.ELibrary ? 'Жанр / категория' : 'Категория' }}</dt>
               <dd>{{ item.categoryName }}</dd>
             </div>
             <div>

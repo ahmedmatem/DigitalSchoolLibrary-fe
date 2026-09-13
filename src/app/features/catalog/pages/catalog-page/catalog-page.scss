@@ -189,6 +189,10 @@
   width: 100%;
 }
 
+:host-context(.catalog) sl-resource-collection-switcher {
+  margin-top: var(--sl-space-3);
+}
+
 
 /*
  * CatalogFilters вече е вътре във външната
@@ -206,10 +210,7 @@
   display: grid;
 
   grid-template-columns:
-    repeat(
-      4,
-      minmax(0, 1fr)
-    )
+    repeat(2, minmax(0, 240px))
     128px;
 
   align-items: end;
@@ -222,6 +223,14 @@
   border-radius: 0;
 
   background: transparent;
+}
+
+:host ::ng-deep
+.catalog__filter-content
+.catalog-filters--educational {
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr))
+    128px;
 }
 
 

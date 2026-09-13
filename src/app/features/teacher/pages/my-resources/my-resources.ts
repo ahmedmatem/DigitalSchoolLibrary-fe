@@ -51,10 +51,13 @@ import { DatePipe } from '@angular/common';
 import { PageContainer } from '../../../../layout/page-container/page-container';
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 import { SearchField } from '../../../../shared/ui/search-field/search-field';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
+import { ResourceCollectionSwitcher } from '../../../../shared/ui/resource-collection-switcher/resource-collection-switcher';
 
 
 const DEFAULT_QUERY: MyResourcesQuery = {
   search: '',
+  collectionType: ResourceCollectionType.ELibrary,
   moderationStatus: null,
   page: 1,
   pageSize: 12,
@@ -76,6 +79,7 @@ const EMPTY_SUMMARY: MyResourcesSummary = {
     PageContainer,
     SearchField,
     Pagination,
+    ResourceCollectionSwitcher,
   ],
   templateUrl: './my-resources.html',
   styleUrl: './my-resources.scss',
@@ -156,6 +160,13 @@ export class MyResources {
 
   readonly moderationStatus = ResourceModerationStatus;
 
+  readonly collectionType = ResourceCollectionType;
+
+  readonly isEducational = computed(() =>
+    this.query().collectionType ===
+      ResourceCollectionType.EducationalResources
+  );
+
 
   /*
    * =========================================================
@@ -205,6 +216,21 @@ export class MyResources {
     );
 
     this.loadResources();
+  }
+
+  updateCollection(collectionType: ResourceCollectionType): void {
+    if (this.query().collectionType === collectionType) {
+      return;
+    }
+
+    this.query.update(query => ({
+      ...query,
+      collectionType,
+      moderationStatus: null,
+      page: 1,
+    }));
+
+    this.loadInitialData();
   }
 
 
@@ -281,7 +307,7 @@ export class MyResources {
         ),
       summary:
         this.resourceApi
-          .getMineSummary(),
+          .getMineSummary(this.query().collectionType),
     })
       .pipe(
         finalize(
@@ -395,6 +421,8 @@ export class MyResources {
       search:
         query.search.trim() || undefined,
 
+      collectionType: query.collectionType,
+
       moderationStatus:
         query.moderationStatus ?? undefined,
 
@@ -407,9 +435,10 @@ export class MyResources {
   }
 
   clearFilters(): void {
-    this.query.set({
+    this.query.update(query => ({
       ...DEFAULT_QUERY,
-    });
+      collectionType: query.collectionType,
+    }));
 
     this.loadResources();
   }

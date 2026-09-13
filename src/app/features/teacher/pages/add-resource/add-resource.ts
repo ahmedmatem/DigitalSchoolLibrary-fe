@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   inject,
   signal,
@@ -43,6 +44,8 @@ import {
   ResourceType,
 } from '../../../../core/models/resource-type.model';
 import { PageContainer } from '../../../../layout/page-container/page-container';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
+import { ResourceCollectionSwitcher } from '../../../../shared/ui/resource-collection-switcher/resource-collection-switcher';
 
 type AudienceSelection = 'all' | 'grade' | 'class';
 
@@ -51,6 +54,7 @@ type AudienceSelection = 'all' | 'grade' | 'class';
   imports: [
     PageContainer,
     ReactiveFormsModule,
+    ResourceCollectionSwitcher,
   ],
   templateUrl: './add-resource.html',
   styleUrl: './add-resource.scss',
@@ -76,7 +80,13 @@ export class AddResource {
   readonly loadError = signal<string | null>(null);
   readonly submitError = signal<string | null>(null);
 
+  readonly collectionType = ResourceCollectionType;
+  readonly selectedCollection = signal(ResourceCollectionType.ELibrary);
+
   readonly form = new FormGroup({
+    collectionType: new FormControl(ResourceCollectionType.ELibrary, {
+      nonNullable: true,
+    }),
     title: new FormControl('', {
       nonNullable: true,
       validators: [
@@ -118,7 +128,13 @@ export class AddResource {
     externalUrl: new FormControl('', { nonNullable: true }),
   });
 
+  readonly isEducational = computed(() =>
+    this.selectedCollection() ===
+      ResourceCollectionType.EducationalResources
+  );
+
   constructor() {
+    this.configureCollection(this.selectedCollection());
     this.loadLookups();
 
     this.form.controls.gradeLevelId.valueChanges
@@ -140,6 +156,20 @@ export class AddResource {
 
   cancel(): void {
     this.back();
+  }
+
+  updateCollection(collectionType: ResourceCollectionType): void {
+    if (this.form.controls.collectionType.value === collectionType) {
+      return;
+    }
+
+    this.form.controls.collectionType.setValue(collectionType);
+    this.selectedCollection.set(collectionType);
+    this.form.controls.categoryId.setValue('');
+    this.form.controls.subjectId.setValue('');
+
+    this.configureCollection(collectionType);
+    this.loadCategories(collectionType);
   }
 
   chooseMainFile(event: Event): void {
@@ -244,7 +274,9 @@ export class AddResource {
 
     forkJoin({
       subjects: this.lookupApi.getSubjects(),
-      categories: this.lookupApi.getCategories(),
+      categories: this.lookupApi.getCategories(
+        this.form.controls.collectionType.value
+      ),
       gradeLevels: this.lookupApi.getGradeLevels(),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -260,6 +292,33 @@ export class AddResource {
           this.loadError.set('Списъците за формата не можаха да бъдат заредени.');
         },
       });
+  }
+
+  private loadCategories(collectionType: ResourceCollectionType): void {
+    this.lookupApi.getCategories(collectionType)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: categories => this.categories.set(categories),
+        error: () => {
+          this.categories.set([]);
+          this.loadError.set('Категориите не можаха да бъдат заредени.');
+        },
+      });
+  }
+
+  private configureCollection(collectionType: ResourceCollectionType): void {
+    const subject = this.form.controls.subjectId;
+
+    if (collectionType === ResourceCollectionType.ELibrary) {
+      subject.clearValidators();
+      subject.setValue('', { emitEvent: false });
+      this.form.controls.audience.setValue('all');
+      this.form.controls.publicVisibility.setValue(true);
+    } else {
+      subject.setValidators([Validators.required]);
+    }
+
+    subject.updateValueAndValidity({ emitEvent: false });
   }
 
   private loadSchoolClasses(gradeLevelId: number | null): void {
@@ -335,6 +394,7 @@ export class AddResource {
       title: value.title.trim(),
       description: value.description.trim(),
       author: value.author.trim() || null,
+      collectionType: value.collectionType,
       type: value.resourceType as ResourceType,
       isPubliclyVisible: value.publicVisibility,
       fileStorageKey: fileUpload?.storageKey ?? null,
@@ -345,7 +405,9 @@ export class AddResource {
       externalUrl: this.isExternalLink()
         ? value.externalUrl.trim()
         : null,
-      subjectId: value.subjectId,
+      subjectId: value.collectionType === ResourceCollectionType.ELibrary
+        ? null
+        : value.subjectId,
       categoryId: value.categoryId,
       audienceType: this.toAudienceType(value.audience),
       gradeLevelIds: value.audience === 'grade' && value.gradeLevelId != null

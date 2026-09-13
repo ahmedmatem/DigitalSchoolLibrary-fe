@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Observable,
   forkJoin,
+  map,
   of,
   switchMap,
 } from 'rxjs';
@@ -49,6 +50,8 @@ import {
   ResourceType,
 } from '../../../../core/models/resource-type.model';
 import { PageContainer } from '../../../../layout/page-container/page-container';
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
+import { ResourceCollectionSwitcher } from '../../../../shared/ui/resource-collection-switcher/resource-collection-switcher';
 
 type AudienceSelection = 'all' | 'grade' | 'class';
 
@@ -57,6 +60,7 @@ type AudienceSelection = 'all' | 'grade' | 'class';
   imports: [
     PageContainer,
     ReactiveFormsModule,
+    ResourceCollectionSwitcher,
   ],
   templateUrl: './edit-resource.html',
   styleUrl: '../add-resource/add-resource.scss',
@@ -87,6 +91,9 @@ export class EditResource {
   readonly submitError = signal<string | null>(null);
   readonly notFound = signal(false);
 
+  readonly collectionType = ResourceCollectionType;
+  readonly selectedCollection = signal(ResourceCollectionType.ELibrary);
+
   readonly isRejected = computed(() =>
     this.resource()?.moderationStatus === ResourceModerationStatus.Rejected
   );
@@ -108,6 +115,9 @@ export class EditResource {
   });
 
   readonly form = new FormGroup({
+    collectionType: new FormControl(ResourceCollectionType.ELibrary, {
+      nonNullable: true,
+    }),
     title: new FormControl('', {
       nonNullable: true,
       validators: [
@@ -149,6 +159,11 @@ export class EditResource {
     externalUrl: new FormControl('', { nonNullable: true }),
   });
 
+  readonly isEducational = computed(() =>
+    this.selectedCollection() ===
+      ResourceCollectionType.EducationalResources
+  );
+
   constructor() {
     this.form.controls.gradeLevelId.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -175,6 +190,19 @@ export class EditResource {
 
   cancel(): void {
     this.back();
+  }
+
+  updateCollection(collectionType: ResourceCollectionType): void {
+    if (this.form.controls.collectionType.value === collectionType) {
+      return;
+    }
+
+    this.form.controls.collectionType.setValue(collectionType);
+    this.selectedCollection.set(collectionType);
+    this.form.controls.subjectId.setValue('');
+    this.form.controls.categoryId.setValue('');
+    this.configureCollection(collectionType);
+    this.loadCategories(collectionType);
   }
 
   chooseMainFile(event: Event): void {
@@ -327,11 +355,16 @@ export class EditResource {
     forkJoin({
       resource: this.resourceApi.getManagementResource(id),
       subjects: this.lookupApi.getSubjects(),
-      categories: this.lookupApi.getCategories(),
       gradeLevels: this.lookupApi.getGradeLevels(),
       schoolClasses: this.lookupApi.getSchoolClasses(),
     })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        switchMap(data =>
+          this.lookupApi.getCategories(data.resource.collectionType)
+            .pipe(map(categories => ({ ...data, categories })))
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
         next: data => {
           this.resource.set(data.resource);
@@ -372,7 +405,8 @@ export class EditResource {
       title: resource.title,
       author: resource.author ?? '',
       description: resource.description,
-      subjectId: resource.subjectId,
+      collectionType: resource.collectionType,
+      subjectId: resource.subjectId ?? '',
       categoryId: resource.categoryId,
       resourceType: resource.type,
       audience,
@@ -382,7 +416,10 @@ export class EditResource {
       externalUrl: resource.externalUrl ?? '',
     }, { emitEvent: false });
 
+    this.selectedCollection.set(resource.collectionType);
+
     this.configureContentValidators(resource.type);
+    this.configureCollection(resource.collectionType);
     this.configureAudienceValidators(audience);
 
     this.schoolClasses.set(
@@ -395,6 +432,30 @@ export class EditResource {
       selectedClassId,
       { emitEvent: false }
     );
+  }
+
+  private loadCategories(collectionType: ResourceCollectionType): void {
+    this.lookupApi.getCategories(collectionType)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: categories => this.categories.set(categories),
+        error: () => this.categories.set([]),
+      });
+  }
+
+  private configureCollection(collectionType: ResourceCollectionType): void {
+    const subject = this.form.controls.subjectId;
+
+    if (collectionType === ResourceCollectionType.ELibrary) {
+      subject.clearValidators();
+      subject.setValue('', { emitEvent: false });
+      this.form.controls.audience.setValue('all');
+      this.form.controls.publicVisibility.setValue(true);
+    } else {
+      subject.setValidators([Validators.required]);
+    }
+
+    subject.updateValueAndValidity({ emitEvent: false });
   }
 
   private loadSchoolClasses(gradeLevelId: number | null): void {
@@ -498,6 +559,7 @@ export class EditResource {
       title: value.title.trim(),
       description: value.description.trim(),
       author: value.author.trim() || null,
+      collectionType: value.collectionType,
       type: value.resourceType as ResourceType,
       isPubliclyVisible: value.publicVisibility,
       fileStorageKey: external
@@ -516,7 +578,9 @@ export class EditResource {
         ? null
         : coverUpload?.storageKey ?? current.coverStorageKey,
       externalUrl: external ? value.externalUrl.trim() : null,
-      subjectId: value.subjectId,
+      subjectId: value.collectionType === ResourceCollectionType.ELibrary
+        ? null
+        : value.subjectId,
       categoryId: value.categoryId,
       audienceType: this.toAudienceType(value.audience),
       gradeLevelIds:

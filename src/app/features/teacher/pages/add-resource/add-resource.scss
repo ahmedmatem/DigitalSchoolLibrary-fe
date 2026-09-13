@@ -228,6 +228,15 @@
   cursor: pointer;
 }
 
+.add-resource__info {
+  padding: var(--sl-space-4);
+  border: 1px solid var(--sl-color-border);
+  border-radius: var(--sl-radius-md);
+  background: var(--sl-color-surface-subtle);
+  color: var(--sl-color-text-secondary);
+  line-height: 1.5;
+}
+
 .add-resource__toggle > input {
   position: absolute;
   opacity: 0;

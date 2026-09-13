@@ -2,6 +2,7 @@ export type CatalogSort = 'newest' | 'oldest' | 'title-asc' | 'title-desc';
 
 export interface CatalogQuery {
   search: string;
+  collectionType: ResourceCollectionType;
   subject: string | null;
   category: string | null;
   grade: number | null;
@@ -10,3 +11,4 @@ export interface CatalogQuery {
   page: number;
   pageSize: number;
 }
+import { ResourceCollectionType } from '../../../core/resources/models/resource-collection-type.model';

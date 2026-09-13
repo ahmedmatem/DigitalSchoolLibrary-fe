@@ -1,12 +1,14 @@
 import { ResourceType } from '../../models/resource-type.model';
 import { ResourceAudienceType } from './resource-audience-type.model';
 import { ResourceModerationStatus } from './resource-moderation-status.model';
+import { ResourceCollectionType } from './resource-collection-type.model';
 
 export interface ManagementResourceDetails {
   id: string;
   title: string;
   description: string;
   author: string | null;
+  collectionType: ResourceCollectionType;
   type: ResourceType;
 
   fileStorageKey: string | null;
@@ -17,8 +19,8 @@ export interface ManagementResourceDetails {
   coverStorageKey: string | null;
   externalUrl: string | null;
 
-  subjectId: string;
-  subjectName: string;
+  subjectId: string | null;
+  subjectName: string | null;
   categoryId: string;
   categoryName: string;
 

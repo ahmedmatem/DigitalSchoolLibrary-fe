@@ -26,6 +26,7 @@ import { RESOURCE_TYPE_OPTIONS, } from '../../../../core/models/resource-type.mo
 import { HttpErrorResponse } from '@angular/common/http';
 import { SavedResourcesApiService } from '../../../../core/resources/data-access/saved-resources-api.service';
 import { AuthStateService } from '../../../../core/auth/services/auth-state.service';
+import { RESOURCE_COLLECTION_LABELS } from '../../../../core/resources/models/resource-collection-type.model';
 
 @Component({
   selector: 'sl-resource-details-page',
@@ -45,6 +46,7 @@ import { AuthStateService } from '../../../../core/auth/services/auth-state.serv
   styleUrl: './resource-details-page.scss',
 })
 export class ResourceDetailsPage {
+  readonly collectionLabels = RESOURCE_COLLECTION_LABELS;
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authState = inject(AuthStateService);

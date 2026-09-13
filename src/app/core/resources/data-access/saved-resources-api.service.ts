@@ -42,6 +42,13 @@ export class SavedResourcesApiService {
       params = params.set('search', request.search);
     }
 
+    if (request.collectionType !== undefined) {
+      params = params.set(
+        'collectionType',
+        request.collectionType
+      );
+    }
+
 
     if (request.subjectId) {
       params =

@@ -1,5 +1,9 @@
-<div class="catalog-filters">
+<div
+  class="catalog-filters"
+  [class.catalog-filters--educational]="showEducationalFilters()"
+>
 
+  @if (showEducationalFilters()) {
   <div class="catalog-filters__field">
     <label for="catalog-subject">
       Предмет
@@ -21,6 +25,7 @@
       }
     </select>
   </div>
+  }
 
   <div class="catalog-filters__field">
     <label for="catalog-category">
@@ -46,6 +51,7 @@
 
   </div>
 
+  @if (showEducationalFilters()) {
   <div class="catalog-filters__field">
     <label for="catalog-grade">
       Клас
@@ -67,6 +73,7 @@
       }
     </select>
   </div>
+  }
 
   <div class="catalog-filters__field">
     <label for="catalog-resource-type">
