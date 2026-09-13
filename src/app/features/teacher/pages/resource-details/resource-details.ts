@@ -72,6 +72,7 @@ export class TeacherResourceDetails {
     return !!resource && (
       this.authState.hasRole(AUTH_ROLES.Admin)
       || resource.moderationStatus === ResourceModerationStatus.Pending
+      || resource.moderationStatus === ResourceModerationStatus.Approved
       || resource.moderationStatus === ResourceModerationStatus.Rejected
     );
   });
