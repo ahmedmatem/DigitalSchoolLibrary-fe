@@ -272,7 +272,11 @@
                     || 'Изберете файл от устройството'
                 }}
               </span>
-              <input type="file" (change)="chooseMainFile($event)" />
+              <input
+                type="file"
+                [accept]="resourceFileAccept"
+                (change)="chooseMainFile($event)"
+              />
             </label>
 
             <label class="add-resource__upload">
@@ -294,7 +298,8 @@
             </label>
           </div>
           <p class="add-resource__hint">
-            Разрешени файлове: PDF, Word, PowerPoint, Excel, TXT и ZIP.
+            Документи: PDF, Word, PowerPoint, Excel, TXT и ZIP — до 50 MB.
+            Видео: MP4 или WebM — до 250 MB.
             Корицата може да бъде JPG, PNG или WebP.
           </p>
           @if (resource()?.coverStorageKey && !removeCoverRequested()) {
