@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   inject,
   signal,
@@ -29,9 +30,14 @@ import { mapResourceToCard } from '../../../../shared/ui/resource-card/resource.
 
 import { Pagination } from '../../../../shared/ui/pagination/pagination';
 
+import { ResourceCollectionType } from '../../../../core/resources/models/resource-collection-type.model';
+
+import { ResourceCollectionSwitcher } from '../../../../shared/ui/resource-collection-switcher/resource-collection-switcher';
+
 
 interface MyLibraryQuery {
   search: string;
+  collectionType: ResourceCollectionType;
   page: number;
   pageSize: number;
 }
@@ -39,6 +45,7 @@ interface MyLibraryQuery {
 
 const DEFAULT_QUERY: MyLibraryQuery = {
   search: '',
+  collectionType: ResourceCollectionType.ELibrary,
   page: 1,
   pageSize: 12,
 };
@@ -51,6 +58,7 @@ const DEFAULT_QUERY: MyLibraryQuery = {
     SearchField,
     ResourceCard,
     Pagination,
+    ResourceCollectionSwitcher,
   ],
   templateUrl: './my-library.html',
   styleUrl: './my-library.scss',
@@ -73,6 +81,11 @@ export class MyLibrary {
    */
 
   readonly query = signal<MyLibraryQuery>({ ...DEFAULT_QUERY });
+
+  readonly isEducational = computed(
+    () => this.query().collectionType ===
+      ResourceCollectionType.EducationalResources
+  );
 
 
   /*
@@ -115,6 +128,30 @@ export class MyLibrary {
       query => ({
         ...query,
         search,
+        page: 1,
+      })
+    );
+
+    this.loadResources();
+  }
+
+
+  /*
+   * =========================================================
+   * COLLECTION
+   * =========================================================
+   */
+
+  updateCollection(collectionType: ResourceCollectionType): void {
+
+    if (this.query().collectionType === collectionType) {
+      return;
+    }
+
+    this.query.update(
+      query => ({
+        ...query,
+        collectionType,
         page: 1,
       })
     );
@@ -352,6 +389,8 @@ export class MyLibrary {
 
 
     return {
+      collectionType: query.collectionType,
+
       search: query.search.trim() || undefined,
 
       sort: ResourceSortOption.Newest,
