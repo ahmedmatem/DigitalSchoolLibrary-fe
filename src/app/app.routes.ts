@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { guestGuard } from './core/auth/guards/guest.guard';
 import { authGuard } from './core/auth/guards/auth.guard';
+import { changePasswordGuard } from './core/auth/guards/change-password.guard';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,27 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/pages/register-page/register-page')
         .then(m => m.RegisterPage),
+  },
+  {
+    path: 'forgot-password',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/auth/pages/forgot-password-page/forgot-password-page')
+        .then(m => m.ForgotPasswordPage),
+  },
+  {
+    path: 'reset-password',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/auth/pages/reset-password-page/reset-password-page')
+        .then(m => m.ResetPasswordPage),
+  },
+  {
+    path: 'change-password',
+    canActivate: [changePasswordGuard],
+    loadComponent: () =>
+      import('./features/auth/pages/change-password-page/change-password-page')
+        .then(m => m.ChangePasswordPage),
   },
   /* =========================
      STUDENT

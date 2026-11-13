@@ -27,6 +27,10 @@ export function roleGuard(...allowedRoles: AuthRole[]): CanActivateFn {
       );
     }
 
+    if (authState.currentUser()?.mustChangePassword) {
+      return router.createUrlTree(['/change-password']);
+    }
+
     const hasAllowedRole = allowedRoles.some(role =>
       authState.hasRole(role)
     );

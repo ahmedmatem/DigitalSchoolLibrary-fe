@@ -73,6 +73,11 @@ export class LoginPage {
       )
       .subscribe({
         next: user => {
+          if (user.mustChangePassword) {
+            void this.router.navigate(['/change-password']);
+            return;
+          }
+
           const returnUrl =
             this.route.snapshot.queryParamMap.get('returnUrl');
 

@@ -4,6 +4,27 @@ export interface LoginRequest {
   rememberMe: boolean;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 export interface RegisterRequest {
   firstName: string;
   fatherName: string;
@@ -27,4 +48,5 @@ export interface CurrentUser {
   gradeNumber: number | null;
   schoolClassId: string | null;
   schoolClassName: string | null;
+  mustChangePassword: boolean;
 }

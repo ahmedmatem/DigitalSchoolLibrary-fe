@@ -1,7 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { CurrentUser, LoginRequest, RegisterRequest } from '../models/auth.models';
+import {
+  ChangePasswordRequest,
+  CurrentUser,
+  LoginRequest,
+  RegisterRequest,
+} from '../models/auth.models';
 import { AuthApiService } from './auth-api.service';
 
 @Injectable({
@@ -84,6 +89,16 @@ export class AuthStateService {
       finalize(() => {
         this.loadingSignal.set(false);
       })
+    );
+  }
+
+  changePassword(model: ChangePasswordRequest): Observable<CurrentUser> {
+    this.loadingSignal.set(true);
+
+    return this.authApi.changePassword(model).pipe(
+      switchMap(() => this.authApi.getMe()),
+      tap(user => this.currentUserSignal.set(user)),
+      finalize(() => this.loadingSignal.set(false))
     );
   }
 

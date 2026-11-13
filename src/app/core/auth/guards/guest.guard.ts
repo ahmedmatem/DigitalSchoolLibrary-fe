@@ -24,6 +24,10 @@ export const guestGuard: CanActivateFn = (): boolean | UrlTree => {
       return true;
     }
 
+    if (authState.currentUser()?.mustChangePassword) {
+      return router.createUrlTree(['/change-password']);
+    }
+
 
     return router.createUrlTree(['/']);
   };

@@ -128,16 +128,12 @@
           </span>
         </label>
 
-        <!--
-          Оставено визуално според Figma.
-          Password reset ще бъде реализиран в бъдещ sprint.
-        -->
-        <span
+        <a
           class="login-form__forgot-password"
-          aria-disabled="true"
+          routerLink="/forgot-password"
         >
           Забравена парола?
-        </span>
+        </a>
       </div>
 
       @if (serverError()) {
