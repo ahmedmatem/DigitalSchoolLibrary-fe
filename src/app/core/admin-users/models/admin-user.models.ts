@@ -52,3 +52,20 @@ export interface AdminUserDetails extends AdminUserListItem {
   savedResourcesCount: number;
   auditLog: AdminAuditLogItem[];
 }
+
+export interface UpdateAdminUserRequest {
+  firstName: string;
+  fatherName: string;
+  lastName: string;
+  email: string;
+  gradeLevelId: number | null;
+  schoolClassId: string | null;
+}
+
+export interface DeactivateAdminUserRequest {
+  reason: string | null;
+}
+
+export interface ResetAdminUserPasswordRequest {
+  temporaryPassword: string;
+}

@@ -56,6 +56,17 @@
         </div>
       </section>
 
+      <section class="admin-actions" aria-labelledby="admin-actions-title">
+        <div><h2 id="admin-actions-title">Административни действия</h2><p>Промените се записват в административната история.</p></div>
+        <div class="admin-actions__buttons">
+          @if (canEdit(currentUser)) { <a [routerLink]="['/admin/users', currentUser.id, 'edit']">Редактирай профила</a> }
+          @if (currentUser.role === 'Student') { <button type="button" (click)="openDialog('promote')">Повиши до учител</button> }
+          @if (canResetPassword(currentUser)) { <button type="button" (click)="openDialog('reset')">Временна парола</button> }
+          @if (canDeactivate(currentUser)) { <button type="button" class="danger" (click)="openDialog('deactivate')">Деактивирай</button> }
+          @if (!currentUser.isActive) { <button type="button" (click)="openDialog('reactivate')">Активирай</button> }
+        </div>
+      </section>
+
       <section class="user-summary" aria-label="Активност на потребителя">
         <article><strong>{{ currentUser.createdResourcesCount }}</strong><span>Създадени ресурси</span></article>
         <article><strong>{{ currentUser.savedResourcesCount }}</strong><span>Запазени ресурси</span></article>
@@ -85,6 +96,41 @@
           </ol>
         }
       </section>
+
+      @if (dialog()) {
+        <div class="dialog-backdrop" (click)="closeDialog()">
+          <section class="action-dialog" role="dialog" aria-modal="true" aria-labelledby="action-dialog-title" (click)="$event.stopPropagation()">
+            <h2 id="action-dialog-title">{{ dialogTitle() }}</h2>
+
+            @if (dialog() === 'promote') {
+              <p>Ролята на <strong>{{ currentUser.fullName }}</strong> ще бъде променена необратимо от Ученик на Учител. Класът и паралелката ще бъдат премахнати.</p>
+            } @else if (dialog() === 'deactivate') {
+              <p>Потребителят няма да може да влиза в приложението, докато профилът не бъде активиран отново.</p>
+              <form [formGroup]="deactivateForm">
+                <label><span>Причина (незадължително)</span><textarea formControlName="reason" maxlength="500" rows="3"></textarea></label>
+              </form>
+            } @else if (dialog() === 'reactivate') {
+              <p>Потребителят отново ще може да влиза в приложението със своята парола.</p>
+            } @else {
+              <p>След вход с временната парола потребителят задължително ще трябва да я смени.</p>
+              <form [formGroup]="resetForm">
+                <label><span>Временна парола</span><input type="password" formControlName="temporaryPassword" autocomplete="new-password" /></label>
+                @if (resetForm.controls.temporaryPassword.touched && resetForm.controls.temporaryPassword.invalid) {
+                  <small role="alert">Използвайте поне 6 символа, малка буква и цифра.</small>
+                }
+              </form>
+            }
+
+            @if (actionError()) { <div class="action-dialog__error" role="alert">{{ actionError() }}</div> }
+            <div class="action-dialog__buttons">
+              <button type="button" class="secondary" [disabled]="processing()" (click)="closeDialog()">Отказ</button>
+              <button type="button" [class.danger]="dialog() === 'deactivate'" [disabled]="processing()" (click)="confirmAction()">
+                {{ processing() ? 'Обработване…' : 'Потвърди' }}
+              </button>
+            </div>
+          </section>
+        </div>
+      }
     }
   </main>
 </sl-page-container>

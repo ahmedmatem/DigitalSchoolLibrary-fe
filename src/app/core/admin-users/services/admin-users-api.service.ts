@@ -3,7 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_CONFIG } from '../../config/api.config';
-import { AdminUserDetails, AdminUsersQuery, AdminUsersResponse } from '../models/admin-user.models';
+import {
+  AdminUserDetails,
+  AdminUsersQuery,
+  AdminUsersResponse,
+  DeactivateAdminUserRequest,
+  ResetAdminUserPasswordRequest,
+  UpdateAdminUserRequest,
+} from '../models/admin-user.models';
 
 @Injectable({ providedIn: 'root' })
 export class AdminUsersApiService {
@@ -32,5 +39,25 @@ export class AdminUsersApiService {
     return this.http.get<AdminUserDetails>(
       `${API_CONFIG.baseUrl}/admin/users/${id}`
     );
+  }
+
+  updateUser(id: string, model: UpdateAdminUserRequest): Observable<AdminUserDetails> {
+    return this.http.put<AdminUserDetails>(`${API_CONFIG.baseUrl}/admin/users/${id}`, model);
+  }
+
+  promoteToTeacher(id: string): Observable<void> {
+    return this.http.post<void>(`${API_CONFIG.baseUrl}/admin/users/${id}/promote-to-teacher`, null);
+  }
+
+  deactivate(id: string, model: DeactivateAdminUserRequest): Observable<void> {
+    return this.http.post<void>(`${API_CONFIG.baseUrl}/admin/users/${id}/deactivate`, model);
+  }
+
+  reactivate(id: string): Observable<void> {
+    return this.http.post<void>(`${API_CONFIG.baseUrl}/admin/users/${id}/reactivate`, null);
+  }
+
+  resetPassword(id: string, model: ResetAdminUserPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${API_CONFIG.baseUrl}/admin/users/${id}/reset-password`, model);
   }
 }

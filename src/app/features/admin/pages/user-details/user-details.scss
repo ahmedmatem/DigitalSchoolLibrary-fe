@@ -29,6 +29,14 @@
 .user-summary strong { color: var(--sl-color-primary); font-size: 22px; }
 .user-summary span { color: var(--sl-color-text-secondary); font-size: 12px; }
 
+.admin-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--sl-space-5); padding: var(--sl-space-5); border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-lg); background: var(--sl-color-surface); }
+.admin-actions h2 { margin: 0; color: var(--sl-color-text-primary); font-size: 18px; }
+.admin-actions p { margin: 6px 0 0; color: var(--sl-color-text-secondary); font-size: 12px; }
+.admin-actions__buttons { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--sl-space-2); }
+.admin-actions__buttons a, .admin-actions__buttons button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 13px; border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-md); color: var(--sl-color-primary); background: var(--sl-color-surface); font: inherit; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; }
+.admin-actions__buttons a:hover, .admin-actions__buttons button:hover { background: var(--sl-color-secondary-hover); }
+.admin-actions__buttons .danger { color: var(--sl-color-error); border-color: var(--sl-color-error-border); }
+
 .audit-card { padding: var(--sl-space-5); border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-lg); background: var(--sl-color-surface); }
 .audit-card > header { display: flex; align-items: start; justify-content: space-between; gap: var(--sl-space-4); }
 .audit-card header p { margin: 6px 0 0; color: var(--sl-color-text-secondary); font-size: 13px; }
@@ -53,6 +61,22 @@
 .details-skeleton__card { height: 250px; }
 .details-skeleton__card--short { height: 160px; }
 
+.dialog-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: var(--sl-space-4); background: var(--sl-color-overlay); }
+.action-dialog { width: min(100%, 480px); padding: var(--sl-space-5); border-radius: var(--sl-radius-lg); background: var(--sl-color-surface); box-shadow: var(--sl-shadow-drawer); }
+.action-dialog h2 { margin: 0; color: var(--sl-color-text-primary); font-size: 20px; }
+.action-dialog > p { margin: var(--sl-space-3) 0 0; color: var(--sl-color-text-secondary); font-size: 13px; line-height: 1.5; }
+.action-dialog form { margin-top: var(--sl-space-4); }
+.action-dialog label { display: grid; gap: 6px; color: var(--sl-color-text-secondary); font-size: 12px; font-weight: 600; }
+.action-dialog input, .action-dialog textarea { width: 100%; box-sizing: border-box; padding: 11px 12px; border: 1px solid var(--sl-color-border); border-radius: var(--sl-radius-md); color: var(--sl-color-text-primary); background: var(--sl-color-surface); font: inherit; resize: vertical; }
+.action-dialog input:focus-visible, .action-dialog textarea:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+.action-dialog small { display: block; margin-top: 6px; color: var(--sl-color-error); }
+.action-dialog__error { margin-top: var(--sl-space-4); padding: 10px 12px; border: 1px solid var(--sl-color-error-border); border-radius: var(--sl-radius-md); color: var(--sl-color-error); background: var(--sl-color-error-bg-subtle); font-size: 12px; }
+.action-dialog__buttons { display: flex; justify-content: flex-end; gap: var(--sl-space-3); margin-top: var(--sl-space-5); }
+.action-dialog__buttons button { min-height: 40px; padding: 0 16px; border: 0; border-radius: var(--sl-radius-md); color: var(--sl-color-on-primary); background: var(--sl-color-primary); font: inherit; font-weight: 700; cursor: pointer; }
+.action-dialog__buttons .secondary { border: 1px solid var(--sl-color-border); color: var(--sl-color-primary); background: var(--sl-color-surface); }
+.action-dialog__buttons .danger { background: var(--sl-color-error); }
+.action-dialog__buttons button:disabled { cursor: wait; opacity: .7; }
+
 @media (max-width: 800px) {
   .user-details__heading { display: grid; }
   .user-details__heading h1 { font-size: 28px; }
@@ -61,6 +85,8 @@
   .profile-card__identity { padding: 0 0 var(--sl-space-4); border-right: 0; border-bottom: 1px solid var(--sl-color-border); }
   .profile-card__information dl { grid-template-columns: 1fr; }
   .user-summary { grid-template-columns: 1fr 1fr; }
+  .admin-actions { display: grid; }
+  .admin-actions__buttons { display: grid; grid-template-columns: 1fr; }
   .user-details__warning { display: grid; }
   .user-details__warning time { margin-left: 0; }
   .audit-card li { grid-template-columns: 10px 1fr; }

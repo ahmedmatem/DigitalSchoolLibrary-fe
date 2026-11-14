@@ -35,6 +35,12 @@ export const ADMIN_ROUTES: Routes = [
           .then(m => m.UsersList),
       },
       {
+        path: 'users/:id/edit',
+        title: 'Редактиране на потребител',
+        loadComponent: () => import('./pages/user-edit/user-edit')
+          .then(m => m.UserEdit),
+      },
+      {
         path: 'users/:id',
         title: 'Детайли за потребител',
         loadComponent: () => import('./pages/user-details/user-details')
