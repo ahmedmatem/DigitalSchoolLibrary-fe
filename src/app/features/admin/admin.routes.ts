@@ -30,7 +30,9 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'users',
-        redirectTo: 'moderation',
+        title: 'Управление на потребители',
+        loadComponent: () => import('./pages/users-list/users-list')
+          .then(m => m.UsersList),
       },
     ],
   },

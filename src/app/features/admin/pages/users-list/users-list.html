@@ -1,0 +1,124 @@
+<sl-page-container>
+  <main class="users-page">
+    <header class="users-page__heading">
+      <div>
+        <h1>Управление на потребители</h1>
+        <p>Търсете, филтрирайте и преглеждайте ученически и учителски профили.</p>
+      </div>
+      <span class="users-page__count">{{ totalCount() }} потребители</span>
+    </header>
+
+    <section class="users-page__filters" aria-label="Филтри за потребители">
+      <div class="users-page__search">
+        <sl-search-field
+          [value]="search()"
+          placeholder="Търсене по име или имейл…"
+          (valueChange)="updateSearch($event)"
+        />
+      </div>
+
+      <label>
+        <span>Роля</span>
+        <select [value]="role()" (change)="updateRole($event)">
+          <option value="">Всички роли</option>
+          <option [value]="roles.Student">Ученици</option>
+          <option [value]="roles.Teacher">Учители</option>
+          <option [value]="roles.Admin">Администратори</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Статус</span>
+        <select [value]="active()" (change)="updateActive($event)">
+          <option value="all">Всички статуси</option>
+          <option value="active">Активни</option>
+          <option value="inactive">Деактивирани</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Клас</span>
+        <select [value]="gradeLevelId() ?? ''" (change)="updateGrade($event)">
+          <option value="">Всички класове</option>
+          @for (grade of gradeLevels(); track grade.id) {
+            <option [value]="grade.id">{{ grade.displayName }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Паралелка</span>
+        <select [value]="schoolClassId()" (change)="updateClass($event)">
+          <option value="">Всички паралелки</option>
+          @for (schoolClass of availableClasses(); track schoolClass.id) {
+            <option [value]="schoolClass.id">{{ schoolClass.displayName }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Сортиране</span>
+        <select [value]="sort()" (change)="updateSort($event)">
+          <option value="name">Име А–Я</option>
+          <option value="name-desc">Име Я–А</option>
+          <option value="email">Имейл А–Я</option>
+          <option value="email-desc">Имейл Я–А</option>
+          <option value="status">Статус</option>
+        </select>
+      </label>
+    </section>
+
+    <aside class="users-page__notice">
+      Администраторските профили са защитени. Действията за редактиране и управление ще бъдат достъпни в детайлите на потребителя.
+    </aside>
+
+    @if (loading()) {
+      <section class="users-table users-table--loading" aria-label="Зареждане на потребители" aria-busy="true">
+        @for (row of [1, 2, 3, 4, 5]; track row) {
+          <div class="users-skeleton"><span></span><span></span><span></span><span></span></div>
+        }
+      </section>
+    } @else if (error()) {
+      <section class="users-page__state users-page__state--error" role="alert">
+        <h2>Потребителите не могат да бъдат заредени</h2>
+        <p>{{ error() }}</p>
+        <button type="button" (click)="loadInitial()">Опитай отново</button>
+      </section>
+    } @else if (!users().length) {
+      <section class="users-page__state">
+        <h2>Няма намерени потребители</h2>
+        <p>Променете критериите за търсене или изчистете филтрите.</p>
+        @if (hasFilters()) {
+          <button type="button" (click)="clearFilters()">Изчисти филтрите</button>
+        }
+      </section>
+    } @else {
+      <section class="users-table" aria-label="Списък с потребители">
+        <div class="users-table__head" role="row">
+          <span>Потребител</span><span>Роля</span><span>Клас</span><span>Статус</span>
+        </div>
+        @for (user of users(); track user.id) {
+          <article class="user-row">
+            <div class="user-row__identity">
+              <span class="user-row__avatar">{{ initials(user) }}</span>
+              <div><h2>{{ user.fullName }}</h2><p>{{ user.email }}</p></div>
+            </div>
+            <div class="user-row__field" data-label="Роля">
+              <span [class]="'role-badge role-badge--' + user.role.toLowerCase()">{{ roleLabel(user.role) }}</span>
+            </div>
+            <div class="user-row__field" data-label="Клас">{{ classLabel(user) }}</div>
+            <div class="user-row__field" data-label="Статус">
+              <span [class]="user.isActive ? 'status-badge status-badge--active' : 'status-badge status-badge--inactive'">
+                {{ user.isActive ? 'Активен' : 'Деактивиран' }}
+              </span>
+            </div>
+          </article>
+        }
+      </section>
+    }
+
+    @if (showPagination()) {
+      <sl-pagination [page]="page()" [pageCount]="totalPages()" (pageChange)="updatePage($event)" />
+    }
+  </main>
+</sl-page-container>
