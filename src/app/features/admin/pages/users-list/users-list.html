@@ -95,7 +95,7 @@
     } @else {
       <section class="users-table" aria-label="Списък с потребители">
         <div class="users-table__head" role="row">
-          <span>Потребител</span><span>Роля</span><span>Клас</span><span>Статус</span>
+          <span>Потребител</span><span>Роля</span><span>Клас</span><span>Статус</span><span></span>
         </div>
         @for (user of users(); track user.id) {
           <article class="user-row">
@@ -112,6 +112,7 @@
                 {{ user.isActive ? 'Активен' : 'Деактивиран' }}
               </span>
             </div>
+            <a class="user-row__details" [routerLink]="['/admin/users', user.id]">Детайли</a>
           </article>
         }
       </section>

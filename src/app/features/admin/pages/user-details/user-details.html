@@ -1,0 +1,90 @@
+<sl-page-container>
+  <main class="user-details">
+    <a class="user-details__back" routerLink="/admin/users">← Назад към потребителите</a>
+
+    @if (loading()) {
+      <section class="details-skeleton" aria-label="Зареждане на потребител" aria-busy="true">
+        <div class="details-skeleton__title"></div>
+        <div class="details-skeleton__card"></div>
+        <div class="details-skeleton__card details-skeleton__card--short"></div>
+      </section>
+    } @else if (error()) {
+      <section class="user-details__state" role="alert">
+        <h1>Данните не могат да бъдат заредени</h1>
+        <p>{{ error() }}</p>
+        <div><button type="button" (click)="load()">Опитай отново</button><a routerLink="/admin/users">Към списъка</a></div>
+      </section>
+    } @else if (user(); as currentUser) {
+      <header class="user-details__heading">
+        <div>
+          <h1>{{ currentUser.fullName }}</h1>
+          <p>{{ roleLabel(currentUser.role) }} · {{ currentUser.email }}</p>
+        </div>
+        <span [class]="currentUser.isActive ? 'status status--active' : 'status status--inactive'">
+          {{ currentUser.isActive ? 'Активен профил' : 'Деактивиран профил' }}
+        </span>
+      </header>
+
+      @if (!currentUser.isActive) {
+        <aside class="user-details__warning" role="status">
+          <strong>Профилът е деактивиран.</strong>
+          @if (currentUser.deactivationReason) { <span>{{ currentUser.deactivationReason }}</span> }
+          @if (currentUser.deactivatedAtUtc) { <time>{{ currentUser.deactivatedAtUtc | date:'dd.MM.yyyy, HH:mm' }}</time> }
+        </aside>
+      }
+
+      <section class="profile-card">
+        <div class="profile-card__identity">
+          <span class="profile-card__avatar">{{ initials(currentUser) }}</span>
+          <div>
+            <h2>{{ currentUser.fullName }}</h2>
+            <p>{{ currentUser.email }}</p>
+            <span [class]="'role role--' + currentUser.role.toLowerCase()">{{ roleLabel(currentUser.role) }}</span>
+          </div>
+        </div>
+
+        <div class="profile-card__information">
+          <h2>Основна информация</h2>
+          <dl>
+            <div><dt>Име</dt><dd>{{ currentUser.firstName }}</dd></div>
+            <div><dt>Презиме</dt><dd>{{ currentUser.fatherName }}</dd></div>
+            <div><dt>Фамилия</dt><dd>{{ currentUser.lastName }}</dd></div>
+            <div><dt>Имейл</dt><dd>{{ currentUser.email }}</dd></div>
+            <div><dt>Роля</dt><dd>{{ roleLabel(currentUser.role) }}</dd></div>
+            <div><dt>Клас и паралелка</dt><dd>{{ classLabel(currentUser) }}</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="user-summary" aria-label="Активност на потребителя">
+        <article><strong>{{ currentUser.createdResourcesCount }}</strong><span>Създадени ресурси</span></article>
+        <article><strong>{{ currentUser.savedResourcesCount }}</strong><span>Запазени ресурси</span></article>
+        <article>
+          <strong>{{ currentUser.mustChangePassword ? 'Да' : 'Не' }}</strong>
+          <span>Изисква смяна на парола</span>
+        </article>
+        <article>
+          <strong>{{ currentUser.promotedToTeacherAtUtc ? (currentUser.promotedToTeacherAtUtc | date:'dd.MM.yyyy') : '—' }}</strong>
+          <span>Повишен до учител</span>
+        </article>
+      </section>
+
+      <section class="audit-card">
+        <header><div><h2>Административна история</h2><p>Последните действия, извършени за този профил.</p></div><span>{{ currentUser.auditLog.length }} записа</span></header>
+        @if (!currentUser.auditLog.length) {
+          <div class="audit-card__empty">Все още няма записани административни действия.</div>
+        } @else {
+          <ol>
+            @for (item of currentUser.auditLog; track item.id) {
+              <li>
+                <span class="audit-card__marker" aria-hidden="true"></span>
+                <div><strong>{{ auditLabel(item) }}</strong>@if (item.details) { <p>{{ item.details }}</p> }</div>
+                <time>{{ item.createdAtUtc | date:'dd.MM.yyyy, HH:mm' }}</time>
+              </li>
+            }
+          </ol>
+        }
+      </section>
+    }
+  </main>
+</sl-page-container>

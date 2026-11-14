@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_CONFIG } from '../../config/api.config';
-import { AdminUsersQuery, AdminUsersResponse } from '../models/admin-user.models';
+import { AdminUserDetails, AdminUsersQuery, AdminUsersResponse } from '../models/admin-user.models';
 
 @Injectable({ providedIn: 'root' })
 export class AdminUsersApiService {
@@ -25,6 +25,12 @@ export class AdminUsersApiService {
     return this.http.get<AdminUsersResponse>(
       `${API_CONFIG.baseUrl}/admin/users`,
       { params }
+    );
+  }
+
+  getUser(id: string): Observable<AdminUserDetails> {
+    return this.http.get<AdminUserDetails>(
+      `${API_CONFIG.baseUrl}/admin/users/${id}`
     );
   }
 }

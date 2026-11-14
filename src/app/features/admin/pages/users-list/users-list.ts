@@ -1,6 +1,7 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, forkJoin } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 import { AdminUserListItem, AdminUsersQuery } from '../../../../core/admin-users/models/admin-user.models';
 import { AdminUsersApiService } from '../../../../core/admin-users/services/admin-users-api.service';
@@ -16,7 +17,7 @@ type SortOption = 'name' | 'name-desc' | 'email' | 'email-desc' | 'status';
 
 @Component({
   selector: 'sl-users-list',
-  imports: [PageContainer, Pagination, SearchField],
+  imports: [PageContainer, Pagination, RouterLink, SearchField],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
 })

@@ -31,3 +31,24 @@ export interface AdminUsersQuery {
   page: number;
   pageSize: number;
 }
+
+export interface AdminAuditLogItem {
+  id: string;
+  action: string;
+  details: string | null;
+  createdAtUtc: string;
+  adminUserId: string;
+}
+
+export interface AdminUserDetails extends AdminUserListItem {
+  firstName: string;
+  fatherName: string;
+  lastName: string;
+  deactivatedAtUtc: string | null;
+  deactivationReason: string | null;
+  promotedToTeacherAtUtc: string | null;
+  mustChangePassword: boolean;
+  createdResourcesCount: number;
+  savedResourcesCount: number;
+  auditLog: AdminAuditLogItem[];
+}

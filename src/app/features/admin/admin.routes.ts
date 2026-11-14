@@ -34,6 +34,12 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./pages/users-list/users-list')
           .then(m => m.UsersList),
       },
+      {
+        path: 'users/:id',
+        title: 'Детайли за потребител',
+        loadComponent: () => import('./pages/user-details/user-details')
+          .then(m => m.UserDetails),
+      },
     ],
   },
 ];
