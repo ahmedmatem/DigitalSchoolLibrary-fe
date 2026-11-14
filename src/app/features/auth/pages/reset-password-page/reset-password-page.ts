@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthApiService } from '../../../../core/auth/services/auth-api.service';
+import { passwordPolicyValidator } from '../../../../core/auth/validators/password-policy.validator';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   return control.get('newPassword')?.value === control.get('confirmNewPassword')?.value
@@ -31,7 +32,7 @@ export class ResetPasswordPage {
   readonly serverError = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    newPassword: ['', [Validators.required, Validators.minLength(6)]],
+    newPassword: ['', [Validators.required, Validators.minLength(6), passwordPolicyValidator]],
     confirmNewPassword: ['', Validators.required],
   }, { validators: passwordsMatch });
 
@@ -51,7 +52,7 @@ export class ResetPasswordPage {
       next: () => this.succeeded.set(true),
       error: (error: HttpErrorResponse) => this.serverError.set(
         error.status === 400
-          ? 'Линкът за възстановяване е невалиден или е изтекъл.'
+          ? (error.error?.detail ?? 'Линкът за възстановяване е невалиден или е изтекъл.')
           : 'Паролата не може да бъде променена. Моля, опитайте отново.'
       ),
     });

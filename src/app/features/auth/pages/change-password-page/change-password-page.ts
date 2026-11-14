@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 
 import { AuthStateService } from '../../../../core/auth/services/auth-state.service';
 import { getDefaultRouteForRoles } from '../../../../core/navigation/default-route.util';
+import { passwordPolicyValidator } from '../../../../core/auth/validators/password-policy.validator';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   return control.get('newPassword')?.value === control.get('confirmNewPassword')?.value
@@ -29,7 +30,7 @@ export class ChangePasswordPage {
 
   readonly form = this.fb.nonNullable.group({
     currentPassword: ['', Validators.required],
-    newPassword: ['', [Validators.required, Validators.minLength(6)]],
+    newPassword: ['', [Validators.required, Validators.minLength(6), passwordPolicyValidator]],
     confirmNewPassword: ['', Validators.required],
   }, { validators: passwordsMatch });
 
@@ -47,7 +48,7 @@ export class ChangePasswordPage {
       next: user => void this.router.navigateByUrl(getDefaultRouteForRoles(user.roles)),
       error: (error: HttpErrorResponse) => this.serverError.set(
         error.status === 400
-          ? (error.error?.message ?? 'Настоящата парола е неправилна или новата парола не отговаря на изискванията.')
+          ? (error.error?.detail ?? 'Настоящата парола е неправилна или новата парола не отговаря на изискванията.')
           : 'Паролата не може да бъде променена. Моля, опитайте отново.'
       ),
     });
